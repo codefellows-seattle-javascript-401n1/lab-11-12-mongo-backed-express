@@ -4,5 +4,6 @@ node_js:
 services:
   - mongodb
 sudo: required
+before-script: npm i -g eslint mocha
 script: 
   - ./script/test-submissions.sh
