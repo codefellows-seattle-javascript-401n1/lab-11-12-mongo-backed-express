@@ -7,6 +7,9 @@ logs
 *.log
 npm-debug.log*
 
+#Mongo
+db
+
 # Runtime data
 pids
 *.pid
