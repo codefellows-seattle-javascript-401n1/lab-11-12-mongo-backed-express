@@ -20,7 +20,7 @@ exports.createPlayer = function (reqBody) {
   });
 };
 
-exports.fetchNote = function(id) {
+exports.fetchPlayer = function(id) {
   return new Promise((resolve, reject) => {
     Player.findOne({_id: id})
     .then(resolve)
