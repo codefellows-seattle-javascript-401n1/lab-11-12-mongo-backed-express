@@ -9,3 +9,51 @@ const server = require('../server');
 const playerCrud = require('../lib/player-crud');
 const port = process.env.PORT || 3000;
 const baseUrl = `http://localhost:${port}`;
+
+request.use(superPromise);
+
+describe('testing module player-router', function() {
+  before((done) => {
+    if (!server.isRunning) {
+      server.listen(port, () => {
+        server.isRunnign = true;
+        done();
+      });
+      return;
+    }
+    done();
+  });
+
+  after((done) => {
+    if (server.isRunning) {
+      server.close(() => {
+        server.isRunning = false;
+        done();
+      });
+    }
+  });
+
+  describe('testing POST /api/player with valid data', function() {
+    after((done) => {
+      playerCrud.removeAllPlayers()
+      .then(() => done())
+      .catch(done);
+    });
+  });
+
+  it('should return a player', function(done) {
+    request.post(`${baseUrl}/api/player`)
+    .send({
+      name: 'Taylor Wirtz',
+      hometown: 'Seattle',
+      position: 'Left Back',
+      number: 26
+    })
+    .then((res) => {
+      expect(res.status).to.equal(200);
+      expect(res.body.name).to.equal('Taylor Wirtz');
+      done();
+    })
+    .catch(done);
+  });
+});

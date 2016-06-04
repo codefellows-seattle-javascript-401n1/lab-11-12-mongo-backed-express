@@ -27,3 +27,7 @@ exports.fetchPlayer = function(id) {
     .catch(err => reject(AppError.error404(err.message)));
   });
 };
+
+exports.removeAllPlayers = function() {
+  return Player.remove({});
+};
