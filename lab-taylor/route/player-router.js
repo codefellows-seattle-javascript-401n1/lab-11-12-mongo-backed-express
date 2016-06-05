@@ -11,7 +11,7 @@ playerRouter.post('/player', jsonParser, (req, res) => {
   .catch(err => res.sendError(err));
 });
 
-playerRouter.get('player/:id', (req, res) => {
+playerRouter.get('/player/:id', (req, res) => {
   playerCrud.fetchPlayer(req.params.id)
   .then(player => res.send(player))
   .catch(err => res.sendError(err));
