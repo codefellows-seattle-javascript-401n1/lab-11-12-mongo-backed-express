@@ -1,4 +1,4 @@
-![cf](https://i.imgur.com/7v5ASc8.png) Lab 11-12 Mongo-Express Backend
+![cf](https://i.imgur.com/7v5ASc8.png) lab 11-12 mongo backed express
 ======
 [![](https://img.shields.io/badge/Issues%3F-Ask%20for%20Help!-55cbe0.svg)](https://github.com/codefellows/seattle-javascript-401n1/issues/new)
 
