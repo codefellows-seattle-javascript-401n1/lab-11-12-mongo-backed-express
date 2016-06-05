@@ -6,6 +6,7 @@ const playerSchema = mongoose.Schema({
   hometown: {type: String, required: true},
   position: {type: String, required: true},
   number: {type: Number, required: true},
+  teamId: {type: mongoose.Schema.ObjectId},
   timestamp: {type: Date, required: true}
 });
 

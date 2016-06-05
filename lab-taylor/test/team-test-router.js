@@ -6,14 +6,13 @@ const expect = require('chai').expect;
 const request = require('superagent-use');
 const superPromise = require('superagent-promise-plugin');
 const server = require('../server');
-const playerCrud = require('../lib/player-crud');
 const teamCrud = require('../lib/team-crud');
 const port = process.env.PORT || 3000;
 const baseUrl = `http://localhost:${port}`;
 
 request.use(superPromise);
 
-describe('testing module player-router', function() {
+describe('testing module team-router', function() {
   before((done) => {
     if (!server.isRunning) {
       server.listen(port, () => {
@@ -34,9 +33,52 @@ describe('testing module player-router', function() {
     }
   });
 
-  describe('testing POST /api/player', function() {
-    let tempTeam = {};
+  describe('testing POST /api/team', function() {
+    after((done) => {
+      teamCrud.removeAllTeams()
+      .then(() => done())
+      .catch(done);
+    });
 
+    it('should return a team with valid data', function(done) {
+      request.post(`${baseUrl}/api/team`)
+    .send({
+      name: 'Seattle Sounders',
+      city: 'Seattle',
+      coach: 'Sigi'
+    })
+    .then((res) => {
+      expect(res.status).to.equal(200);
+      expect(res.body.name).to.equal('Seattle Sounders');
+      done();
+    })
+    .catch(done);
+    });
+
+    it('should return a 400 when no body is provided', (done) => {
+      request.post(`${baseUrl}/api/team/`)
+      .catch((err) => {
+        expect(err.response.status).to.equal(400);
+        expect(err.response.error.text).to.equal('bad request');
+        done();
+      });
+    });
+
+    it('should return a 400 when invalid body is provided', (done) => {
+      request.post(`${baseUrl}/api/team/`)
+      .send({
+        name: 'Seattle Sounders FC'
+      })
+      .catch((err) => {
+        expect(err.response.status).to.equal(400);
+        expect(err.response.error.text).to.equal('bad request');
+        done();
+      });
+    });
+  });
+
+  describe('testing GET /api/team', function() {
+    let tempTeam = {};
     before((done) => {
       teamCrud.createTeam({
         name: 'Seattle Sounders',
@@ -51,92 +93,23 @@ describe('testing module player-router', function() {
     });
 
     after((done) => {
-      playerCrud.removeAllPlayers()
+      teamCrud.removeAllTeams()
       .then(() => done())
       .catch(done);
     });
 
-    it('should return a player with valid data', function(done) {
-      request.post(`${baseUrl}/api/player`)
-    .send({
-      name: 'Taylor Wirtz',
-      hometown: 'Seattle',
-      position: 'Left Back',
-      number: 26,
-      teamId: tempTeam._id
-    })
-    .then((res) => {
-      expect(res.status).to.equal(200);
-      expect(res.body.name).to.equal('Taylor Wirtz');
-      done();
-    })
-    .catch(done);
-    });
-
-    it('should return a 400 when no body is provided', (done) => {
-      request.post(`${baseUrl}/api/player/`)
-      .catch((err) => {
-        expect(err.response.status).to.equal(400);
-        expect(err.response.error.text).to.equal('bad request');
-        done();
-      });
-    });
-
-    it('should return a 400 when invalid body is provided', (done) => {
-      request.post(`${baseUrl}/api/player/`)
-      .send({
-        name: 'taylor'
-      })
-      .catch((err) => {
-        expect(err.response.status).to.equal(400);
-        expect(err.response.error.text).to.equal('bad request');
-        done();
-      });
-    });
-  });
-
-  describe('testing GET /api/player', function() {
-    let tempPlayer = {};
-    before((done) => {
-      teamCrud.createTeam({
-        name: 'Seattle Sounders',
-        city: 'Seattle',
-        coach: 'Sigi'
-      })
-      .then((team) => {
-        return playerCrud.createPlayer({
-          name: 'Taylor Wirtz',
-          hometown: 'Seattle',
-          position: 'Left Back',
-          number: 26,
-          teamId: team._id
-        });
-      })
-      .then((player) => {
-        tempPlayer = player;
-        done();
-      })
-      .catch(done);
-    });
-
-    after((done) => {
-      playerCrud.removeAllPlayers()
-      .then(() => done())
-      .catch(done);
-    });
-
-    it('should return a player when a valid id', (done) => {
-      request.get(`${baseUrl}/api/player/${tempPlayer._id}`)
+    it('should return a team when a valid id', (done) => {
+      request.get(`${baseUrl}/api/team/${tempTeam._id}`)
       .then((res) => {
         expect(res.status).to.equal(200);
-        expect(res.body.name).to.equal('Taylor Wirtz');
+        expect(res.body.name).to.equal('Seattle Sounders');
         done();
       })
       .catch(done);
     });
 
     it('should return an error 404 with invalid id', (done) => {
-      request.get(`${baseUrl}/api/player/3923`)
+      request.get(`${baseUrl}/api/team/3923`)
       .catch((err) => {
         expect(err.response.status).to.equal(404);
         expect(err.response.error.text).to.equal('not found');
@@ -145,8 +118,8 @@ describe('testing module player-router', function() {
     });
   });
 
-  describe('testing PUT /api/player', function() {
-    let tempPlayer = {};
+  describe('testing PUT /api/team', function() {
+    let tempTeam = {};
     before((done) => {
       teamCrud.createTeam({
         name: 'Seattle Sounders',
@@ -154,29 +127,20 @@ describe('testing module player-router', function() {
         coach: 'Sigi'
       })
       .then((team) => {
-        return playerCrud.createPlayer({
-          name: 'Taylor Wirtz',
-          hometown: 'Seattle',
-          position: 'Left Back',
-          number: 26,
-          teamId: team._id
-        });
-      })
-      .then((player) => {
-        tempPlayer = player;
+        tempTeam = team;
         done();
       })
       .catch(done);
     });
 
     after((done) => {
-      playerCrud.removeAllPlayers()
+      teamCrud.removeAllTeams()
       .then(() => done())
       .catch(done);
     });
 
-    it('should return a player when a valid id', (done) => {
-      request.put(`${baseUrl}/api/player/${tempPlayer._id}`)
+    it('should return a team when a valid id', (done) => {
+      request.put(`${baseUrl}/api/team/${tempTeam._id}`)
       .send({
         name: 'NEW NAME'
       })
@@ -189,7 +153,7 @@ describe('testing module player-router', function() {
     });
 
     it('should return a 404 if an invalid id is provided', (done) => {
-      request.put(`${baseUrl}/api/player/23432`)
+      request.put(`${baseUrl}/api/team/23432`)
       .send({
         name: 'New Name'
       })
@@ -201,7 +165,7 @@ describe('testing module player-router', function() {
     });
 
     it('should return a 400 if no body is provided', (done) => {
-      request.put(`${baseUrl}/api/player/${tempPlayer._id}`)
+      request.put(`${baseUrl}/api/team/${tempTeam._id}`)
       .catch((err) => {
         expect(err.response.error.status).to.equal(400);
         expect(err.response.error.text).to.equal('bad request');
@@ -210,7 +174,7 @@ describe('testing module player-router', function() {
     });
 
     it('should return a 400 if invalid body is provided', (done) => {
-      request.put(`${baseUrl}/api/player/${tempPlayer._id}`)
+      request.put(`${baseUrl}/api/team/${tempTeam._id}`)
       .send({
         fake_key: 'you suck'
       })
@@ -222,8 +186,8 @@ describe('testing module player-router', function() {
     });
   });
 
-  describe('testing DELETE /api/player/:id', function() {
-    let tempPlayer = {};
+  describe('testing DELETE /api/team/:id', function() {
+    let tempTeam = {};
     before((done) => {
       teamCrud.createTeam({
         name: 'Seattle Sounders',
@@ -231,29 +195,20 @@ describe('testing module player-router', function() {
         coach: 'Sigi'
       })
       .then((team) => {
-        return playerCrud.createPlayer({
-          name: 'Taylor Wirtz',
-          hometown: 'Seattle',
-          position: 'Left Back',
-          number: 26,
-          teamId: team._id
-        });
-      })
-      .then((player) => {
-        tempPlayer = player;
+        tempTeam = team;
         done();
       })
       .catch(done);
     });
 
     after((done) => {
-      playerCrud.removeAllPlayers()
+      teamCrud.removeAllTeams()
       .then(() => done())
       .catch(done);
     });
 
     it('should return 204 with a valid id', (done) => {
-      request.del(`${baseUrl}/api/player/${tempPlayer._id}`)
+      request.del(`${baseUrl}/api/team/${tempTeam._id}`)
       .then((res) => {
         expect(res.status).to.equal(204);
         done();
@@ -262,7 +217,7 @@ describe('testing module player-router', function() {
     });
 
     it('should return an error 404 with invalid id', (done) => {
-      request.del(`${baseUrl}/api/player/3923`)
+      request.del(`${baseUrl}/api/team/3923`)
       .catch((err) => {
         expect(err.response.status).to.equal(404);
         expect(err.response.error.text).to.equal('not found');

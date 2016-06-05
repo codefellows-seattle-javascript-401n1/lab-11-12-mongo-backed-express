@@ -11,6 +11,7 @@ exports.createPlayer = function (reqBody) {
     if (!reqBody.hometown) return reject(AppError.error400('players require a hometown'));
     if (!reqBody.position) return reject(AppError.error400('players require a position'));
     if (!reqBody.number) return reject(AppError.error400('players require a number'));
+    if (!reqBody.teamId) return reject(AppError.error400('players need to have a team'));
 
     reqBody.timestamp = new Date();
     const player = new Player(reqBody);
@@ -34,7 +35,7 @@ exports.updatePlayer = function(id, reqBody) {
   return new Promise((resolve, reject) => {
     if (Object.keys(reqBody).length === 0) return reject(AppError.error400('need to provide a body'));
 
-    const playerKeys = ['name', 'hometown', 'number', 'position'];
+    const playerKeys = ['name', 'hometown', 'number', 'position', 'teamId'];
     Object.keys(reqBody).forEach((key) => {
       if (playerKeys.indexOf(key) === -1) return reject(AppError.error400('need to update a key that exists'));
     });

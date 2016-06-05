@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const AppError = require('./lib/AppError');
 const errorResponse = require('./lib/error-response');
 const playerRouter = require('./route/player-router');
+const teamRouter = require('./route/team-router');
 const port = process.env.PORT || 3000;
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost/soccerapp';
 const app = express();
@@ -16,6 +17,7 @@ mongoose.connect(mongoURI);
 app.use(logger('dev'));
 app.use(errorResponse);
 
+app.use('/api', teamRouter);
 app.use('/api', playerRouter);
 
 app.all('*', ((req, res) => {
