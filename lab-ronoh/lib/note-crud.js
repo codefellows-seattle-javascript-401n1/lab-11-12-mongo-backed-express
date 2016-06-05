@@ -1,8 +1,8 @@
 'use strict';
 
 const Note = require('../model/note');
-const AppError = require('../lib/app-error');
-const debug = require('debug')('rito:note-crud');
+const AppError = require('./app-error');
+const debug = require('debug')('ronito:note-crud');
 
 exports.createNote = function(reqBody){
   return new Promise((resolve, reject) =>{

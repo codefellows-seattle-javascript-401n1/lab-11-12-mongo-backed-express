@@ -11,14 +11,15 @@ const baseUrl = `http://localhost:${port}`;
 const server = require('../server');
 const noteCrud = require('../lib/note-crud');
 const taskCrud = require('../lib/task-crud');
-
 request.use(superPromise);
 
 describe('testing module note-router', function(){
   before((done) =>{
     if(!server.isRunning){
       server.listen(port, () =>{
+        server.isRunning = true;
         console.log('server up on port', port);
+        done();
       });
       return;
     }
@@ -29,6 +30,7 @@ describe('testing module note-router', function(){
       server.close(() =>{
         server.isRunning = false;
         console.log('server down');
+        done();
       });
       return;
     }

@@ -3,7 +3,7 @@
 //npm modules
 const express = require('express');
 const morgan = require('morgan');
-const debug = require('debug')('rito:server');
+const debug = require('debug')('ronito:server');
 const mongoose = require('mongoose');
 
 //app modules
@@ -28,7 +28,7 @@ app.all('*', function(req, res){
 });
 //start server
 const server = app.listen(port, function(){
-  console.log('the server is running :)<-<'+ port);
+  console.log('the server is running on :'+ port);
 });
 //export server
 server.isRunning =true;
