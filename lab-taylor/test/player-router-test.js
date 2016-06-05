@@ -155,6 +155,18 @@ describe('testing module player-router', function() {
       .catch(done);
     });
 
+    it('should return a 404 if an invalid id is provided', (done) => {
+      request.put(`${baseUrl}/api/player/23432`)
+      .send({
+        name: 'New Name'
+      })
+      .catch((err) => {
+        expect(err.response.error.status).to.equal(404);
+        expect(err.response.error.text).to.equal('not found');
+        done();
+      });
+    });
+
     it('should return a 400 if no body is provided', (done) => {
       request.put(`${baseUrl}/api/player/${tempPlayer._id}`)
       .catch((err) => {
