@@ -19,6 +19,7 @@ deityRouter.get('/deity/:id', function(req, res){
 });
 
 deityRouter.put('/deity/:id', jsonParser, function(req, res){
+  console.log('inside put route');
   deityCrud.updateDeity(req.params.id, req.body)
   .then( deity => res.send(deity))
   .catch( err => res.sendError(err));

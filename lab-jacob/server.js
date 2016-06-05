@@ -13,7 +13,7 @@ const deityRouter = require('./route/deity-router');
 
 // global variables
 const port = process.env.PORT || 3000;
-const mongoURI = process.env.MONGO_URI || 'mongod://localhost/diety';
+const mongoURI = process.env.MONGO_URI || 'mongodb://localhost/diety';
 const app = express();
 
 //connects to the database

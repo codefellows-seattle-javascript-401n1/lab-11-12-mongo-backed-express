@@ -7,10 +7,13 @@ const debug = require('debug')('deity:deity-crud');
 exports.createDeity = function(reqBody){ // our create function
   debug('deity-createCrud');
   return new Promise((resolve, reject) => {
-    if (!reqBody.name)
-      return reject(AppErr.error400('deity require\'s a name'));
-    if (!reqBody.power)
-      return reject(AppErr.error400('deity require\'s a power'));
+    if (!reqBody) {
+      return reject(AppErr.error400('bad request'));
+    }
+    if (!reqBody.name || !reqBody.power) {
+      console.log('inside create');
+      return reject(AppErr.error400('deity requires a power and a name'));
+    }
     const deity = new Deity(reqBody);
     deity.save()
     .then(resolve)
@@ -30,32 +33,39 @@ exports.fetchDeity = function(id){ // our read function
 exports.updateDeity = function(id, updateContent){ // update function
   debug('deity-updateCrud');
   return new Promise((resolve, reject) => {
+    if(!updateContent)
+      reject(AppErr.error400('bad request'));
+    if(!id)
+      reject(AppErr.error400('bad request'));
     Deity.findOne({_id: id})
-    .then((updateContent) => {
+    .then((deity) => {
       if(updateContent.name){
-        Deity.name = updateContent.name;
-        resolve();
+        deity.name = updateContent.name;
       }
       if(updateContent.power) {
-        Deity.power = updateContent.power;
-        resolve();
+        deity.power = updateContent.power;
       }
+      deity.save()
+      .then( deity => resolve(deity))
+      .catch( err => reject(err));
     })
     .catch((err) => {
-      if(!updateContent)
-        reject(AppErr.error400(err.message));
-      if(!id)
-        reject(AppErr.error404(err.message));
+      reject(AppErr.error404(err.message));
     });
   });
 };
 
-// exports.deleteDeity = function(id) { // destroy function
-//   debug('deity-deleteDeity');
-//   return new Promise((resolve, reject) => {
-//
-//   });
-// };
+exports.deleteDeity = function(id) { // destroy function
+  debug('deity-deleteDeity');
+  return new Promise((resolve, reject) => {
+    Deity.findOne({_id: id})
+    .then((deity) => {
+      Deity.remove(deity)
+      .then( deity => resolve(deity))
+      .catch( deity => reject(deity));
+    }).catch( err => reject(AppErr.error404(err.message)));
+  });
+};
 
 exports.removeAllDeities = function(){
   return Deity.remove();

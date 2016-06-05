@@ -54,6 +54,19 @@ describe('testing the deity router', function(){
         done();
       }).catch(done);
     });
+
+    describe('testing a bad request for POST', function(){
+      it('should return a 400', function(done){
+        request.post(`${homeUrl}/api/deity`)
+          .send({name: 'tester', powr: 'testing'})
+          .then(done)
+          .catch( err => {
+            const res = err.response;
+            expect(res.status).to.equal(400);
+            done();
+          });
+      });
+    });
   });
 
   describe('testing GET method on /api/deity', function(){
@@ -77,6 +90,55 @@ describe('testing the deity router', function(){
       .then((res) => {
         expect(res.status).to.equal(200);
         expect(res.body.name).to.equal(this.tempDeity.name);
+        done();
+      })
+      .catch(done);
+    });
+  });
+
+  describe('testing PUT method on /api/deity', function(){
+    before((done) => {
+      deityCrud.createDeity({name: 'Brian', power: 'fuck off Brian'})
+      .then(deity => {
+        this.tempDeity = deity;
+        done();
+      })
+      .catch(done);
+    });
+
+    after((done) => {
+      deityCrud.removeAllDeities()
+      .then(() => done())
+      .catch(done);
+    });
+
+    it('should return an updated deity', (done) =>{
+      request.put(`${homeUrl}/api/deity/${this.tempDeity._id}`)
+      .send({name: 'MegaBrian', power: 'Aaaaaahhhhh!!!'})
+      .then((res) => {
+        expect(res.status).to.equal(200);
+        expect(res.body.name).to.equal('MegaBrian');
+        done();
+      })
+      .catch(done);
+    });
+  });
+
+  describe('testing DELETE method on /api/deity', function(){
+    before((done) => {
+      deityCrud.createDeity({name: 'dingus', power: 'didgerydoooo'})
+      .then(deity => {
+        this.tempDeity = deity;
+        done();
+      })
+      .catch(done);
+    });
+
+    it('should delete the specified deity', (done) => {
+      request.del(`${homeUrl}/api/deity/${this.tempDeity._id}`)
+      .then((res) => {
+        expect(res.status).to.equal(200);
+        //expect(res.body).to.equal(undefined);
         done();
       })
       .catch(done);

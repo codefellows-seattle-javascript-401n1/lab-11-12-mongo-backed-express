@@ -19,15 +19,15 @@ AppError.isAppError = function(err) { // functions for the AppError constructor
 
 AppError.error404 = function(message){
   debug('error404');
-  return new AppError(404, message,  'not found');
+  return new AppError(404, message, 'not found');
 };
 
 AppError.error400 = function(message){
   debug('error400');
-  return new AppError( 400, message,'bad request');
+  return new AppError(400, message, 'bad request');
 };
 
 AppError.error500 = function(message){
   debug('error500');
-  return new AppError( 500, message, 'server error');
+  return new AppError(500, message, 'server error');
 };
