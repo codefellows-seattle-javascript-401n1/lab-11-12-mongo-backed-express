@@ -1,13 +1,13 @@
 'use strict';
 
 const AppError = require('./AppError');
+const debug = require('debug')('soccer:errorResponse');
 
 module.exports = function(req, res, next) {
   res.errorResponse = function(err) {
-    console.error(err);
-
+    debug('sending error response', err);
     if (AppError.isAppError(err)){
-      res.status(err.statusCode).send(err.response);
+      res.status(err.statusCode).send(err.responseMessage);
       return;
     }
 

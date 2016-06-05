@@ -16,7 +16,7 @@ describe('testing module player-router', function() {
   before((done) => {
     if (!server.isRunning) {
       server.listen(port, () => {
-        server.isRunnign = true;
+        server.isRunning = true;
         done();
       });
       return;
@@ -57,7 +57,7 @@ describe('testing module player-router', function() {
     .catch(done);
   });
 
-  describe('GET /api/player with valid id', function() {
+  describe('GET /api/player', function() {
     let tempPlayer = {};
     before((done) => {
       playerCrud.createPlayer({
@@ -79,7 +79,7 @@ describe('testing module player-router', function() {
       .catch(done);
     });
 
-    it('shoudl return a player', (done) => {
+    it('should return a player when a valid id', (done) => {
       request.get(`${baseUrl}/api/player/${tempPlayer._id}`)
       .then((res) => {
         expect(res.status).to.equal(200);
@@ -87,6 +87,15 @@ describe('testing module player-router', function() {
         done();
       })
       .catch(done);
+    });
+
+    it('should return an error 404 with invalid id', (done) => {
+      request.get(`${baseUrl}/api/player/123456`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+        expect(res.error.text).to.equal('not found');
+        done();
+      });
     });
   });
 });

@@ -21,6 +21,7 @@ exports.createPlayer = function (reqBody) {
 };
 
 exports.fetchPlayer = function(id) {
+  debug('fetching player');
   return new Promise((resolve, reject) => {
     Player.findOne({_id: id})
     .then(resolve)
@@ -29,5 +30,6 @@ exports.fetchPlayer = function(id) {
 };
 
 exports.removeAllPlayers = function() {
+  debug('deleting all players');
   return Player.remove({});
 };

@@ -24,7 +24,6 @@ app.all('*', ((req, res) => {
   res.errorResponse(err);
 }));
 
-
 const server = app.listen(port, () => {
   debug('listen');
   console.log('Server is running on', port);
