@@ -114,6 +114,7 @@ describe('testing module player-router', function() {
       request.get(`${baseUrl}/api/player/3923`)
       .catch((err) => {
         expect(err.response.status).to.equal(404);
+        expect(err.response.error.text).to.equal('not found');
         done();
       });
     });
