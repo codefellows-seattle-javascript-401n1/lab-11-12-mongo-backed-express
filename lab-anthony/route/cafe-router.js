@@ -13,7 +13,18 @@ cafeRouter.post('/cafes', jsonParser, function(req, res){
   .catch(err => res.sendError(err));
 });
 
-//GET - no jsonParser
+// //GET - no jsonParser
+// cafeRouter.get('/cafes/all', function(req, res){
+//   console.log('CALLED GET ALL');
+//   //res with all
+// });
+
+cafeRouter.get('/cafes/:id', function(req, res){
+  console.log('CALLED GET BY ID');
+  cafeCrud.fetchCafe(req.params.id)
+  .then(cafe => res.send(cafe))
+  .catch(err => res.sendError(err));
+});
 
 //PUT - jsonParser
 

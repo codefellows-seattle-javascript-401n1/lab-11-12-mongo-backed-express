@@ -19,6 +19,15 @@ exports.createCafe = function(reqBody){
   });
 };
 
+exports.fetchCafe = function(id){
+  debug('fetch cafe');
+  return new Promise((resolve, reject)=>{
+    Cafe.findOne({_id: id})
+    .then(resolve)
+    .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
+
 exports.removeAllCafes = function(){
   return Cafe.remove();
 };
