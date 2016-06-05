@@ -2,6 +2,7 @@
 
 const debug = require('debug')('soccer:player-crud');
 const Player = require('../model/player');
+const teamCrud = require('../lib/team-crud');
 const AppError = require('./AppError');
 
 exports.createPlayer = function (reqBody) {
@@ -48,11 +49,20 @@ exports.updatePlayer = function(id, reqBody) {
 
 exports.removePlayer = function(id) {
   debug('removing player');
-  console.log('removeing player', id);
   return new Promise((resolve, reject) => {
     Player.remove({_id: id})
     .then(resolve)
     .catch(err => reject(AppError.error404(err.message)));
+  });
+};
+
+exports.fetchPlayerByTeamId = function(teamId) {
+  debug('finding players from team id');
+  return new Promise((resolve, reject) => {
+    teamCrud.fetchTeam({_id: teamId})
+    .then(team => Player.find({teamId: team._id}))
+    .then(players => resolve(players))
+    .catch(err => reject(err));
   });
 };
 

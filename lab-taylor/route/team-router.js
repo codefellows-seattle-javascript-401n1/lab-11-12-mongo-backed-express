@@ -4,6 +4,7 @@ const Router = require('express').Router;
 const debug = require('debug')('soccer:team-router');
 const jsonParser = require('body-parser').json();
 const teamCrud = require('../lib/team-crud');
+const playerCrud = require('../lib/player-crud');
 const teamRouter = module.exports = new Router();
 
 teamRouter.post('/team', jsonParser, (req, res) => {
@@ -32,4 +33,10 @@ teamRouter.delete('/team/:id', (req, res) => {
   teamCrud.removeTeam(req.params.id)
   .then(() => res.status(204).send())
   .catch(err => res.errorResponse(err));
+});
+
+teamRouter.get('/team/:id/players', (req, res) => {
+  playerCrud.fetchPlayerByTeamId(req.params.id)
+  .then(players => res.send(players))
+  .catch(err => res.send(err));
 });

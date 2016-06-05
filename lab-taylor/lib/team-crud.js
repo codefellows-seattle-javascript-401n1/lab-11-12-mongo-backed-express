@@ -47,7 +47,6 @@ exports.updateTeam = function(id, reqBody) {
 
 exports.removeTeam = function(id) {
   debug('removing team');
-  console.log('removeing team', id);
   return new Promise((resolve, reject) => {
     Team.remove({_id: id})
     .then(resolve)

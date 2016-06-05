@@ -36,44 +36,44 @@ describe('testing module team-router', function() {
   describe('testing POST /api/team', function() {
     after((done) => {
       teamCrud.removeAllTeams()
-                .then(() => done())
-                .catch(done);
+      .then(() => done())
+      .catch(done);
     });
 
     it('should return a team with valid data', function(done) {
       request.post(`${baseUrl}/api/team`)
-                .send({
-                  name: 'Seattle Sounders',
-                  city: 'Seattle',
-                  coach: 'Sigi'
-                })
-                .then((res) => {
-                  expect(res.status).to.equal(200);
-                  expect(res.body.name).to.equal('Seattle Sounders');
-                  done();
-                })
-                .catch(done);
+      .send({
+        name: 'Seattle Sounders',
+        city: 'Seattle',
+        coach: 'Sigi'
+      })
+    .then((res) => {
+      expect(res.status).to.equal(200);
+      expect(res.body.name).to.equal('Seattle Sounders');
+      done();
+    })
+    .catch(done);
     });
 
     it('should return a 400 when no body is provided', (done) => {
       request.post(`${baseUrl}/api/team/`)
-                .catch((err) => {
-                  expect(err.response.status).to.equal(400);
-                  expect(err.response.error.text).to.equal('bad request');
-                  done();
-                });
+      .catch((err) => {
+        expect(err.response.status).to.equal(400);
+        expect(err.response.error.text).to.equal('bad request');
+        done();
+      });
     });
 
     it('should return a 400 when invalid body is provided', (done) => {
       request.post(`${baseUrl}/api/team/`)
-                .send({
-                  name: 'Seattle Sounders FC'
-                })
-                .catch((err) => {
-                  expect(err.response.status).to.equal(400);
-                  expect(err.response.error.text).to.equal('bad request');
-                  done();
-                });
+      .send({
+        name: 'Seattle Sounders FC'
+      })
+      .catch((err) => {
+        expect(err.response.status).to.equal(400);
+        expect(err.response.error.text).to.equal('bad request');
+        done();
+      });
     });
   });
 
@@ -89,32 +89,32 @@ describe('testing module team-router', function() {
         tempTeam = team;
         done();
       })
-    .catch(done);
+      .catch(done);
     });
 
     after((done) => {
       teamCrud.removeAllTeams()
-                .then(() => done())
-                .catch(done);
+      .then(() => done())
+      .catch(done);
     });
 
     it('should return a team when a valid id', (done) => {
       request.get(`${baseUrl}/api/team/${tempTeam._id}`)
-                .then((res) => {
-                  expect(res.status).to.equal(200);
-                  expect(res.body.name).to.equal('Seattle Sounders');
-                  done();
-                })
-                .catch(done);
+      .then((res) => {
+        expect(res.status).to.equal(200);
+        expect(res.body.name).to.equal('Seattle Sounders');
+        done();
+      })
+      .catch(done);
     });
 
     it('should return an error 404 with invalid id', (done) => {
       request.get(`${baseUrl}/api/team/3923`)
-                .catch((err) => {
-                  expect(err.response.status).to.equal(404);
-                  expect(err.response.error.text).to.equal('not found');
-                  done();
-                });
+      .catch((err) => {
+        expect(err.response.status).to.equal(404);
+        expect(err.response.error.text).to.equal('not found');
+        done();
+      });
     });
   });
 
@@ -126,63 +126,63 @@ describe('testing module team-router', function() {
         city: 'Seattle',
         coach: 'Sigi'
       })
-                .then((team) => {
-                  tempTeam = team;
-                  done();
-                })
-                .catch(done);
+      .then((team) => {
+        tempTeam = team;
+        done();
+      })
+      .catch(done);
     });
 
     after((done) => {
       teamCrud.removeAllTeams()
-                .then(() => done())
-                .catch(done);
+      .then(() => done())
+      .catch(done);
     });
 
     it('should return a team when a valid id', (done) => {
       request.put(`${baseUrl}/api/team/${tempTeam._id}`)
-                .send({
-                  name: 'NEW NAME'
-                })
-                .then((res) => {
-                  expect(res.status).to.equal(200);
-                  expect(res.body.name).to.equal('NEW NAME');
-                  done();
-                })
-                .catch(done);
+      .send({
+        name: 'NEW NAME'
+      })
+      .then((res) => {
+        expect(res.status).to.equal(200);
+        expect(res.body.name).to.equal('NEW NAME');
+        done();
+      })
+      .catch(done);
     });
 
     it('should return a 404 if an invalid id is provided', (done) => {
       request.put(`${baseUrl}/api/team/23432`)
-                .send({
-                  name: 'New Name'
-                })
-                .catch((err) => {
-                  expect(err.response.error.status).to.equal(404);
-                  expect(err.response.error.text).to.equal('not found');
-                  done();
-                });
+      .send({
+        name: 'New Name'
+      })
+      .catch((err) => {
+        expect(err.response.error.status).to.equal(404);
+        expect(err.response.error.text).to.equal('not found');
+        done();
+      });
     });
 
     it('should return a 400 if no body is provided', (done) => {
       request.put(`${baseUrl}/api/team/${tempTeam._id}`)
-                .catch((err) => {
-                  expect(err.response.error.status).to.equal(400);
-                  expect(err.response.error.text).to.equal('bad request');
-                  done();
-                });
+      .catch((err) => {
+        expect(err.response.error.status).to.equal(400);
+        expect(err.response.error.text).to.equal('bad request');
+        done();
+      });
     });
 
     it('should return a 400 if invalid body is provided', (done) => {
       request.put(`${baseUrl}/api/team/${tempTeam._id}`)
-                .send({
-                  fake_key: 'you suck'
-                })
-                .catch((err) => {
-                  expect(err.response.error.status).to.equal(400);
-                  expect(err.response.error.text).to.equal('bad request');
-                  done();
-                });
+      .send({
+        fake_key: 'you suck'
+      })
+      .catch((err) => {
+        expect(err.response.error.status).to.equal(400);
+        expect(err.response.error.text).to.equal('bad request');
+        done();
+      });
     });
   });
 
@@ -194,35 +194,35 @@ describe('testing module team-router', function() {
         city: 'Seattle',
         coach: 'Sigi'
       })
-                .then((team) => {
-                  tempTeam = team;
-                  done();
-                })
-                .catch(done);
+      .then((team) => {
+        tempTeam = team;
+        done();
+      })
+      .catch(done);
     });
 
     after((done) => {
       teamCrud.removeAllTeams()
-                .then(() => done())
-                .catch(done);
+      .then(() => done())
+      .catch(done);
     });
 
     it('should return 204 with a valid id', (done) => {
       request.del(`${baseUrl}/api/team/${tempTeam._id}`)
-                .then((res) => {
-                  expect(res.status).to.equal(204);
-                  done();
-                })
-                .catch(done);
+      .then((res) => {
+        expect(res.status).to.equal(204);
+        done();
+      })
+      .catch(done);
     });
 
     it('should return an error 404 with invalid id', (done) => {
       request.del(`${baseUrl}/api/team/3923`)
-                .catch((err) => {
-                  expect(err.response.status).to.equal(404);
-                  expect(err.response.error.text).to.equal('not found');
-                  done();
-                });
+      .catch((err) => {
+        expect(err.response.status).to.equal(404);
+        expect(err.response.error.text).to.equal('not found');
+        done();
+      });
     });
   });
 
