@@ -45,6 +45,16 @@ exports.updatePlayer = function(id, reqBody) {
   });
 };
 
+exports.removePlayer = function(id) {
+  debug('removing player');
+  console.log('removeing player', id);
+  return new Promise((resolve, reject) => {
+    Player.remove({_id: id})
+    .then(resolve)
+    .catch(err => reject(AppError.error404(err.message)));
+  });
+};
+
 exports.removeAllPlayers = function() {
   debug('deleting all players');
   return Player.remove({});

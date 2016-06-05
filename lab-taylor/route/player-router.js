@@ -26,3 +26,10 @@ playerRouter.put('/player/:id', jsonParser, (req, res) => {
   .then(player => res.send(player))
   .catch(err => res.errorResponse(err));
 });
+
+playerRouter.delete('/player/:id', (req, res) => {
+  debug('deleting player');
+  playerCrud.removePlayer(req.params.id)
+  .then(() => res.status(204).send())
+  .catch(err => res.errorResponse(err));
+});

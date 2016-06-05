@@ -189,4 +189,45 @@ describe('testing module player-router', function() {
     });
   });
 
+  describe('testing DELETE /api/player/:id', function() {
+    let tempPlayer = {};
+    before((done) => {
+      playerCrud.createPlayer({
+        name: 'Taylor Wirtz',
+        hometown: 'Seattle',
+        position: 'Left Back',
+        number: 26
+      })
+      .then((player) => {
+        tempPlayer = player;
+        done();
+      })
+      .catch(done);
+    });
+
+    after((done) => {
+      playerCrud.removeAllPlayers()
+      .then(() => done())
+      .catch(done);
+    });
+
+    it('should return 204 with a valid id', (done) => {
+      request.del(`${baseUrl}/api/player/${tempPlayer._id}`)
+      .then((res) => {
+        expect(res.status).to.equal(204);
+        done();
+      })
+      .catch(done);
+    });
+
+    it('should return an error 404 with invalid id', (done) => {
+      request.del(`${baseUrl}/api/player/3923`)
+      .catch((err) => {
+        expect(err.response.status).to.equal(404);
+        expect(err.response.error.text).to.equal('not found');
+        done();
+      });
+    });
+  });
+
 });
