@@ -32,6 +32,12 @@ exports.fetchPlayer = function(id) {
 exports.updatePlayer = function(id, reqBody) {
   debug('updating player');
   return new Promise((resolve, reject) => {
+    if (Object.keys(reqBody).length === 0) return reject(AppError.error400('need to provide a body'));
+
+    const playerKeys = ['name', 'hometown', 'number', 'position'];
+    Object.keys(reqBody).forEach((key) => {
+      if (playerKeys.indexOf(key) === -1) return reject(AppError.error400('need to update a key that exists'));
+    });
 
     Player.findByIdAndUpdate(id, reqBody)
     .then(() => Player.findOne({_id: id}).then(resolve))

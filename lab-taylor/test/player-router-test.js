@@ -154,6 +154,27 @@ describe('testing module player-router', function() {
       })
       .catch(done);
     });
+
+    it('should return a 400 if no body is provided', (done) => {
+      request.put(`${baseUrl}/api/player/${tempPlayer._id}`)
+      .catch((err) => {
+        expect(err.response.error.status).to.equal(400);
+        expect(err.response.error.text).to.equal('bad request');
+        done();
+      });
+    });
+
+    it('should return a 400 if invalid body is provided', (done) => {
+      request.put(`${baseUrl}/api/player/${tempPlayer._id}`)
+      .send({
+        fake_key: 'you suck'
+      })
+      .catch((err) => {
+        expect(err.response.error.status).to.equal(400);
+        expect(err.response.error.text).to.equal('bad request');
+        done();
+      });
+    });
   });
 
 });
