@@ -29,6 +29,16 @@ exports.fetchPlayer = function(id) {
   });
 };
 
+exports.updatePlayer = function(id, reqBody) {
+  debug('updating player');
+  return new Promise((resolve, reject) => {
+
+    Player.findByIdAndUpdate(id, reqBody)
+    .then(() => Player.findOne({_id: id}).then(resolve))
+    .catch(err => reject(AppError.error404(err.message)));
+  });
+};
+
 exports.removeAllPlayers = function() {
   debug('deleting all players');
   return Player.remove({});

@@ -119,4 +119,41 @@ describe('testing module player-router', function() {
       });
     });
   });
+
+  describe('testing PUT /api/player', function() {
+    let tempPlayer = {};
+    before((done) => {
+      playerCrud.createPlayer({
+        name: 'Taylor Wirtz',
+        hometown: 'Seattle',
+        position: 'Left Back',
+        number: 26
+      })
+      .then((player) => {
+        tempPlayer = player;
+        done();
+      })
+      .catch(done);
+    });
+
+    after((done) => {
+      playerCrud.removeAllPlayers()
+      .then(() => done())
+      .catch(done);
+    });
+
+    it('should return a player when a valid id', (done) => {
+      request.put(`${baseUrl}/api/player/${tempPlayer._id}`)
+      .send({
+        name: 'NEW NAME'
+      })
+      .then((res) => {
+        expect(res.status).to.equal(200);
+        expect(res.body.name).to.equal('NEW NAME');
+        done();
+      })
+      .catch(done);
+    });
+  });
+
 });

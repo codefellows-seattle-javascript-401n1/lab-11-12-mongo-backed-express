@@ -16,8 +16,13 @@ playerRouter.post('/player', jsonParser, (req, res) => {
 playerRouter.get('/player/:id', (req, res) => {
   debug('getting player');
   playerCrud.fetchPlayer(req.params.id)
-  .then(player => {
-    res.send(player);
-  })
+  .then(player => res.send(player))
+  .catch(err => res.errorResponse(err));
+});
+
+playerRouter.put('/player/:id', jsonParser, (req, res) => {
+  debug('putting player update');
+  playerCrud.updatePlayer(req.params.id, req.body)
+  .then(player => res.send(player))
   .catch(err => res.errorResponse(err));
 });
