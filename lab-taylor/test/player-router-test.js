@@ -57,26 +57,25 @@ describe('testing module player-router', function() {
     });
 
     it('should return a 400 when no body is provided', (done) => {
-      request.post(`${baseUrl}/api/player`)
-      .end((err, res) => {
-        expect(res.status).to.equal(400);
-        expect(res.error.text).to.equal('bad request');
+      request.post(`${baseUrl}/api/player/`)
+      .catch((err) => {
+        expect(err.response.status).to.equal(400);
+        expect(err.response.error.text).to.equal('bad request');
         done();
       });
     });
 
     it('should return a 400 when invalid body is provided', (done) => {
-      request.post(`${baseUrl}/api/player`)
+      request.post(`${baseUrl}/api/player/`)
       .send({
-        name: 'Taylor'
+        name: 'taylor'
       })
-      .end((err, res) => {
-        expect(res.status).to.equal(400);
-        expect(res.error.text).to.equal('bad request');
+      .catch((err) => {
+        expect(err.response.status).to.equal(400);
+        expect(err.response.error.text).to.equal('bad request');
         done();
       });
     });
-
   });
 
   describe('testing GET /api/player', function() {
@@ -112,10 +111,9 @@ describe('testing module player-router', function() {
     });
 
     it('should return an error 404 with invalid id', (done) => {
-      request.get(`${baseUrl}/api/player/123456`)
-      .end((err, res) => {
-        expect(res.status).to.equal(404);
-        expect(res.error.text).to.equal('not found');
+      request.get(`${baseUrl}/api/player/3923`)
+      .catch((err) => {
+        expect(err.response.status).to.equal(404);
         done();
       });
     });
