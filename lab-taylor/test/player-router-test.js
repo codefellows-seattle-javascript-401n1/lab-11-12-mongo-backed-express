@@ -33,16 +33,15 @@ describe('testing module player-router', function() {
     }
   });
 
-  describe('testing POST /api/player with valid data', function() {
+  describe('testing POST /api/player', function() {
     after((done) => {
       playerCrud.removeAllPlayers()
       .then(() => done())
       .catch(done);
     });
-  });
 
-  it('should return a player', function(done) {
-    request.post(`${baseUrl}/api/player`)
+    it('should return a player with valid data', function(done) {
+      request.post(`${baseUrl}/api/player`)
     .send({
       name: 'Taylor Wirtz',
       hometown: 'Seattle',
@@ -55,9 +54,32 @@ describe('testing module player-router', function() {
       done();
     })
     .catch(done);
+    });
+
+    it('should return a 400 when no body is provided', (done) => {
+      request.post(`${baseUrl}/api/player`)
+      .end((err, res) => {
+        expect(res.status).to.equal(400);
+        expect(res.error.text).to.equal('bad request');
+        done();
+      });
+    });
+
+    it('should return a 400 when invalid body is provided', (done) => {
+      request.post(`${baseUrl}/api/player`)
+      .send({
+        name: 'Taylor'
+      })
+      .end((err, res) => {
+        expect(res.status).to.equal(400);
+        expect(res.error.text).to.equal('bad request');
+        done();
+      });
+    });
+
   });
 
-  describe('GET /api/player', function() {
+  describe('testing GET /api/player', function() {
     let tempPlayer = {};
     before((done) => {
       playerCrud.createPlayer({
