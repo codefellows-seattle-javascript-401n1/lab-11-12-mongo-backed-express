@@ -10,6 +10,7 @@
   "author": "andrewpeterwatson@gmail.com",
   "license": "ISC",
   "devDependencies": {
+    "debug": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-eslint": "^2.0.0",
     "gulp-mocha": "^2.2.0",
