@@ -13,6 +13,13 @@ playerRouter.post('/player', jsonParser, (req, res) => {
   .catch(err => res.errorResponse(err));
 });
 
+playerRouter.get('/player/all', (req, res) => {
+  debug('getting all players');
+  playerCrud.fetchAll()
+  .then(players => res.send(players))
+  .catch(err => res.errorResponse(err));
+});
+
 playerRouter.get('/player/:id', (req, res) => {
   debug('getting player');
   playerCrud.fetchPlayer(req.params.id)

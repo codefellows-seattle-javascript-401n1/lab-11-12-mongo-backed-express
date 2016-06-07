@@ -331,8 +331,79 @@ describe('testing module player-router', function() {
       .catch(done);
     });
 
-    it('should return an array of six tasks', (done) => {
+    it('should return an array of six players', (done) => {
       request.get(`${baseUrl}/api/team/${this.tempTeam._id}/players`)
+         .then((res) => {
+           expect(res.status).to.equal(200);
+           expect(res.body.length).to.equal(5);
+           done();
+         })
+         .catch(done);
+    });
+  });
+
+  describe('GET /api/player/all', function() {
+    before((done) => {
+      teamCrud.createTeam({
+        name: 'Seattle Sounders',
+        city: 'Seattle',
+        coach: 'Sigi'
+      })
+         .then((team) => {
+           this.tempTeam = team;
+           return Promise.all([
+             playerCrud.createPlayer({
+               teamId: team._id,
+               name: 'player 1',
+               hometown: 'city 1',
+               position: 'position 1',
+               number: 1
+             }),
+             playerCrud.createPlayer({
+               teamId: team._id,
+               name: 'player 2',
+               hometown: 'city 2',
+               position: 'position 2',
+               number: 2
+             }),playerCrud.createPlayer({
+               teamId: team._id,
+               name: 'player 3',
+               hometown: 'city 3',
+               position: 'position 3',
+               number: 3
+             }),playerCrud.createPlayer({
+               teamId: team._id,
+               name: 'player 4',
+               hometown: 'city 4',
+               position: 'position 4',
+               number: 4
+             }),playerCrud.createPlayer({
+               teamId: team._id,
+               name: 'player 5',
+               hometown: 'city 5',
+               position: 'position 5',
+               number: 5
+             })
+           ]);
+         })
+         .then(tasks => {
+           this.tempTasks = tasks;
+           done();
+         })
+         .catch(done);
+    });
+
+    after((done) => {
+      Promise.all([
+        playerCrud.removeAllPlayers(),
+        teamCrud.removeAllTeams()
+      ])
+      .then(() => done())
+      .catch(done);
+    });
+
+    it('should return an array of six players', (done) => {
+      request.get(`${baseUrl}/api/player/all`)
          .then((res) => {
            expect(res.status).to.equal(200);
            expect(res.body.length).to.equal(5);

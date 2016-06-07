@@ -66,6 +66,15 @@ exports.fetchPlayerByTeamId = function(teamId) {
   });
 };
 
+exports.fetchAll = function() {
+  debug('fetching all players');
+  return new Promise((resolve, reject) => {
+    Player.find({})
+    .then(players => resolve(players))
+    .catch(err => reject(err));
+  });
+};
+
 exports.removeAllPlayers = function() {
   debug('deleting all players');
   return Player.remove({});
