@@ -5,9 +5,9 @@ const morgan = require('morgan');
 const debug = require('debug')('brewer:server');
 const mongoose = require('mongoose');
 
-const errorResponse = require('./lib/error-response');
-const brewerRouter = require('./route/brewer-router');
-// const taskRouter = require('./router/task-router');
+const errorResponse = require('./lib/err-response');
+const brewerRouter = require('./route/brewer-route');
+// const brewRouter = require('./router/`brew-router');
 
 const port = process.env.PORT || 3000;
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost/brewer';
