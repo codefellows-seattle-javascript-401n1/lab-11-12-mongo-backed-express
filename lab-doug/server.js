@@ -13,6 +13,7 @@ const port = process.env.PORT || 3000;
 const mongoURI = process.env.MONGO_URI || 'mongodb:localhost/business';
 
 const app = express();
+//mongoose client connects to mongo db
 mongoose.connect(mongoURI);
 app.use(errorResponse);
 app.use(morgan('dev'));

@@ -30,6 +30,8 @@
   "dependencies": {
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
-    "mongoose": "^4.4.20"
+    "mongoose": "^4.4.20",
+    "superagent-promise-plugin": "node_modules/superagent-promise-plugin",
+    "superagent-use": "0.0.1"
   }
 }
