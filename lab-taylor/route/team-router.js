@@ -14,6 +14,13 @@ teamRouter.post('/team', jsonParser, (req, res) => {
   .catch(err => res.errorResponse(err));
 });
 
+teamRouter.get('/team/all', (req, res) => {
+  debug('getting all teams');
+  teamCrud.fetchAll()
+  .then(teams => res.send(teams))
+  .catch(err => res.errorResponse(err));
+});
+
 teamRouter.get('/team/:id', (req, res) => {
   debug('getting team');
   teamCrud.fetchTeam(req.params.id)

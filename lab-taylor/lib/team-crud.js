@@ -54,6 +54,15 @@ exports.removeTeam = function(id) {
   });
 };
 
+exports.fetchAll = function() {
+  debug('fetching all team');
+  return new Promise((resolve, reject) => {
+    Team.find({})
+    .then(teams => resolve(teams))
+    .catch(err => reject(err));
+  });
+};
+
 exports.removeAllTeams = function() {
   debug('deleting all players');
   return Team.remove({});

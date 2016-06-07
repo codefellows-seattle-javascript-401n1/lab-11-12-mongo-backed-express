@@ -7,6 +7,7 @@ const request = require('superagent-use');
 const superPromise = require('superagent-promise-plugin');
 const server = require('../server');
 const teamCrud = require('../lib/team-crud');
+const playerCrud = require('../lib/player-crud');
 const port = process.env.PORT || 3000;
 const baseUrl = `http://localhost:${port}`;
 
@@ -223,6 +224,129 @@ describe('testing module team-router', function() {
         expect(err.response.error.text).to.equal('not found');
         done();
       });
+    });
+  });
+
+  describe('GET /api/team/:id/players with valid id', function() {
+    before((done) => {
+      teamCrud.createTeam({
+        name: 'Seattle Sounders',
+        city: 'Seattle',
+        coach: 'Sigi'
+      })
+         .then((team) => {
+           this.tempTeam = team;
+           return Promise.all([
+             playerCrud.createPlayer({
+               teamId: team._id,
+               name: 'player 1',
+               hometown: 'city 1',
+               position: 'position 1',
+               number: 1
+             }),
+             playerCrud.createPlayer({
+               teamId: team._id,
+               name: 'player 2',
+               hometown: 'city 2',
+               position: 'position 2',
+               number: 2
+             }),playerCrud.createPlayer({
+               teamId: team._id,
+               name: 'player 3',
+               hometown: 'city 3',
+               position: 'position 3',
+               number: 3
+             }),playerCrud.createPlayer({
+               teamId: team._id,
+               name: 'player 4',
+               hometown: 'city 4',
+               position: 'position 4',
+               number: 4
+             }),playerCrud.createPlayer({
+               teamId: team._id,
+               name: 'player 5',
+               hometown: 'city 5',
+               position: 'position 5',
+               number: 5
+             })
+           ]);
+         })
+         .then(tasks => {
+           this.tempTasks = tasks;
+           done();
+         })
+         .catch(done);
+    });
+
+    after((done) => {
+      Promise.all([
+        playerCrud.removeAllPlayers(),
+        teamCrud.removeAllTeams()
+      ])
+      .then(() => done())
+      .catch(done);
+    });
+
+    it('should return an array of six players', (done) => {
+      request.get(`${baseUrl}/api/team/${this.tempTeam._id}/players`)
+         .then((res) => {
+           expect(res.status).to.equal(200);
+           expect(res.body.length).to.equal(5);
+           done();
+         })
+         .catch(done);
+    });
+  });
+
+  describe('GET /api/team/all', function() {
+    before((done) => {
+      Promise.all([
+        teamCrud.createTeam({
+          name: 'Seattle Sounders',
+          city: 'Seattle',
+          coach: 'Sigi'
+        }),
+        teamCrud.createTeam({
+          name: 'LA Galaxy',
+          city: 'Los Angels',
+          coach: 'Arena'
+        }),
+        teamCrud.createTeam({
+          name: 'Portland Timbers',
+          city: 'Portland',
+          coach: 'Porter'
+        }),
+        teamCrud.createTeam({
+          name: 'New York Cosmos',
+          city: 'New York City',
+          coach: 'Mr. Nobody'
+        }),
+        teamCrud.createTeam({
+          name: 'Houston Dynamo',
+          city: 'Houston',
+          coach: 'Who Cares'
+        })
+      ])
+      .then(() => done())
+      .catch(done);
+    });
+
+    after((done) => {
+      Promise.all([
+        teamCrud.removeAllTeams()
+      ])
+      .then(() => done())
+      .catch(done);
+    });
+
+    it('should return an array of six teams', (done) => {
+      request.get(`${baseUrl}/api/team/all`)
+         .then((res) => {
+           expect(res.status).to.equal(200);
+           expect(res.body.length).to.equal(5);
+           done();
+         })
+         .catch(done);
     });
   });
 
