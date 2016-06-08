@@ -1,8 +1,9 @@
 'use strict';
 
+const debug = require('debug')('deity:deity-crud');
+
 const Deity = require('../model/deity');
 const AppErr = require('../lib/app-error');
-const debug = require('debug')('deity:deity-crud');
 
 exports.createDeity = function(reqBody){ // our create function
   debug('deity-createCrud');
@@ -11,7 +12,6 @@ exports.createDeity = function(reqBody){ // our create function
       return reject(AppErr.error400('bad request'));
     }
     if (!reqBody.name || !reqBody.power) {
-      console.log('inside create');
       return reject(AppErr.error400('deity requires a power and a name'));
     }
     const deity = new Deity(reqBody);

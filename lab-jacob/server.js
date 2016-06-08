@@ -9,7 +9,7 @@ const morgan = require('morgan');
 // app modules
 const errorResponse = require('./lib/error-response');
 const deityRouter = require('./route/deity-router');
-//const Router = require('./route/_-router'); router for our second resource
+const beliefRouter = require('./route/belief-router');
 
 // global variables
 const port = process.env.PORT || 3000;
@@ -25,10 +25,11 @@ app.use(errorResponse);
 
 // here's our routes
 app.use('/api', deityRouter);
+app.use('/api', beliefRouter);
 //app.use('/api', secondResourceRouter);
 app.all('*', function(req, res){
   debug('404');
-  res.status(404).send('not found');
+  res.status(404).send('not found from server');
 });
 
 // starts and exports server

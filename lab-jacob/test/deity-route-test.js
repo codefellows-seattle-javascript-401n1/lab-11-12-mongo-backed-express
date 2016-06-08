@@ -58,7 +58,7 @@ describe('testing the deity router', function(){
     describe('testing a bad request for POST', function(){
       it('should return a 400', function(done){
         request.post(`${homeUrl}/api/deity`)
-          .send({name: 'tester', powr: 'testing'})
+          .send({})
           .then(done)
           .catch( err => {
             const res = err.response;
