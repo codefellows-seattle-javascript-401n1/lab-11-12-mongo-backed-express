@@ -24,7 +24,5 @@ exports.createReceipt = function(reqBody){
 };
 
 exports.removeReceiptDocuments = function(){
-  return new Promise(function(resolve, reject){
-    return Receipt.remove({});
-  });
+  return Receipt.remove({});
 };

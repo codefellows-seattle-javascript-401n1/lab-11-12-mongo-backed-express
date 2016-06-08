@@ -37,7 +37,7 @@ describe('Testing receipt router', function(){
   describe('Testing POST with valid request', function(){
     after((done) => {
       receiptOps.removeReceiptDocuments()
-      .then(done).catch(done);
+      .then(() => done()).catch(done);
     });
 
     it('should return a receipt', function(done){
