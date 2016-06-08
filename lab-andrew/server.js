@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 const errorResponse = require('./lib/err-response');
 const brewerRouter = require('./route/brewer-route');
-// const brewRouter = require('./router/`brew-router');
+const brewRouter = require('./route/brew-route');
 
 const port = process.env.PORT || 3000;
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost/brewer';
@@ -19,6 +19,7 @@ app.use(morgan('dev'));
 app.use(errorResponse);
 
 app.use('/api', brewerRouter);
+app.use('/api', brewRouter);
 app.all('*', function(req, res) {
   debug('404 *');
   res.status(404)

@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('brewer:brew-crud');
+// const debug = require('debug')('brewer:brew-crud');
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const Brew = require('../model/brew');

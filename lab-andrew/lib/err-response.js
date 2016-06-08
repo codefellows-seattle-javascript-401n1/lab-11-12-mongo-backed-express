@@ -8,7 +8,7 @@ module.exports = function(req, res, next) {
     debug('sendError');
     console.error(err.message);
     if(AppError.isAppError(err)) {
-      res.status(err.statusCode).send(err.resresponseMessage);
+      res.status(err.statusCode).send(err.respresponseMessage);
       return;
     }
     res.status(500).send('internal server error');

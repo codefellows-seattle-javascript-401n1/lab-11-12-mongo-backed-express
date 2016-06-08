@@ -3,7 +3,7 @@
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const brewerCrud = require('../lib/brewer-crud');
-const taskCrud = require('../lib/task-crud.js');
+const brewCrud = require('../lib/brew-crud.js');
 
 const brewerRouter = module.exports = new Router();
 
@@ -19,8 +19,8 @@ brewerRouter.get('/brewer/:id', function(req, res) {
   .catch(err => res.sendError(err));
 });
 
-brewerRouter.get('/brewer/:id/tasks', function(req, res) {
-  taskCrud.fetchTaskByBrewerId(req.params.id)
-  .then(tasks => res.send(tasks))
+brewerRouter.get('/brewer/:id/brews', function(req, res) {
+  brewCrud.fetchBrewByBrewerId(req.params.id)
+  .then(brews => res.send(brews))
   .catch(err => res.sendError(err));
 });
