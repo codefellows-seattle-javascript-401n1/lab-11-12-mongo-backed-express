@@ -52,9 +52,9 @@ exports.updateNote = function(id, newUpdatedBody){
 
   return new Promise((resolve, reject) => {
     if(!newUpdatedBody)
-      return reject(AppErr.error400('note require\'s content'));
+      reject(AppErr.error400('note require\'s content'));
     if(!id)
-      return reject(AppErr.error400('note require\'s id'));
+      reject(AppErr.error400('note require\'s id'));
 
     Note.findOne({_id: id})
     .then((note) => {

@@ -4,7 +4,8 @@ const gulp = require('gulp');
 const eslint = require('gulp-eslint');
 const mocha = require('gulp-mocha');
 const nodemon = require('gulp-nodemon');
-var paths = ['**/*.js', 'lib/*.js', 'model/*.js', 'test/*.js', 'route/*.js'];
+
+var paths = ['*.js', 'lib/*.js', 'model/*.js', 'test/*.js', 'route/*.js'];
 
 gulp.task('mocha', function(){
   return gulp.src(paths)
@@ -19,7 +20,7 @@ gulp.task('eslint', function(){
 });
 
 gulp.task('test', function(){
-  return gulp.src('test.js', {read: false})
+  return gulp.src('./test/*-test.js', {read: false})
   .pipe(mocha({reporter: 'nyan'}));
 });
 
@@ -30,4 +31,4 @@ gulp.task('nodemon', function(){
   });
 });
 
-gulp.task('default', ['eslint', 'mocha', 'test']);
+gulp.task('default', ['eslint', 'test']);

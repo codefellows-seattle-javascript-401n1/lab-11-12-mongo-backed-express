@@ -5,6 +5,7 @@ const express = require('express');
 const morgan = require('morgan');
 const debug = require('debug')('justin:server');
 const mongoose = require('mongoose');
+// const jsonParser = require('body-parser').json();
 
 // app modules
 const errorResponse = require('./lib/error-response');
@@ -22,6 +23,7 @@ mongoose.connect(mongoURI);
 // middle ware
 app.use(morgan('dev'));
 app.use(errorResponse);
+// app.use(jsonParser);
 
 // routes
 app.use('/api', noteRouter);
