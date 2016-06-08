@@ -22,14 +22,18 @@ encounterRoute.get('/encounter/:id', function(req, res){
   .catch(err => res.sendError(err));
 });
 
-// encounterRoute.put('/encounter/:id', jsonParser, function(req, res){
-//   encounterCrud.fetchEncounter(req.params.id)
-//   .then(encounter => res.send(encounter))
-//   .catch(err => res.sendError(err));
-// });
+encounterRoute.put('/encounter/:id', jsonParser, function(req, res){
+  encounterCrud.updateEncounter(req.params.id, req.body)
+  .then( encounter => res.send(encounter) )
+  .catch( err => res.sendError(err) );
+});
 
-// encounterRoute.delete('encounter/:id', function(req, res){
-//   remove encounter(req.params.id)
-//   .then(encounter => res.send(encounter))
-//   .catch(err => res.sendError(err));
-// });
+encounterRoute.delete('/encounter/:id', function(req, res){
+  console.log('delete route id is', req.params.id);
+  encounterCrud.removeEncounter(req.params.id)
+  .then((whatIsThis) => {
+    console.log('Inside delete route: ', whatIsThis);
+    res.status(204).send(whatIsThis);
+  })
+  .catch(err => res.sendError(err));
+});

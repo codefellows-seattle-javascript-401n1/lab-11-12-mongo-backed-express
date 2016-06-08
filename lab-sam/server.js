@@ -26,7 +26,7 @@ app.use('/api', encounterRoute);
 
 app.all('*', function(req, res){
   debug('* 404');
-  const err = new AppError.error404('route not found');
+  const err = new AppError.error404('route not found from server');
   res.sendError(err);
 });
 

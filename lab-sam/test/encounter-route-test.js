@@ -114,4 +114,81 @@ describe('testing the encounter-route', function(){
       });
     });
   });
+  describe('PUT api/encounter route with valid data', function(){
+    before((done) => {
+      encounterCrud.createEncounter({
+        name: 'Test Put',
+        description: 'The Glowing encounter shifts in your grasp',
+        cr: 12,
+        extra: 'what?'
+      }).then(encounter => {
+        this.tempEncounter = encounter;
+        done();
+      })
+      .catch(done);
+      console.log('PUT Before hit');
+    });
+    after((done) => {
+      encounterCrud.removeAllEncounters()
+      .then(() => done()).catch(done);
+    });
+    it('should return Test Put', (done) => {
+      request.put(`${baseUrl}/api/encounter/${this.tempEncounter._id}`)
+      .send({description: 'The Encounter starts to glow and pulse with energy', cr: 14})
+      .end((err, res) => {
+        console.log('PUT response', res.body);
+        console.log('PUT Valid res.body.name', res.body.name);
+        expect(res.status).to.equal(200);
+        expect(res.body.description).to.equal('The Encounter starts to glow and pulse with energy');
+        expect(res.body.cr).to.equal(14);
+        done();
+      });
+    });
+    it('should return 404', (done) => {
+      request.put(`${baseUrl}/api/encounter`)
+      .end((err, res) => {
+        console.log('PUT res.body.name', res.body.name);
+        expect(res.status).to.equal(404);
+        expect(res.text).to.equal('not found');
+        done();
+      });
+    });
+  });
+  describe('DELETE api/encounter route with valid data', function(){
+    before((done) => {
+      encounterCrud.createEncounter({
+        name: 'Test Del',
+        description: 'The Encounter vanishes in a puff of smoke',
+        cr: 12,
+        extra: 'what?'
+      }).then(encounter => {
+        this.tempEncounter = encounter;
+        done();
+      })
+      .catch(done);
+      console.log('DELETE Before hit');
+    });
+    after((done) => {
+      encounterCrud.removeAllEncounters()
+      .then(() => done()).catch(done);
+    });
+    //ERROR BRO
+    it('should return an empty 204', (done) => {
+      request.del(`${baseUrl}/api/encounter/${this.tempEncounter._id}`)
+      .end((err, res) => {
+        // console.log('DEL response', res.body);
+        expect(res.status).to.equal(204);
+        done();
+      });
+    });
+    it('should return 404', (done) => {
+      request.del(`${baseUrl}/api/encounter`)
+      .end((err, res) => {
+        console.log('DELETE res.body.name', res.body.name);
+        expect(res.status).to.equal(404);
+        expect(res.text).to.equal('not found');
+        done();
+      });
+    });
+  });
 });

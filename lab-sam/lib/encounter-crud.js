@@ -32,17 +32,40 @@ exports.fetchEncounter = function(id){
 exports.updateEncounter = function(id, reqBody){
   debug('updateEncounter');
   return new Promise ((resolve, reject) => {
-    if (!reqBody)
-      return reject(AppError.error400('encounters require a description'));
     if (! id)
       return reject(AppError.error400('encounters require a name'));
-    if (! reqBody.cr)
-      return reject(AppError.error400('encounters require a challenge rating'));
-  })
-}
+    Encounter.findOne({_id: id})
+      .then((encounter) => {
+        console.log('PUT old', encounter);
+        if (reqBody.description) {
+          encounter.description = reqBody.description;
+        };
+        if (reqBody.name) {
+          encounter.name = reqBody.name;
+        };
+        if (reqBody.cr) {
+          encounter.cr = reqBody.cr;
+        };
+        if (reqBody.extra) {
+          encounter.extra = reqBody.extra;
+        }
+        console.log('after IFs encounter =', encounter);
+        encounter.save();
+        resolve(encounter)
+      })
+      .then(encounter => resolve(encounter))
+      .catch(err => reject(AppError.error404(err.message)));
+  });
+};
 
 exports.removeEncounter = function(id){
-  return Encounter.remove({_id: id});
+  debug('fetchEncounter');
+  return new Promise((resolve, reject) => {
+    console.log('removeEncounter hit');
+    Encounter.remove({_id: id})
+    .then(resolve)
+    .catch(err => reject(AppError.error404(err.message)));
+  });
 };
 
 exports.removeAllEncounters = function(){
