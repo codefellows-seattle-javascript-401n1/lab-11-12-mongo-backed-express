@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000;
 //address to our mongoD server
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost/dm';
 const app = express();
-
+console.log('Using ' + mongoURI + ' database.');
 //conect to data base
 mongoose.connect(mongoURI);
 

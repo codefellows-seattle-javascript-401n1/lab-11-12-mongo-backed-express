@@ -6,7 +6,7 @@ const AppError = require('./app-error');
 const debug = require('debug')('dm:npc-crud');
 
 exports.createNpc = function(reqBody){
-  debug('createNpc')
+  debug('createNpc');
   return new Promise ((resolve, reject ) => {
     if (! reqBody.encounterId)
       return reject(AppError.error400('npcs must be linked to an encounter'));
@@ -24,7 +24,7 @@ exports.createNpc = function(reqBody){
 };
 
 exports.fetchNpcByEncounter = function(encounterId){
-  debug('fetchNpcByEncounter')
+  debug('fetchNpcByEncounter');
   return new Promise((resolve, reject) =>{
     encounterCrud.fetchEncounter({_id: encounterId})
     .then( encounter => NPC.find({encounterId: encounter._id}))
@@ -34,6 +34,6 @@ exports.fetchNpcByEncounter = function(encounterId){
 };
 
 exports.removeAllNPCs = function(){
-  debug('removeAllNPCs')
+  debug('removeAllNPCs');
   return NPC.remove({});
 };

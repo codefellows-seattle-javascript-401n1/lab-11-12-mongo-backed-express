@@ -1,6 +1,5 @@
 'use strict';
 
-const debug = require('debug')('dm:encounterModel');
 const mongoose = require('mongoose');
 
 const encounterSchema = mongoose.Schema({

@@ -21,7 +21,7 @@ describe('testing the encounter-route', function(){
       });
       return;
     }
-    done()
+    done();
   });
   after((done) => {
     if (server.isRunning){
@@ -30,9 +30,9 @@ describe('testing the encounter-route', function(){
         console.log('server is down');
         done();
       });
-      return
+      return;
     }
-    done()
+    done();
   });
 
   describe('POST /api/encounter with valid Data', function(){
@@ -44,6 +44,7 @@ describe('testing the encounter-route', function(){
       request.post(`${baseUrl}/api/encounter`)
       .send({name: 'test encounter', description: 'you turn a corner and come face to face with a wild test', cr: 22})
       .then((res) => {
+        console.log('POST valid res.body.name', res.body.name);
         expect(res.status).to.equal(200);
         expect(res.body.name).to.equal('test encounter');
         expect(res.body.cr).to.equal(22);
@@ -53,25 +54,64 @@ describe('testing the encounter-route', function(){
   });
 
   describe('POST /api/encounter with invalid Data', function(){
-    var response;
-    before((done) => {
+    it('should return a 400 error', function(done){
       request.post(`${baseUrl}/api/encounter`)
-      .send('22')
-      .then((res) => {
-        console.log('then block hit');
-        var response = res;
+      .end((err, res) => {
+        console.log('POST error res.body.name', res.body.name);
+        expect(res.status).to.equal(400);
+        expect(res.text).to.equal('bad request');
         done();
-      }).catch(done);
-    })
+      });
+    });
+  });
+
+  describe('GET api/encounter route with valid data', function(){
+    before((done) => {
+      encounterCrud.createEncounter({
+        name: 'Test Get',
+        description: 'You pull the Glowing encounter from the stone database',
+        cr: 12,
+        extra: 'what?'
+      }).then(encounter => {
+        this.tempEncounter = encounter;
+        done();
+      })
+      .catch(done);
+      console.log('GET Before hit');
+    });
     after((done) => {
       encounterCrud.removeAllEncounters()
       .then(() => done()).catch(done);
     });
-    it ('should return an 400 error', function(done){
-      console.log('response', response);
-      expect(response.status).to.equal(400);
-      expect(response.text).to.equal('Error: Bad Request');
-      done();
-    })
+    it('should return Test Get', (done) => {
+      request.get(`${baseUrl}/api/encounter/${this.tempEncounter._id}`)
+      .end((err, res) => {
+        console.log('GET Valid res.body.name', res.body.name);
+        expect(res.status).to.equal(200);
+        expect(res.body.name).to.equal('Test Get');
+        expect(res.body.cr).to.equal(12);
+        done();
+      });
+    });
+  });
+  describe('GET api/encounter route with invalid data', function(){
+    it('should return 404', (done) => {
+      request.get(`${baseUrl}/api/encounter/00000000000000`)
+      .end((err, res) => {
+        console.log('GET invalid res.body.name', res.body.name);
+        expect(res.status).to.equal(404);
+        expect(res.text).to.equal('not found');
+        done();
+      });
+    });
+    it('should return 404', (done) => {
+      request.get(`${baseUrl}/api/encounter`)
+      .end((err, res) => {
+        console.log('GET res.body.name', res.body.name);
+        expect(res.status).to.equal(404);
+        expect(res.text).to.equal('not found');
+        done();
+      });
+    });
   });
 });

@@ -16,11 +16,17 @@ encounterRoute.post('/encounter', jsonParser, function(req, res){
   .catch( err => res.sendError(err))
 });
 
-encounterRoute.get('encounter/:id', function(req, res){
+encounterRoute.get('/encounter/:id', function(req, res){
   encounterCrud.fetchEncounter(req.params.id)
   .then(encounter => res.send(encounter))
   .catch(err => res.sendError(err));
 });
+
+// encounterRoute.put('/encounter/:id', jsonParser, function(req, res){
+//   encounterCrud.fetchEncounter(req.params.id)
+//   .then(encounter => res.send(encounter))
+//   .catch(err => res.sendError(err));
+// });
 
 // encounterRoute.delete('encounter/:id', function(req, res){
 //   remove encounter(req.params.id)

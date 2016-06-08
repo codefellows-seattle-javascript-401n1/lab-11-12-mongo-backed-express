@@ -21,12 +21,25 @@ exports.createEncounter = function(reqBody){
 };
 
 exports.fetchEncounter = function(id){
-  return new Promise((resolve, reject) =>{
+  debug('fetchEncounter');
+  return new Promise((resolve, reject) => {
     Encounter.findOne({_id: id})
     .then(encounter => resolve(encounter))
-    .catch(err => AppError.error404(err.message));
+    .catch(err => reject(AppError.error404(err.message)));
   });
 };
+
+exports.updateEncounter = function(id, reqBody){
+  debug('updateEncounter');
+  return new Promise ((resolve, reject) => {
+    if (!reqBody)
+      return reject(AppError.error400('encounters require a description'));
+    if (! id)
+      return reject(AppError.error400('encounters require a name'));
+    if (! reqBody.cr)
+      return reject(AppError.error400('encounters require a challenge rating'));
+  })
+}
 
 exports.removeEncounter = function(id){
   return Encounter.remove({_id: id});
