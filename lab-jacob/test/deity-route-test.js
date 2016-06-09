@@ -58,13 +58,13 @@ describe('testing the deity router', function(){
     describe('testing a bad request for POST', function(){
       it('should return a 400', function(done){
         request.post(`${homeUrl}/api/deity`)
-          .send({})
-          .then(done)
-          .catch( err => {
-            const res = err.response;
-            expect(res.status).to.equal(400);
-            done();
-          });
+        .send({})
+        .then(done)
+        .catch( err => {
+          const res = err.response;
+          expect(res.status).to.equal(400);
+          done();
+        });
       });
     });
   });
@@ -93,6 +93,19 @@ describe('testing the deity router', function(){
         done();
       })
       .catch(done);
+    });
+
+    describe('testing not found http error', function() {
+      it('should return a 404', function(done) {
+        request.get(`${homeUrl}/api/deity/124563324`)
+        .then(done)
+        .catch( err => {
+          const res = err.response;
+          expect(res.status).to.equal(404);
+          expect(res.body).to.equal(undefined);
+          done();
+        });
+      });
     });
   });
 

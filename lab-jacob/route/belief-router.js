@@ -12,7 +12,7 @@ beliefRouter.post('/belief', jsonParser, function(req, res){
   .catch( err => res.sendError(err));
 });
 
-beliefRouter.get('/belief/:id', jsonParser,function(req, res){
+beliefRouter.get('/belief/:id', function(req, res){
   beliefCrud.fetchBeliefByDeityId(req.params.id)
   .then( belief => res.send(belief))
   .catch( err => res.sendError(err));

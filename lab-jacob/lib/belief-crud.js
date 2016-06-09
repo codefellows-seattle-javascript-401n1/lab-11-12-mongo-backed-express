@@ -9,7 +9,6 @@ const AppError = require('../lib/app-error');
 exports.createBelief = function(reqBody){
   debug('belief-createBelief');
   return new Promise((resolve, reject) => {
-    console.log('belief create');
     if(!reqBody.deityId)
       return reject(AppError.error400('belief requires a name'));
     if(!reqBody.desc || !reqBody.name)
@@ -22,9 +21,10 @@ exports.createBelief = function(reqBody){
 };
 
 exports.fetchBeliefByDeityId = function(deityId){
+  debug('fetchBelief');
   return new Promise((resolve, reject) => {
     deityCrud.fetchDeity({_id: deityId})
-    .then( deity => Belief.find({dietyId: deity._id}))
+    .then( deity => Belief.find({deityId: deity._id}))
     .then( belief => resolve(belief))
     .catch( err => reject(err));
   });

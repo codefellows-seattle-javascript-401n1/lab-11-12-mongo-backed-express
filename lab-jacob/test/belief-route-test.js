@@ -60,6 +60,7 @@ describe('testing the belief router', function(){
       request.post(`${homeUrl}/api/belief`)
       .send({deityId: this.tempDeity._id, name: 'testianity', desc: 'tests are life tests are love'})
       .then((res) => {
+        console.log(res.body);
         expect(res.status).to.equal(200);
         expect(res.body.deityId).to.equal(`${this.tempDeity._id}`);
         done();
@@ -73,6 +74,7 @@ describe('testing the belief router', function(){
       deityCrud.createDeity({name: 'testimus', power: 'test-ritus'})
       .then( deity => {
         this.tempDeity = deity;
+        beliefCrud.createBelief({deityId: this.tempDeity._id, name: 'test name', desc: 'test desc'});
         done();
       })
       .catch(done);
@@ -88,8 +90,9 @@ describe('testing the belief router', function(){
     it('should fetch a belief using a deityId', (done) => {
       request.get(`${homeUrl}/api/belief/${this.tempDeity._id}`)
       .then( (res) => {
+        console.log(res.body);
         expect(res.status).to.equal(200);
-        expect(res.body.name).to.equal('');
+        expect(res.body[0].name).to.equal('test name');
         done();
       }).catch(done);
     });
