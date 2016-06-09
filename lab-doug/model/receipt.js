@@ -1,5 +1,6 @@
 'use strict';
 const mongoose = require('mongoose');
+const debug = require('debug')('business:receipt');
 
 const receiptSchema = mongoose.Schema({
   customerLastName: {type: String, required: true},

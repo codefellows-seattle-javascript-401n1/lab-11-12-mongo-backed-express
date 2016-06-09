@@ -23,6 +23,30 @@ exports.createReceipt = function(reqBody){
   });
 };
 
+exports.getReceipt = function(id){
+  return new Promise((resolve, reject) => {
+    Receipt.findOne({_id: id})
+    .then(resolve)
+    .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
+
+exports.putReceipt = function(id, reqBody){
+  return new Promise((resolve, reject) => {
+    Receipt.update({_id: id}, reqBody)
+    .then(resolve)
+    .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
+
+exports.deleteReceipt = function(id){
+  return new Promise((resolve, reject) => {
+    Receipt.remove({_id: id})
+    .then(resolve)
+    .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
+
 exports.removeReceiptDocuments = function(){
   return Receipt.remove({});
 };
