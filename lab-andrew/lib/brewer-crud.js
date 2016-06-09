@@ -1,15 +1,15 @@
 'use strict';
 
 const Brewer = require('../model/brewer');
-const AppErr = require('../lib/app-error');
+const AppError = require('../lib/app-error');
 // const debug = require('debug')('brewer:brewer-crud');
 
 exports.createBrewer = function(reqBody) {
   return new Promise((resolve, reject) => {
     if(!reqBody.content)
-      return reject(AppErr.error400('Brewer requires content'));
+      return reject(AppError.error400('Brewer requires content'));
     if(!reqBody.name)
-      return reject(AppErr.error400('Brewer requires a name'));
+      return reject(AppError.error400('Brewer requires a name'));
 
     reqBody.timestamp = new Date();
     const brewer = new Brewer(reqBody);
@@ -24,7 +24,15 @@ exports.fetchBrewer = function(id) {
     Brewer.findOne({_id: id})
     .then(resolve)
     .catch(err =>
-    reject(AppErr.error404(err.message)));
+    reject(AppError.error404(err.message)));
+  });
+};
+
+exports.deleteBrewer = function(id) {
+  return new Promise((resolve, reject) => {
+    Brewer.remove({_id: id})
+    .then(resolve)
+    .catch(err => reject(AppError.error404(err.message)));
   });
 };
 

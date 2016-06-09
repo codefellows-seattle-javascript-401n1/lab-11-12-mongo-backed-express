@@ -52,7 +52,15 @@ describe('testing module brewer-route', function() {
         done();
       }).catch(done);
     });
+    it('should return a 400, bad request', function(done) {
+      request.post(`${baseUrl}/api/brewer/`).end((err, res) => {
+        expect(res.status).to.equal(400);
+        done();
+      });
+    });
   });
+
+
   describe('testing GET /api/brewer/:id with valid id', function() {
     before((done) => {
       brewerCrud.createBrewer({name:'!arms', content: 'troll talk'})
@@ -69,55 +77,96 @@ describe('testing module brewer-route', function() {
       .catch(done);
     });
 
-    it('should return a brewer', (done) => {
-      request.get(`${baseUrl}/api/brewer/${this.tempBrewer._id}`)
-      .then((res) => {
-        expect(res.status).to.equal(200);
-        expect(res.body.name).to.equal(this.tempBrewer.name);
+    it('should return a an error 404, not found', (done) => {
+      request.get(`${baseUrl}/api/brewer/123456`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
         done();
-      })
-      .catch(done);
+      });
+    });
+
+    it('should return a brewer', (done) => {
+      request.get(`${baseUrl}/api/brewer/${this.tempBrewer._id }`)
+    .then((res) => {
+      expect(res.status).to.equal(200);
+      expect(res.body.name).to.equal(this.tempBrewer.name);
+      done();
+    })
+    .catch(done);
     });
   });
 
 
-  describe('Testing GET /api/brewer/:id/brew with valid id', function() {
+  describe('Testing PUT /api/brewer/:id with valid ID', function() {
     before((done) => {
       brewerCrud.createBrewer({name: 'trolls', content: 'bridge'})
-      .then((brewer) => {
+      .then((brewer => {
         this.tempBrewer = brewer;
-        return Promise.all([
-          brewCrud.createBrew({brewerId: brewer._id, desc: 'test one'}),
-          brewCrud.createBrew({brewerId: brewer._id, desc: 'test two'}),
-          brewCrud.createBrew({brewerId:        brewer._id, desc: 'test three'})
-        ]);
-      })
-      .then(brew => {
-        this.tempBrewer = brew;
         done();
       })
       .catch(done);
     });
 
     after((done) => {
-      Promise.all([
-        brewerCrud.removeAllBrewers(),
-        brewCrud.removeAllBrews()
-      ])
-      .then(() => done())
-      .catch(done);
+      brewerCrud.removeAllBrewers()
+        .then(() => done())
+        .catch(done);
     });
 
-    it('should return an array of three brews', (done) => {
-      request.get(`${baseUrl}/api/brewer/${this.tempBrewer._id}/brew`)
-      .then((res) => {
-        console.log(('brew: ', res.body));
+    it('should return a new name from PUT request', (done) => {
+      request.put(`${baseUrl}/api/brewer/${this.tempBrewer._id}/brew`)
+      .send({name: 'top troll', content: 'better bridge'})
+      .end((req, res) => {
         expect(res.status).to.equal(200);
-        expect(res.body.length).to.equal(3);
-        expect(res.body[0].troll).to.equal('hello');
+        expect(res.body.name).to.equal('top troll');
+        done();
+      });
+    });
+    it('should return a 400 bad request', (done) => {
+      request.put(`${baseUrl}/api/brewer/${this.tempBrewer.id}`)
+      .end((req, res) => {
+        expect(res.status).to.equal(400);
+        done();
+      });
+    });
+    it('should return a status 404 not found', (done) => {
+      request.put(`${baseUrl}/api/brewer/123456`)
+      .send({name: 'try troll', content: 'try bridge'})
+      .end((req, res) => {
+        expect(this.status).to.equal(404);
+        done();
+      });
+    });
+  });
+
+  describe('testing Delete at /api/brewer/:id', function() {
+    before((done) => {
+      brewerCrud.createBrewer({name: 'top brew', content: 'this brew'})
+      .then(brewer => {
+        this.tempBrewer = brewer;
         done();
       })
       .catch(done);
+    });
+
+    after((done) => {
+      brewerCrud.removeAllBrewers()
+      .then(() => done())
+      .catch(done);
+    });
+    it('should return a status 404 not found', (done) => {
+      request.del(`${baseUrl}/api/brewer/12345`)
+      .end((req, res) => {
+        expect(res.status).to.equal(404);
+        done();
+      });
+    });
+    it('should return a status 204 deleted', (done) => {
+      request.del(`${baseUrl}/api/brewer/${this.tempBrewer.id}`)
+      .end((req, res) => {
+        expect(res.status).to.equal(204);
+        done();
+      });
     });
   });
 });

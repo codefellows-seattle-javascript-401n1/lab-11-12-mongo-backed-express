@@ -20,6 +20,23 @@ exports.createBrew = function(reqBody){
   });
 };
 
+exports.deleteBrew = function(id) {
+  return new Promise((resolve, reject) => {
+    Brew.remove({_id: id})
+    .then(resolve)
+    .catch(err => reject(AppError.error404(err.message)));
+  });
+};
+
+exports.fetchBrew = function(id) {
+  return new Promise((resolve, reject) => {
+    Brew.findOne({_id: id})
+    .then(resolve)
+    .catch(err => reject(AppError.error404(err.message)));
+  });
+};
+
+
 exports.fetchBrewByBrewerId = function(brewerId) {
   return new Promise((resolve, reject) => {
     brewerCrud.fetchBrewer({_id: brewerId})
