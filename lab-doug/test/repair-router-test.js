@@ -7,11 +7,11 @@ const supPromise = require('superagent-promise-plugin');
 const port = process.env.PORT || 3000;
 const baseUrl = `http://localhost:${port}`;
 const server = require('../server');
-const receiptOps = require('../lib/receipt-ops');
+const repairCrud = require('../lib/repair-crud');
 
 request.use(supPromise);
 
-describe('Testing receipt router', function(){
+describe('Testing repair router', function(){
   before((done) => {
     if(!server.isRunning){
       server.listen(port, () => {
@@ -36,16 +36,22 @@ describe('Testing receipt router', function(){
   });
   describe('Testing POST with valid request', function(){
     after((done) => {
-      receiptOps.removeReceiptDocuments()
+      repairCrud.removeAllRepairs()
       .then(() => done()).catch(done);
     });
 
-    it('should return a receipt', function(done){
-      request.post(`${baseUrl}/api/receipt`)
-      .send({customerLastName: 'Smith', autoMake: 'Audi', autoYear: 2010})
+    it('should return a repair', function(done){
+      request.post(`${baseUrl}/api/repair`)
+      .send({
+         mechanicLastName : "wally",
+         repairName : "transmission",
+         laborCost : 357.56,
+         partsCost :75.00,
+         receiptId : "5759ed28ac192c0e4e029528"
+      })
       .then((res) => {
         expect(res.status).to.equal(200);
-        expect(res.body.autoMake).to.equal('Audi');
+        expect(res.body.repairName).to.equal('transmission');
         done();
       }).catch(done);
     });

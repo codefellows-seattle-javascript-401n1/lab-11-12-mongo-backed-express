@@ -26,8 +26,8 @@ receiptRouter.put('/receipt/:id', bodyParser, function(req, res){
     .catch(err => res.sendError(err));
 });
 
-receiptRouter.del('/receipt/:id', function(req, res){
-  receiptOps.deleteReceipt(req.params.id)
+receiptRouter.delete('/receipt/:id', function(req, res){
+  receiptOps.removeReceipt(req.params.id)
     .then (receipt => res.send(receipt))
     .catch(err => res.sendError(err));
 });

@@ -9,8 +9,9 @@ const mongoose = require('mongoose');
 const errorResponse = require('./lib/error-response');
 const receiptRouter = require('./route/receipt-router');
 //globals
+const repairRouter = require('./route/repair-router');
 const port = process.env.PORT || 3000;
-const mongoURI = process.env.MONGO_URI || 'mongodb:localhost/business';
+const mongoURI = process.env.MONGO_URI || 'mongodb://localhost/business';
 
 const app = express();
 //mongoose client connects to mongo db
@@ -18,6 +19,7 @@ mongoose.connect(mongoURI);
 app.use(errorResponse);
 app.use(morgan('dev'));
 app.use('/api', receiptRouter);
+app.use('/api', repairRouter);
 
 app.all('*', function(req, res){
   debug('this route is not registered');

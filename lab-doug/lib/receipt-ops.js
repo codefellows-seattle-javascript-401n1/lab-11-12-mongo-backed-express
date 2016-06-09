@@ -10,10 +10,6 @@ exports.createReceipt = function(reqBody){
       return reject(AppErr.error400('receipt needs customer name'));
     if(!reqBody.autoMake)
       return reject(AppErr.error400('receipt needs auto make'));
-    if(!reqBody.autoYear)
-      return reject(AppErr.error400('receipt needs auto year'));
-    if(!reqBody.repairName)
-      return reject(AppErr.error400('receipt needs repair name'));
 
     const receipt = new Receipt(reqBody);
     receipt.save()
@@ -39,7 +35,7 @@ exports.putReceipt = function(id, reqBody){
   });
 };
 
-exports.deleteReceipt = function(id){
+exports.removeReceipt = function(id){
   return new Promise((resolve, reject) => {
     Receipt.remove({_id: id})
     .then(resolve)
