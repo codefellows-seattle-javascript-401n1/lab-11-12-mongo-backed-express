@@ -50,19 +50,46 @@ describe('testing the belief router', function(){
     });
 
     after((done) => {
+      deityCrud.removeAllDeities(); // added to remove created deities NOT TESTED
       beliefCrud.removeAllBeliefs()
       .then(() => done())
       .catch(done);
     });
 
     it('should return a belief', (done) => {
-      console.log('entering belief test');
       request.post(`${homeUrl}/api/belief`)
       .send({deityId: this.tempDeity._id, name: 'testianity', desc: 'tests are life tests are love'})
       .then((res) => {
-        console.log('test then statement');
         expect(res.status).to.equal(200);
         expect(res.body.deityId).to.equal(`${this.tempDeity._id}`);
+        done();
+      }).catch(done);
+    });
+  });
+
+  // need to create a belief for testing in the before block
+  describe('testing GET method with a valid request', function(){
+    before((done) => {
+      deityCrud.createDeity({name: 'testimus', power: 'test-ritus'})
+      .then( deity => {
+        this.tempDeity = deity;
+        done();
+      })
+      .catch(done);
+    });
+
+    after((done) => {
+      deityCrud.removeAllDeities();
+      beliefCrud.removeAllBeliefs()
+      .then(() => done())
+      .catch(done);
+    });
+
+    it('should fetch a belief using a deityId', (done) => {
+      request.get(`${homeUrl}/api/belief/${this.tempDeity._id}`)
+      .then( (res) => {
+        expect(res.status).to.equal(200);
+        expect(res.body.name).to.equal('');
         done();
       }).catch(done);
     });
