@@ -5,7 +5,6 @@ const express = require('express');
 const morgan = require('morgan');
 const debug = require('debug')('justin:server');
 const mongoose = require('mongoose');
-// const jsonParser = require('body-parser').json();
 
 // app modules
 const errorResponse = require('./lib/error-response');
@@ -35,7 +34,7 @@ app.all('*', function(req, res){
 
 // start server
 const server = app.listen(port, function(){
-  console.log('server up :)<-< ' + port);
+  console.log('server UP <o)))>< ~ @' + port);
 });
 
 // exprort server

@@ -1,19 +1,22 @@
 'use strict';
 
+const Task = require('../model/task');
 const debug = require('debug')('justin:task-crud');
+const AppErr = require('./app-error');
+
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-const Task = require('../model/task');
 const noteCrud = require('./note-crud');
-const AppError = require('./app-error');
 
 
 exports.createTask = function(reqBody){
   return new Promise((resolve, reject) => {
-    if (! reqBody.noteId)
-      return reject(AppError.error400('tasks require noteId'));
-    if (! reqBody.desc)
-      return reject(AppError.error400('tasks require a desc'));
+    if (!reqBody.noteId)
+      return reject(AppErr.error400('task require\'s noteId'));
+    if (!reqBody.desc)
+      return reject(AppErr.error400('tasks require\'s desc'));
+
+    reqBody.timestamp = new Date();
     const task = new Task(reqBody);
     task.save()
     .then(task => resolve(task))
@@ -33,3 +36,42 @@ exports.fetchTaskByNoteId = function(noteId){
 exports.removeAllTasks = function(){
   return Task.remove({});
 };
+//
+exports.deleteTaskByNoteId = function(noteId) {
+  return new Promise((resolve, reject) => {
+    // noteCrud.deleteNote({_id: noteId})
+    // .then( note => Task,find({note}))
+    if(!noteId) return reject(AppErr.error400('task require\'s noteId'));
+
+    noteCrud.deleteNote({_id: noteId})
+    .then (tasks => resolve(tasks))
+    .catch( err => reject(err));
+  });
+};
+
+// exports.updateTaskByNoteId = function(id, taskUpdatedBody){
+//   debug('task-updateTask');
+//
+//   return new Promise((resolve, reject) => {
+//     if(!taskUpdatedBody)
+//       reject(AppErr.error400('note require\'s content'));
+//     if(!id)
+//       reject(AppErr.error400('note require\'s id'));
+//
+//     Task.findOne({_id: id})
+//     .then((note) => {
+//       if(taskUpdatedBody.name){
+//         note.name = taskUpdatedBody.name;
+//       }
+//       if(taskUpdatedBody.content){
+//         note.content = taskUpdatedBody.content;
+//       }
+//       note.save()
+//       .then(resolve)
+//       .catch(reject);
+//     })
+//     .catch((err) => {
+//       reject(AppErr.error404(err.message));
+//     });
+//   });
+// };

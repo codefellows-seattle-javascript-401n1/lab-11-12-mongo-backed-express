@@ -13,6 +13,7 @@ exports.createNote = function(reqBody){
 
     reqBody.timestamp = new Date();
     const note = new Note(reqBody);
+    
     note.save()
     .then(resolve)
     .catch(reject);
@@ -21,7 +22,6 @@ exports.createNote = function(reqBody){
 
 exports.fetchNote = function(id){
   return new Promise((resolve, reject) => {
-    // debugger;
     Note.findOne({_id: id})
     .then(resolve)
     .catch(err => reject(AppErr.error404(err.message)));
@@ -31,7 +31,6 @@ exports.fetchNote = function(id){
 exports.removeAllNotes = function(){
   return Note.remove({});
 };
-//
 
 exports.deleteNote = function(id){
   debug('note-deleteNote');

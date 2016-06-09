@@ -238,20 +238,6 @@ describe('testing module note-router', function(){
       });
     });
 
-    // it('test for PUT: 400', (done) => {
-    //   request
-    //   .put(`${baseUrl}/api/note/${this.tempNote._id}`)
-    //   .send()
-    //   .then(done)
-    //   .catch( err => {
-    //     let res = err.response;
-    //     console.log('HIT IT', res.status);
-    //     expect(res.status).to.eql(400);
-    //     expect(res.text).to.eql('bad request');
-    //     done();
-    //   });
-    //
-    // });
   });
   //PUT 400
   describe('test 4 PUT 400:', function() {
