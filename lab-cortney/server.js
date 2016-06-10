@@ -5,7 +5,7 @@ const debug = require('debug');
 const mongoose = require('mongoose');
 
 const errorResponse = require('./lib/error-response');
-const storeRouter = require('./lib-store-router');
+const storeRouter = require('./route/store-router');
 
 const port = process.env.PORT || 3000;
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost/store';

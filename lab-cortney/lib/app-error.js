@@ -22,8 +22,8 @@ AppError.error400 = function(message){
 };
 
 AppError.error404 = function(message){
-  debug('error440');
-  return new AppError(message, 404, 'store not found');
+  debug('error404');
+  return new AppError(message, 404, 'not found');
 };
 
 AppError.error500 = function(message){
