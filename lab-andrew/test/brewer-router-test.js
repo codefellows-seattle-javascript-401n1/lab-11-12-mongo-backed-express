@@ -9,8 +9,8 @@ const port = process.env.PORT || 3000;
 const baseUrl = `http://localhost:${port}`;
 const server = require('../server');
 const brewerCrud = require('../lib/brewer-crud');
-const brewCrud = require('../lib/brew-crud');
 request.use(superPromise);
+
 
 describe('testing module brewer-route', function() {
   before((done) => {
@@ -100,7 +100,7 @@ describe('testing module brewer-route', function() {
   describe('Testing PUT /api/brewer/:id with valid ID', function() {
     before((done) => {
       brewerCrud.createBrewer({name: 'trolls', content: 'bridge'})
-      .then((brewer => {
+      .then(brewer => {
         this.tempBrewer = brewer;
         done();
       })
@@ -114,7 +114,7 @@ describe('testing module brewer-route', function() {
     });
 
     it('should return a new name from PUT request', (done) => {
-      request.put(`${baseUrl}/api/brewer/${this.tempBrewer._id}/brew`)
+      request.put(`${baseUrl}/api/brewer/${this.tempBrewer._id}`)
       .send({name: 'top troll', content: 'better bridge'})
       .end((req, res) => {
         expect(res.status).to.equal(200);
@@ -133,7 +133,7 @@ describe('testing module brewer-route', function() {
       request.put(`${baseUrl}/api/brewer/123456`)
       .send({name: 'try troll', content: 'try bridge'})
       .end((req, res) => {
-        expect(this.status).to.equal(404);
+        expect(res.status).to.equal(404);
         done();
       });
     });

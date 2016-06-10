@@ -25,7 +25,7 @@ brewerRouter.get('/', function(req, res) {
   res.sendError(err);
 });
 
-brewerRouter.put('/hero/:id', jsonParser, function(req, res) {
+brewerRouter.put('/brewer/:id', jsonParser, function(req, res) {
   if(!req.body.name) {
     const err = AppError.error400('bad request, please provide a name');
     res.sendError(err);

@@ -7,4 +7,5 @@ const brewSchema = mongoose.Schema({
   brewerId: {type: mongoose.Schema.ObjectId, required: true}
 });
 
+
 module.exports = mongoose.model('brew', brewSchema);
