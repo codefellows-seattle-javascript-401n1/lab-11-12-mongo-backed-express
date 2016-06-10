@@ -93,6 +93,7 @@ describe('Testing the cafe-router module', function(){
       }).catch(done);
     });
   });
+
   //BAD GET
   describe('Testing GET to /api/cafes/:id with valid data', function(){
     it('should return a 404', (done)=>{
@@ -108,6 +109,29 @@ describe('Testing the cafe-router module', function(){
   //BAD PUT
   //BAD PUT
 
-  //GOOD DELETE
+  // GOOD DELETE
+  describe('Testing DELETE to /api/cafes/:id with valid data', function(){
+    before((done)=>{
+      cafeCrud.createCafe({cafeName:'test', cafeAdd:'test address'})
+      .then(cafe => {
+        this.tempCafe = cafe;
+        done();
+      }).catch(done);
+    });
+
+    after((done)=>{
+      cafeCrud.removeAllCafes()
+      .then(()=>done()).catch(done);
+    });
+
+    it('should return a cafe', (done)=>{
+      console.log('THE ID IS', this.tempCafe._id);
+      request.del(`${baseUrl}/api/cafes/${this.tempCafe._id}`)
+      .then((res)=>{
+        expect(res.status).to.equal(204);
+        done();
+      }).catch(done);
+    });
+  });
   //BAD DELETE
 });

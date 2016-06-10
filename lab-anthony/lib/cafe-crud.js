@@ -28,6 +28,15 @@ exports.fetchCafe = function(id){
   });
 };
 
+exports.removeCafe = function(id){
+  debug('remove cafe');
+  return new Promise((resolve, reject)=>{
+    Cafe.remove({_id: id})
+    .then(resolve)
+    .catch(err => reject(AppErr.error(err.message)));
+  });
+};
+
 exports.removeAllCafes = function(){
   return Cafe.remove();
 };
