@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 const errorResponse = require('./lib/error-response');
 const AppError = require('./lib/app-error');
-// const npcRouter = require('./routes/npc-route');
+const npcRoute = require('./routes/npc-route');
 const encounterRoute = require('./routes/encounter-route');
 
 const port = process.env.PORT || 3000;
@@ -23,6 +23,7 @@ app.use(morgan('dev'));
 
 // app.use('/api', npcRouter);
 app.use('/api', encounterRoute);
+app.use('/api', npcRoute);
 
 app.all('*', function(req, res){
   debug('* 404');

@@ -10,4 +10,4 @@ const npcSchema = mongoose.Schema({
   description: { type: String}
 });
 
-module.exports = mongoose.model('npc', npcSchema);
+module.exports = mongoose.model('NPC', npcSchema);
