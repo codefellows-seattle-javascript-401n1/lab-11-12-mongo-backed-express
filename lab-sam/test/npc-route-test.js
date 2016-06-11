@@ -63,6 +63,7 @@ describe('testing the NPC-route', function(){
         done();
       }).catch(done);
     });
+  });
   describe('testing the npc/ POST route with valid data', function(){
       before((done) => {
         encounterCrud.createEncounter({
