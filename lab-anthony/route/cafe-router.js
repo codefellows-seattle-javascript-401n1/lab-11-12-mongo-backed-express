@@ -26,6 +26,16 @@ cafeRouter.get('/cafes/:id', function(req, res){
 });
 
 //PUT - jsonParser
+cafeRouter.put('/cafes/:id', jsonParser, function(req, res){
+  debug('CALLED PUT BY ID');
+  cafeCrud.editCafe(req.params.id, req.body)
+  .then((cafe) => {
+    res.send(cafe);
+  })
+  .catch((err) => {
+    res.sendError(err);
+  });
+});
 
 //DELETE - no jsonParser
 cafeRouter.delete('/cafes/:id', function(req, res){

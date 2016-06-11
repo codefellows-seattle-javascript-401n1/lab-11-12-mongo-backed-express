@@ -106,8 +106,67 @@ describe('Testing the cafe-router module', function(){
   });
 
   //GOOD PUT
+  describe('Testing PUT to /api/cafes/:id with valid data', function(){
+    before((done)=>{
+      cafeCrud.createCafe({cafeName:'test', cafeAdd:'test address'})
+      .then(cafe => {
+        this.tempCafe = cafe;
+        done();
+      }).catch(done);
+    });
+
+    after((done)=>{
+      cafeCrud.removeAllCafes()
+      .then(()=>done()).catch(done);
+    });
+
+    it('should return a cafe with new properties', (done)=>{
+      console.log('THE ID IS', this.tempCafe._id);
+      request.put(`${baseUrl}/api/cafes/${this.tempCafe._id}`)
+      .send({cafeName: 'edited'})
+      .then((res)=>{
+        expect(res.status).to.equal(200);
+        expect(res.body.cafeName).to.equal('edited');
+        done();
+      }).catch(done);
+    });
+  });
+
   //BAD PUT
-  //BAD PUT
+  describe('Testing PUT to /api/cafes/:id with invalid data', function(){
+    before((done)=>{
+      cafeCrud.createCafe({cafeName:'test', cafeAdd:'test address'})
+      .then(cafe => {
+        this.tempCafe = cafe;
+        done();
+      }).catch(done);
+    });
+
+    after((done)=>{
+      cafeCrud.removeAllCafes()
+      .then(()=>done()).catch(done);
+    });
+
+    it('should return a 400 bad request', (done)=>{
+      request.put(`${baseUrl}/api/cafes/${this.tempCafe._id}`)
+      .send({})
+      .then(()=>done())
+      .catch((err)=> {
+        expect(err.response.error.status).to.equal(400);
+        done();
+      });
+    });
+
+    it('should return a 404 not found', (done)=>{
+      request.put(`${baseUrl}/api/cafes/123`)
+      .send({cafeName:'edited'})
+      .then(()=>done())
+      .catch((err)=> {
+        expect(err.response.error.status).to.equal(404);
+        done();
+      });
+    });
+  });
 
   // GOOD DELETE
   describe('Testing DELETE to /api/cafes/:id with valid data', function(){
@@ -124,8 +183,7 @@ describe('Testing the cafe-router module', function(){
       .then(()=>done()).catch(done);
     });
 
-    it('should return a cafe', (done)=>{
-      console.log('THE ID IS', this.tempCafe._id);
+    it('should delete a cafe', (done)=>{
       request.del(`${baseUrl}/api/cafes/${this.tempCafe._id}`)
       .then((res)=>{
         expect(res.status).to.equal(204);
@@ -134,4 +192,15 @@ describe('Testing the cafe-router module', function(){
     });
   });
   //BAD DELETE
+  describe('Testing DELETE to /api/cafes/:id with invalid data', function(){
+    it('should return a 404', (done)=>{
+      request.del(`${baseUrl}/api/cafes/123`)
+      .then(done)
+      .catch((err)=>{
+        var res = err.response;
+        expect(res.status).to.equal(404);
+        done();
+      });
+    });
+  });
 });

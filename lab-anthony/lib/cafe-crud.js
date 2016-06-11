@@ -28,12 +28,28 @@ exports.fetchCafe = function(id){
   });
 };
 
+exports.editCafe = function(id, reqBody){
+  debug('edit cafe');
+  console.log('THE REQBODY IS', reqBody);
+  return new Promise((resolve, reject)=>{
+    if (!reqBody.cafeName && !reqBody.cafeAdd) {
+      return reject(AppErr.error400('cafe requires new name or address'));
+    }
+
+    Cafe.findByIdAndUpdate(id, reqBody)
+    .then(()=> Cafe.findOne({_id: id})).then(resolve)
+    .catch((err) => {
+      return reject((AppErr.error404(err.message)));
+    });
+  });
+};
+
 exports.removeCafe = function(id){
   debug('remove cafe');
   return new Promise((resolve, reject)=>{
     Cafe.remove({_id: id})
     .then(resolve)
-    .catch(err => reject(AppErr.error(err.message)));
+    .catch(err => reject(AppErr.error404(err.message)));
   });
 };
 
