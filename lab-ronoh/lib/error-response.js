@@ -11,7 +11,7 @@ module.exports = function(req, res, next){
       res.status(err.statusCode).send(err.responseMessage);
       return;
     }
-    res.status(500).send('internal server error');
+    res.status(500).send('internal server error - ERROR RESPONSE');
   };
   next();
 };

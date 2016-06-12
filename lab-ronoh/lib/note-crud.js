@@ -32,9 +32,26 @@ exports.updateNote = function(id, data){
       var err = AppError.error400('bad request');
       return reject(err);
     }
-    Note.update({_id: id}, data)
-    .then(resolve)
-    .catch(err => reject(AppError.error404(err.message)));
+    if(!data){
+      err = AppError.error400('bad request');
+      return reject(err);
+    }
+    if(!data.content){
+      err = AppError.error400('bad request');
+      return reject(err);
+    }
+
+    Note.findOne({_id: id})
+   .then(note => {
+     Note.update({_id: id}, data)
+     .then(() => {
+       Note.findOne({_id: id})
+       .then(resolve)
+       .catch(reject);
+     })
+     .catch( err => reject(AppError.error400(err.mesage)));
+   })
+   .catch(err => reject(AppError.error404(err.message)));
   });
 };
 exports.removeNote = function(id){

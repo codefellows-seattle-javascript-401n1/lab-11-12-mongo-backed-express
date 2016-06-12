@@ -155,6 +155,32 @@ describe('testing module note-router', function(){
       });
     });
   });
+  describe('PUT /api/note/:id with valid id', function(){
+    before((done) => {
+      noteCrud.createNote({name: 'booya', content: 'test test 123'})
+      .then(note =>{
+        this.tempNote = note;
+        done();
+      })
+      .catch(done);
+    });
+    after((done) => {
+      noteCrud.removeAllNotes()
+      .then(() => done())
+      .catch(done);
+    });
+
+    it('should return a note', (done) =>{
+      request.put(`${baseUrl}/api/note/${this.tempNote._id}`)
+      .send({content:'retest retest 234'})
+      .then((res)=> {
+        expect(res.status).to.equal(200);
+        expect(res.body.content).to.equal('retest retest 234');
+        done();
+      })
+      .catch(done);
+    });
+  });
   describe('testing DELETE/api/note/:id', function(){
     before((done) => {
       noteCrud.createNote({name: 'booya', content: 'test test 123'})
@@ -188,6 +214,57 @@ describe('testing module note-router', function(){
         expect(err.response.res.statusCode).to.equal(404);
         expect(err.response.res.text).to.equal('not found');
         done();
+      });
+    });
+  });
+  describe('testing PUT with no valid Id', function(){
+    it('should return an error', (done)=> {
+      request.put(`${baseUrl}/api/note/123`)
+      .send({content:'ABANDON ALL HOPE!'})
+      .then(done)
+      .catch(err => {
+        try {
+          // expect(err.response.res.statusCode).to.equal(404);
+          // expect(err.response.res.text).to.equal('not found');
+          const res = err.response;
+          expect(res.statusCode).to.equal(404);
+          expect(res.text).to.equal('not found');
+          done();
+        } catch(err){
+          done(err);
+        }
+      });
+    });
+  });
+  describe('testing PUT bad input', function(){
+    before((done) => {
+      noteCrud.createNote({name: 'booya', content: 'test test 123'})
+      .then(note =>{
+        this.tempNote = note;
+        done();
+      })
+      .catch(done);
+    });
+    after((done) => {
+      noteCrud.removeAllNotes()
+      .then(() => done())
+      .catch(done);
+    });
+    it('should return an error', (done)=> {
+      request.put(`${baseUrl}/api/note/${this.tempNote._id}`)
+      .send({})
+      .then(done)
+      .catch(err => {
+        try {
+          // expect(err.response.res.statusCode).to.equal(404);
+          // expect(err.response.res.text).to.equal('not found');
+          const res = err.response;
+          expect(res.statusCode).to.equal(400);
+          expect(res.text).to.equal('bad request');
+          done();
+        } catch(err){
+          done(err);
+        }
       });
     });
   });
