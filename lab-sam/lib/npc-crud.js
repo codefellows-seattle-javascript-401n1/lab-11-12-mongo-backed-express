@@ -65,7 +65,7 @@ exports.fetchNpcByEncounter = function(encounterId){
   debug('fetchNpcByEncounter');
   return new Promise((resolve, reject) =>{
     encounterCrud.fetchEncounter({_id: encounterId})
-    .then( encounter => npc.find({encounterId: encounter._id}))
+    .then( encounter => NPC.find({encounterId: encounter._id}))
     .then( npcs => resolve(npcs))
     .catch( err => reject(err));
   });

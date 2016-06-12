@@ -154,6 +154,54 @@ describe('testing the encounter-route', function(){
       });
     });
   });
+  describe('GET-by-encounter api/npc route with valid data', function(){
+    before((done) => {
+      encounterCrud.createEncounter({
+        name: 'Tes NPC holder',
+        description: 'a Giant test holding a croud of testers on it\'s deck',
+        cr: 12
+      })
+      .then(encounter => {
+        this.tempEncounter = encounter;
+        console.log('#1 GET then Encounter1', this.tempEncounter);
+        npcCrud.createNpc({
+          encounterId: `${this.tempEncounter._id}`,
+          name: 'Tester Test',
+          classes: 'tester',
+          race: 'test'
+        }).then( npc => {
+          this.tempNpc = npc;
+          done()
+        })
+        .catch(done)
+      })
+      .catch(done);
+      console.log('Before NPC GET hit');
+    })
+    after((done) => {
+      encounterCrud.removeAllEncounters()
+      .then(npcCrud.removeAllNPCs())
+      .then(() => done())
+      .catch(done);
+    });
+    it('should return 200', (done) => {
+      request.get(`${baseUrl}/api/encounter/${this.tempEncounter._id}/npcs`)
+      .end((err, res) => {
+        console.log('GET all-by-Encounter res.body.name', res.body.name);
+        expect(res.status).to.equal(200);
+        done();
+      });
+    });
+    it('should return 404', (done) => {
+      request.get(`${baseUrl}/api/encounter/0000000000000/npcs`)
+      .end((err, res) => {
+        console.log('PUT res.body.name', res.body.name);
+        expect(res.status).to.equal(404);
+        expect(res.text).to.equal('not found');
+        done();
+      });
+    });
+  });
   describe('DELETE api/encounter route with valid data', function(){
     before((done) => {
       encounterCrud.createEncounter({

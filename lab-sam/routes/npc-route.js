@@ -17,7 +17,8 @@ npcRoute.post('/npc', jsonParser, function(req, res){
 });
 
 npcRoute.get('/npc/:id', function(req, res){
-  npcCrud.fetchNpc(req.params.id)
+  debug('npc GET route')
+  npcCrud.fetchNpcByEncounter(req.params.id)
   .then(npc => res.send(npc))
   .catch(err => res.sendError(err));
 });
