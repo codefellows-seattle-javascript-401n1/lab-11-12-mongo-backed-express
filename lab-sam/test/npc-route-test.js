@@ -45,7 +45,7 @@ describe('testing the NPC-route', function(){
         done();
       })
       .catch(done);
-      console.log('Before NPC post hit');
+      console.log('Before NPC POST hit');
     });
     after((done) => {
       encounterCrud.removeAllEncounters()
@@ -65,27 +65,27 @@ describe('testing the NPC-route', function(){
     });
   });
   describe('testing the npc/ POST route with invalid data', function(){
-      before((done) => {
-        encounterCrud.createEncounter({
-          name: 'Tes NPC holder',
-          description: 'a Giant test holding a croud of testers on it\'s deck',
-          cr: 12
-        }).then(encounter => {
-          this.tempEncounter = encounter;
-          done();
-        })
-        .catch(done);
-        console.log('Before NPC post hit');
-      });
-      after((done) => {
-        encounterCrud.removeAllEncounters()
-        .then(npcCrud.removeAllNPCs())
-        .then(() => done()).catch(done);
-      });
-      it ('should return a 400', (done) => {
-        request.post(`${baseUrl}/api/npc`)
-        .send({name: 'Tester Test', classes: 'tester', race: 'test'})
-        .end((err, res) => {
+    before((done) => {
+      encounterCrud.createEncounter({
+        name: 'Tes NPC holder',
+        description: 'a Giant test holding a croud of testers on it\'s deck',
+        cr: 12
+      }).then(encounter => {
+        this.tempEncounter = encounter;
+        done();
+      })
+      .catch(done);
+      console.log('Before NPC post hit');
+    });
+    after((done) => {
+      encounterCrud.removeAllEncounters()
+      .then(npcCrud.removeAllNPCs())
+      .then(() => done()).catch(done);
+    });
+    it ('should return a 400', (done) => {
+      request.post(`${baseUrl}/api/npc`)
+      .send({name: 'Tester Test', classes: 'tester', race: 'test'})
+      .end((err, res) => {
         console.log('POST with invalid linked', res.body.name);
         expect(res.status).to.equal(400);
         expect(res.text).to.equal('bad request');
@@ -111,13 +111,13 @@ describe('testing the NPC-route', function(){
         }).then( npc => {
           this.tempNpc = npc;
           console.log('this.tempNpc', this.tempNpc);
-          done()
+          done();
         })
-        .catch(done)
+        .catch(done);
       })
       .catch(done);
       console.log('Before NPC UPDATE hit');
-    })
+    });
     after((done) => {
       encounterCrud.removeAllEncounters()
       .then(npcCrud.removeAllNPCs())

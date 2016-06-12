@@ -171,13 +171,13 @@ describe('testing the encounter-route', function(){
           race: 'test'
         }).then( npc => {
           this.tempNpc = npc;
-          done()
+          done();
         })
-        .catch(done)
+        .catch(done);
       })
       .catch(done);
       console.log('Before NPC GET hit');
-    })
+    });
     after((done) => {
       encounterCrud.removeAllEncounters()
       .then(npcCrud.removeAllNPCs())

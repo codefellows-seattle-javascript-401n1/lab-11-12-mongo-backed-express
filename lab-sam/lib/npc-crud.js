@@ -9,21 +9,30 @@ exports.createNpc = function(reqBody){
   debug('createNpc');
   return new Promise ((resolve, reject ) => {
     console.log('createNpc; reqBody', reqBody);
-    if (! reqBody.encounnterIeateNpc = function(reqBody){
-  debug('createNpc');
-  return new Promise ((resolverror400('npcs require a name'));
+    if (! reqBody.encounnterId)
+      return reject(AppError.error400('npcs must be linked to an encounter'));
+    if (! reqBody.classes)
+      return reject(AppError.error400('npcs requires at least one class'));
+    if (! reqBody.race)
+      return reject(AppError.error400('npcs require a race'));
+    if (! reqBody.name)
+      return reject(AppError.error400('npcs require a name'));
     const npc = new NPC(reqBody);
     npc.save()
     .then(npc => resolve(npc))
     .catch(err => reject(err));
-  });eateNpc = function(reqBody){
-  debug('createNpc');
-  return new Promise ((resolv) {
+  });
+};
+
+exports.updateNpc = function(id, reqBody){
+  debug('updateNpc');
+  console.log('updateNpc: reqBody', reqBody);
+  return new Promise ((resolve, reject) => {
+    if (! reqBody.encounterId) {
       console.log('ERROR found ! reqBody.encounterId HIT');
       return reject(AppError.error400('npcs must be linked to an encounter'));
     }
     console.log('updateNpc good; reqBody.encounterId');
-
     encounterCrud.fetchEncounter(reqBody.encounterId)
     .then( encounter => {
       NPC.findOne({_id: id})
@@ -36,7 +45,14 @@ exports.createNpc = function(reqBody){
             npc.name = reqBody.name;
           };
           if (reqBody.classes) {
-            npc.classes = reqt(AppError.error404(err.message)));
+            npc.classes = reqBody.classes;
+          };
+          if (reqBody.extra) {
+            npc.extra = reqBody.extra;
+          }
+          npc.save()
+          .then(npc => resolve(npc))
+          .catch(err => reject(AppError.error404(err.message)));
         })
         .catch(err => reject(AppError.error404(err.message)));
       })

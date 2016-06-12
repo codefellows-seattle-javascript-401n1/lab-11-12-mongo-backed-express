@@ -39,19 +39,19 @@ exports.updateEncounter = function(id, reqBody){
         console.log('PUT old', encounter);
         if (reqBody.description) {
           encounter.description = reqBody.description;
-        };
+        }
         if (reqBody.name) {
           encounter.name = reqBody.name;
-        };
+        }
         if (reqBody.cr) {
           encounter.cr = reqBody.cr;
-        };
+        }
         if (reqBody.extra) {
           encounter.extra = reqBody.extra;
         }
         console.log('after IFs encounter =', encounter);
         encounter.save();
-        resolve(encounter)
+        resolve(encounter);
       })
       .then(encounter => resolve(encounter))
       .catch(err => reject(AppError.error404(err.message)));
