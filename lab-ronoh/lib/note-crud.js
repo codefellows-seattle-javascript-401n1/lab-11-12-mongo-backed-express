@@ -42,7 +42,7 @@ exports.updateNote = function(id, data){
     }
 
     Note.findOne({_id: id})
-   .then(note => {
+   .then(() => {
      Note.update({_id: id}, data)
      .then(() => {
        Note.findOne({_id: id})
