@@ -17,3 +17,15 @@ beliefRouter.get('/belief/:id', function(req, res){
   .then( belief => res.send(belief))
   .catch( err => res.sendError(err));
 });
+
+beliefRouter.put('/belief/:id', jsonParser, function(req, res){
+  beliefCrud.updateBeliefByDeityId(req.params.id, req.body)
+  .then( belief => res.send(belief))
+  .catch( err => res.sendError(err));
+});
+
+beliefRouter.delete('/belief/:id', function(req, res){
+  beliefCrud.deleteBeliefByDeityId(req.params.id)
+  .then( belief => res.send(belief))
+  .catch( err => res.sendError(err));
+});

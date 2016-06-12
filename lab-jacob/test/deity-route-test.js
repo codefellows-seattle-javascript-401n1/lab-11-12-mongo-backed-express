@@ -102,9 +102,10 @@ describe('testing the deity router', function(){
         .catch( err => {
           const res = err.response;
           expect(res.status).to.equal(404);
-          expect(res.body).to.equal(undefined);
+          expect(res.body.name).to.equal(undefined);
           done();
-        });
+        })
+        .catch(done);
       });
     });
   });
