@@ -1,8 +1,6 @@
 'use strict';
 //debug
 const debug = require('debug')('drink:drink-crud');
-//mongoose
-const mongoose = require('mongoose');
 
 //drink model 'Drink'
 const Drink = require('../model/drink');
