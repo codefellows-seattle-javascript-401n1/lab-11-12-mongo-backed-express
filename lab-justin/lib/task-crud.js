@@ -18,6 +18,7 @@ exports.createTask = function(reqBody){
 
     reqBody.timestamp = new Date();
     const task = new Task(reqBody);
+
     task.save()
     .then(task => resolve(task))
     .catch(err => reject(err));
@@ -29,7 +30,8 @@ exports.fetchTaskByNoteId = function(noteId){
     noteCrud.fetchNote({_id: noteId})
     .then( note => Task.find({noteId: note._id}))
     .then( tasks => resolve(tasks))
-    .catch( err => reject(err));
+    // .catch( err => reject(err)); class note
+    .catch( err => reject(AppErr.error404(err.message)));//lecture.com
   });
 };
 
@@ -39,12 +41,12 @@ exports.removeAllTasks = function(){
 //
 exports.deleteTaskByNoteId = function(noteId) {
   return new Promise((resolve, reject) => {
-    // noteCrud.deleteNote({_id: noteId})
-    // .then( note => Task,find({note}))
     if(!noteId) return reject(AppErr.error400('task require\'s noteId'));
 
     noteCrud.deleteNote({_id: noteId})
-    .then (tasks => resolve(tasks))
+    // .then( task => Task.delete({noteId: note._id}))
+    .then( note => Task.find({noteId: note._id}))
+    .then ( tasks => resolve(tasks))
     .catch( err => reject(err));
   });
 };

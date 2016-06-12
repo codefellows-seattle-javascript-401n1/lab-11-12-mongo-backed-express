@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 
 process.env.MONGO_URI = 'mongodb://localhost/test-task';
 
@@ -38,7 +38,7 @@ describe('testing module task-router', function(){
     done();
   });
 //POST
-  describe('POST /task with valid data', function(){
+  describe('POST task/:id/task with valid data', function(){
     after((done) => {
       taskCrud
       .removeAllTasks()
@@ -61,8 +61,8 @@ describe('testing module task-router', function(){
       .post(`${baseUrl}/api/note/${this.tempNote._id}/task`)
       .send({noteId: this.tempNote._id, desc: 'test task'})
       .then( (res) => {
-        expect(res.status).to.equal(200);
-        expect(res.body.noteId).to.equal(`${this.tempNote._id}`);
+        expect(res.status).to.eql(200);
+        expect(res.body.noteId).to.eql(`${this.tempNote._id}`);
         done();
       })
       .catch(done);
@@ -80,52 +80,142 @@ describe('testing module task-router', function(){
       });
     });
   });
+
 //GET
-  describe('GET /task with valid id', function(){
+  describe('GET /api/note/:id/tasks with valid id', () => {
+    before((done) => {
+      noteCrud.createNote({name: 'booya', content: 'test test 123'})
+      .then(note => {
+        this.tempNote = note;
+        return Promise.all([
+          taskCrud.createTask({noteId: note._id, desc: 'test one'}),
+          taskCrud.createTask({noteId: note._id, desc: 'test two'}),
+          taskCrud.createTask({noteId: note._id, desc: 'test three'})
+        ]);
+      })
+      .then( tasks => {
+        this.tempTasks = tasks;
+        done();
+      })
+      .catch(done);
+    });
+
     after((done) => {
-      taskCrud
-      .removeAllTasks()
+      Promise.all([
+        noteCrud.removeAllNotes(),
+        taskCrud.removeAllTasks()
+      ])
       .then(() => done())
       .catch(done);
     });
-
-    before((done) => {
-      console.log('HIT IT', this.tempNote._id);
-      taskCrud
-      .createNote({noteId: this.tempNote._id, desc:'Cheese Cake'})
-      .then(note => {
-        this.tempNote = note;
-        done();
-      })
-      .catch(done);
-    });
-
-// //GET 200
-    it('should return a note', (done) => {
+//GET 200
+    it('should return an array of three tasks', (done) => {
       request
-      .get(`${baseUrl}/api/note/${this.tempNote._id}/task/${this.tempNote._id}`)
+      .get(`${baseUrl}/api/note/${this.tempNote._id}/tasks`)
       .then((res) => {
-        expect(res.status).to.eql(200);
-        expect(res.body.name).to.eql(this.tempNote.name);
+        console.log('tasks:\n', res.body);
+        expect(res.status).to.equal(200);
+        expect(res.body.length).to.equal(3);
+        expect(res.body[0].desc).to.equal('test one');
         done();
       })
       .catch(done);
     });
 
-    // it('should return "not found"', (done) => {
-    //   request
-    //   .get(baseUrl)
-    //   .then(done)
-    //   .catch( err => {
-    //     let res = err.message;
-    //     expect(res.status).to.eql(404);
-    //     expect(res.text).to.eql('not found');
-    //     done();
-    //   });
-    // });
-
-
+//GET 404
+    it('should return "not found"', (done) => {
+      request
+      .get(baseUrl)
+      .then(done)
+      .catch( err => {
+        try{
+          let res = err.response;
+          expect(res.status).to.equal(404);
+          expect(res.text).to.eql('not found');
+          done();
+        } catch(err) {
+          done(err);
+        }
+      });
+    });
   });
 
+//DELETE
+describe('DELETE /note/:id/tasks with valid id', function(){
+  after((done) => {
+    Promise.all([
+      noteCrud.removeAllNotes(),
+      taskCrud.removeAllTasks()
+    ])
+    .then(() => done())
+    .catch(done);
+  });
+
+  before((done) => {
+    noteCrud.createNote({name:'cats', content:'meow 123'})
+      .then(note => {
+
+        this.tempNote = note;
+        taskCrud.createTask({noteId: note._id, desc: '123'})
+          .then(done()
+          // taskCrud.createTask({name:'meow', content:'456'})
+          // this.tempTask = task;
+          //   request
+          //   .del(`${baseUrl}/api/note/${this.tempNote._id}/tasks`)
+          ).catch(done);
+        // .catch(done)
+      }).catch(done);
+        // taskCrud.createTask({name:'meow', content:'456'})
+        // .then(task => {
+        //   this.tempTask = task;
+        //   request
+        //   .del(`${baseUrl}/api/note/${this.tempNote._id}/tasks`)
+        // }).catch(done);
+  });
+
+    // this.tempNote = note,
+    // this.tempTask = task;
+
+    // .then(note, task => {
+    //   this.tempNote = note,
+    //   this.tempTask = task;
+    //   done();
+    // })
+    // .catch(done);
+
+    // taskCrud.createTask({name:'meow', content:'456'})
+    // .then(task => {
+    //   this.tempTask = task;
+    //   done();
+    // }).catch(done);
+  // });
+
+//DELETE 204
+  it('should return "no content"', (done) => {
+
+    request
+    .del(`${baseUrl}/api/note/${this.tempNote._id}/task`)
+    .then((res) => {
+      expect(res.status).to.eql(204);
+      expect(res.text).to.eql('');
+      done();
+    })
+    .catch(done);
+    // console.log('HIT IT', this.tempNote._id, this.tempTask._id);
+  });
+
+//DELETE 404
+  it('should return "not found"', (done) => {
+    request
+    .del(baseUrl)
+    .then(done)
+    .catch( err => {
+      let res = err.response;
+      expect(res.status).to.eql(404);
+      expect(res.text).to.eql('not found');
+      done();
+    });
+  });
+});
 
 });

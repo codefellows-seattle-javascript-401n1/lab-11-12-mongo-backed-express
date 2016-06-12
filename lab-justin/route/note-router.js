@@ -3,7 +3,7 @@
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const noteCrud = require('../lib/note-crud');
-// const taskCrud = require('../lib/task-crud');
+const taskCrud = require('../lib/task-crud');
 const noteRouter = module.exports = new Router();
 
 noteRouter.post('/note', jsonParser, function(req, res){
@@ -18,11 +18,11 @@ noteRouter.get('/note/:id', function(req, res){
   .catch(err => res.sendError(err));
 });
 
-// noteRouter.get('/note/:id/tasks', function(req, res){
-//   taskCrud.fetchTaskByNoteId(req.params.id)
-//   .then(tasks => res.send(tasks))
-//   .catch(err => res.sendError(err));
-// });
+noteRouter.get('/note/:id/tasks', function(req, res){
+  taskCrud.fetchTaskByNoteId(req.params.id)
+  .then(tasks => res.send(tasks))
+  .catch(err => res.sendError(err));
+});
 
 //
 noteRouter.put('/note/:id', jsonParser, function(req, res){
@@ -33,7 +33,7 @@ noteRouter.put('/note/:id', jsonParser, function(req, res){
 });
 //
 noteRouter.delete('/note/:id', function(req, res){
-  noteCrud.removeAllNotes(req.params.id)
+  noteCrud.deleteNote(req.params.id)
   .then(note => res.send(note))
   .catch(err => res.sendError(err));
 });

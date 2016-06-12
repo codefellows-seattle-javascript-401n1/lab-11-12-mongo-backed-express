@@ -22,7 +22,6 @@ mongoose.connect(mongoURI);
 // middle ware
 app.use(morgan('dev'));
 app.use(errorResponse);
-// app.use(jsonParser);
 
 // routes
 app.use('/api', noteRouter);

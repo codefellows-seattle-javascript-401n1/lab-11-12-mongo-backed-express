@@ -13,10 +13,10 @@ exports.createNote = function(reqBody){
 
     reqBody.timestamp = new Date();
     const note = new Note(reqBody);
-    
-    note.save()
+
+    note.save()//save to the db
     .then(resolve)
-    .catch(reject);
+    .catch(reject);//it's gonna be internal server err
   });
 };
 

@@ -20,7 +20,7 @@ taskRouter.get('/note/:id/task', function(req, res){
 
 taskRouter.delete('/note/:id/task', function(req, res){
   taskCrud.removeAllTasks(req.params.id)
-  .then(task => res.send(task))
+  .then(task => res.send(204, task))
   .catch(err => res.sendError(err));
 });
 
