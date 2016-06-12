@@ -4,7 +4,10 @@ process.env.MONGO_URI = 'mongodb://localhost/test';
 
 const expect = require('chai').expect;
 //add superagent-use plug in//
-const request = require('superagent-promise-plugin');
+const superPromise = require('superagent-promise-plugin');
+const request = require('superagent-use');
+
+request.use(superPromise);
 
 
 //require app modules//
