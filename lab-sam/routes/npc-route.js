@@ -24,6 +24,8 @@ npcRoute.get('/npc/:id', function(req, res){
 });
 
 npcRoute.put('/npc/:id', jsonParser, function(req, res){
+  debug('npc PUT route')
+  console.log('NPC ROUTE PUT req.body', req.body);
   npcCrud.updateNpc(req.params.id, req.body)
   .then( npc => res.send(npc) )
   .catch( err => res.sendError(err) );
