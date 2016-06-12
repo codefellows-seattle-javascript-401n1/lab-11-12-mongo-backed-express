@@ -27,6 +27,14 @@ exports.createDrink = function(reqBody){
 };
 
 //get/fetch a drink
+exports.fetchDrink = function(id){
+  debug('fetchDrink');
+  return new Promise((resolve, reject) =>{
+    Drink.findOne({_id: id})
+    .then(drink => resolve(drink))
+    .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
 
 //update a drink
 
