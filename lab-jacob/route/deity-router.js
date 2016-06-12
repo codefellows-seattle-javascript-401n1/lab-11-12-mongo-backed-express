@@ -27,6 +27,8 @@ deityRouter.put('/deity/:id', jsonParser, function(req, res){
 
 deityRouter.delete('/deity/:id', function(req, res){
   deityCrud.deleteDeity(req.params.id)
-  .then( deity => res.send(deity))
+  .then( (deity) =>{
+    res.status(204).send(deity);
+  })
   .catch( err => res.sendError(err));
 });

@@ -33,10 +33,14 @@ exports.fetchDeity = function(id){ // our read function
 exports.updateDeity = function(id, updateContent){ // update function
   debug('deity-updateCrud');
   return new Promise((resolve, reject) => {
-    if(!updateContent)
-      reject(AppError.error400('bad request'));
-    if(!id)
-      reject(AppError.error400('bad request'));
+    if(!updateContent.name || !updateContent.power) {
+      console.log('first if');
+      return reject(AppError.error400('bad request'));
+    }
+    if(!id) {
+      console.log('second if');
+      return reject(AppError.error400('bad request'));
+    }
     Deity.findOne({_id: id})
     .then((deity) => {
       if(updateContent.name){
@@ -47,12 +51,13 @@ exports.updateDeity = function(id, updateContent){ // update function
       }
       deity.save()
       .then( deity => resolve(deity))
-      .catch( err => reject(err));
+      .catch( err => reject(AppError.error500(err.message)));
     })
     .catch((err) => {
-      reject(AppError.error404(err.message));
+      return reject(AppError.error404(err.message)); //Only when the DB breaks
     });
   });
+
 };
 
 exports.deleteDeity = function(id) { // destroy function

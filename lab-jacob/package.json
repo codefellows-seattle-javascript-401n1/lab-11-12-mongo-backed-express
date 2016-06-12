@@ -10,7 +10,7 @@
     "test": "mocha",
     "start": "node server.js"
   },
-  "author": "Jacob Knaac",
+  "author": "Jacob Knaack",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.1",

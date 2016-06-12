@@ -29,7 +29,7 @@ app.use('/api', beliefRouter);
 //app.use('/api', secondResourceRouter);
 app.all('*', function(req, res){
   debug('404');
-  res.status(404).send('not found from server');
+  res.status(404).send('not found from SERVER');
 });
 
 // starts and exports server

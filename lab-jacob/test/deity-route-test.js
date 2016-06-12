@@ -104,8 +104,7 @@ describe('testing the deity router', function(){
           expect(res.status).to.equal(404);
           expect(res.body.name).to.equal(undefined);
           done();
-        })
-        .catch(done);
+        });
       });
     });
   });
@@ -126,7 +125,7 @@ describe('testing the deity router', function(){
       .catch(done);
     });
 
-    it('should return an updated deity', (done) =>{
+    it('should return an updated deity', (done) => {
       request.put(`${homeUrl}/api/deity/${this.tempDeity._id}`)
       .send({name: 'MegaBrian', power: 'Aaaaaahhhhh!!!'})
       .then((res) => {
@@ -135,6 +134,42 @@ describe('testing the deity router', function(){
         done();
       })
       .catch(done);
+    });
+
+    describe('testing a not found PUT request', () => {
+      it('should return a 404', (done) => {
+        request.put(`${homeUrl}/api/deity/123658176253`)
+        .send({name: 'Michael Peterson', power: 'Touchdowns'})
+        .then(done)
+        .catch((err) =>{
+          try {
+            const res = err.response;
+            expect(res.status).to.equal(404);
+            expect(res.text).to.equal('not found');
+            done();
+          } catch (e) {
+            done(e);
+          }
+
+        });
+      });
+    });
+
+    describe('testing a bad PUT request', () =>{
+      it('should return a 400 for a bad PUT requeest', (done) => {
+        request.put(`${homeUrl}/api/deity/${this.tempDeity._id}`)
+        .send({})
+        .then(done)
+        .catch((err) => {
+          try {
+            const res = err.response;
+            expect(res.status).to.equal(400);
+            done();
+          } catch (err) {
+            done(err);
+          }
+        });
+      });
     });
   });
 
@@ -151,11 +186,24 @@ describe('testing the deity router', function(){
     it('should delete the specified deity', (done) => {
       request.del(`${homeUrl}/api/deity/${this.tempDeity._id}`)
       .then((res) => {
-        expect(res.status).to.equal(200);
-        //expect(res.body).to.equal(undefined);
+        expect(res.status).to.equal(204);
+        expect(res.body.name).to.equal(undefined);
         done();
       })
       .catch(done);
+    });
+
+    describe('testing a 404', () => {
+      it('should return a 404', (done) => {
+        request.del(`${homeUrl}/api/deity/123412341234`)
+        .then(done)
+        .catch((err) => {
+          const res = err.response;
+          expect(res.status).to.equal(404);
+          expect(res.text).to.equal('not found');
+          done();
+        });
+      });
     });
   });
 });
