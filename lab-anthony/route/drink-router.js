@@ -16,10 +16,22 @@ drinkRouter.post('/drinks', jsonParser, function(req, res){
 
 //GET BY ID
 drinkRouter.get('/drinks/:id', function(req, res){
-  debug('drinkRouter GET');
-  drinkCrud.fetchDrink(req.params.id)
+  debug('drinkRouter GET drink by id');
+  drinkCrud.fetchDrinkById(req.params.id)
   .then(drink => res.send(drink))
   .catch(err => res.sendError(err));
+});
+
+//GET BY CAFE ID
+drinkRouter.get('/cafes/:id/drinks', function(req, res){
+  debug('drinkRouter GET drinks by cafe id');
+  drinkCrud.fetchDrinksByCafeId(req.params.id)
+  .then((drinks)=>{
+    res.send(drinks);
+  })
+  .catch((err)=>{
+    res.sendError(err);
+  });
 });
 
 //POST BY ID

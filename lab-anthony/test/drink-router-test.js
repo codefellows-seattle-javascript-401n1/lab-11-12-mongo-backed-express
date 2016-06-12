@@ -100,6 +100,14 @@ describe('Testing the drink-router module', function(){
       }).catch(done);
     });
 
+    before((done)=>{
+      drinkCrud.createDrink({drinkName: 'test2', drinkDesc:'test2 desc', locId: this.tempCafe._id})
+      .then((drink)=>{
+        this.tempDrink2 = drink;
+        done();
+      }).catch(done);
+    });
+
     after((done)=>{
       drinkCrud.removeAllDrinks()
       .then(()=>done()).catch(done);
@@ -110,11 +118,22 @@ describe('Testing the drink-router module', function(){
       .then(()=>done()).catch(done);
     });
 
-    it('should return a drink', (done)=>{
+    it('should return a drink by id', (done)=>{
       request.get(`${baseUrl}/api/drinks/${this.tempDrink._id}`)
       .then((res)=>{
         expect(res.status).to.equal(200);
         expect(res.body.drinkName).to.equal('test');
+        done();
+      }).catch(done);
+    });
+
+    it('should return drinks by cafe id', (done)=>{
+      request.get(`${baseUrl}/api/cafes/${this.tempCafe._id}/drinks`)
+      .then((res)=>{
+        expect(res.status).to.equal(200);
+        expect(res.body.length).to.equal(2);
+        expect(res.body[0].drinkName).to.equal('test');
+        expect(res.body[1].drinkName).to.equal('test2');
         done();
       }).catch(done);
     });
