@@ -8,14 +8,14 @@ const debug = require('debug')('dm:npc-crud');
 exports.createNpc = function(reqBody){
   debug('createNpc');
   return new Promise ((resolve, reject ) => {
-    console.log('createNpc; reqBody', reqBody);
-    if (! reqBody.encounnterId)
+    console.log('^^^^^^createNpc; reqBody', reqBody);
+    if (!reqBody.encounterId)
       return reject(AppError.error400('npcs must be linked to an encounter'));
-    if (! reqBody.classes)
+    if (!reqBody.classes)
       return reject(AppError.error400('npcs requires at least one class'));
-    if (! reqBody.race)
+    if (!reqBody.race)
       return reject(AppError.error400('npcs require a race'));
-    if (! reqBody.name)
+    if (!reqBody.name)
       return reject(AppError.error400('npcs require a name'));
     const npc = new NPC(reqBody);
     npc.save()
