@@ -64,7 +64,7 @@ describe('testing the NPC-route', function(){
       }).catch(done);
     });
   });
-  describe('testing the npc/ POST route with valid data', function(){
+  describe('testing the npc/ POST route with invalid data', function(){
       before((done) => {
         encounterCrud.createEncounter({
           name: 'Tes NPC holder',
@@ -82,15 +82,66 @@ describe('testing the NPC-route', function(){
         .then(npcCrud.removeAllNPCs())
         .then(() => done()).catch(done);
       });
-      it ('Sent with invalid data should return a 400', (done) => {
+      it ('should return a 400', (done) => {
         request.post(`${baseUrl}/api/npc`)
         .send({name: 'Tester Test', classes: 'tester', race: 'test'})
         .end((err, res) => {
         console.log('POST with invalid linked', res.body.name);
         expect(res.status).to.equal(400);
-        expect(res.text).to.equal('Error: Bad Request');
+        expect(res.text).to.equal('bad request');
         done();
+      });
+    });
+  });
+  describe('GET-by-encounter api/npc route with valid data', function(){
+    before((done) => {
+      encounterCrud.createEncounter({
+        name: 'Tes NPC holder',
+        description: 'a Giant test holding a croud of testers on it\'s deck',
+        cr: 12
+      }).then(
+        npcCrud.createNpc({encounterId: `${this.tempEncounter._id}`,
+        name: 'Tester Test',
+        classes: 'tester',
+        race: 'test'}))
+        .then(encounter => {
+        this.tempEncounter = encounter;
+        done();
+      })
+      .catch(done);
+      console.log('Before NPC GET hit');
+    });
+    after((done) => {
+      encounterCrud.removeAllEncounters()
+      .then(npcCrud.removeAllNPCs())
+      .then(() => done()).catch(done);
+    });
+    it('should return 200 and an array of with length of 1', (done) => {
+        request.get(`${baseUrl}/api/npc`)
+        .send({encounterId: `${this.tempEncounter._id}`})
+        .then((res) => {
+          console.log('Get valid res.body', res.body.name);
+          expect(res.status).to.equal(200);
+          expect(res.body.length).to.equal(1);
+          done();
         }).catch(done);
+    });
+    it('should return 404', (done) => {
+      request.get(`${baseUrl}/api/npc`)
+      .end((err, res) => {
+        console.log('GET invalid res.body.name', res.body);
+        expect(res.status).to.equal(404);
+        expect(res.text).to.equal('not found');
+        done();
+      });
+    });
+    it('should return 404', (done) => {
+      request.get(`${baseUrl}/api/npc`)
+      .end((err, res) => {
+        console.log('GET res.body.name', res.body.name);
+        expect(res.status).to.equal(404);
+        expect(res.text).to.equal('not found');
+        done();
       });
     });
   });
