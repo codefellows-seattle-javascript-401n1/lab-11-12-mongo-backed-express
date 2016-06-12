@@ -122,7 +122,6 @@ describe('Testing the cafe-router module', function(){
     });
 
     it('should return a cafe with new properties', (done)=>{
-      console.log('THE ID IS', this.tempCafe._id);
       request.put(`${baseUrl}/api/cafes/${this.tempCafe._id}`)
       .send({cafeName: 'edited'})
       .then((res)=>{

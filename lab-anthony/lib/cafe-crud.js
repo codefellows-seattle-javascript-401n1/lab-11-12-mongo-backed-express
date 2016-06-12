@@ -30,7 +30,6 @@ exports.fetchCafe = function(id){
 
 exports.editCafe = function(id, reqBody){
   debug('edit cafe');
-  console.log('THE REQBODY IS', reqBody);
   return new Promise((resolve, reject)=>{
     if (!reqBody.cafeName && !reqBody.cafeAdd) {
       return reject(AppErr.error400('cafe requires new name or address'));

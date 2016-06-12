@@ -37,6 +37,20 @@ exports.fetchDrink = function(id){
 };
 
 //update a drink
+exports.editDrink = function(id, reqBody){
+  debug('editDrink');
+  return new Promise((resolve, reject)=>{
+    if (!reqBody.drinkName && !reqBody.drinkDesc) {
+      return reject(AppErr.error400('Drink requires new name or address'));
+    }
+
+    Drink.findByIdAndUpdate(id, reqBody)
+    .then(()=> Drink.findOne({_id: id})).then(resolve)
+    .catch((err) => {
+      return reject((AppErr.error404(err.message)));
+    });
+  });
+};
 
 //remove a drink
 

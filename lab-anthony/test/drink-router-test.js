@@ -129,4 +129,65 @@ describe('Testing the drink-router module', function(){
     });
   });
 
+  //PUT 200/404/400
+  describe('Testing PUT to /api/drinks/:id with valid and invalid data', function(){
+    before((done)=>{
+      cafeCrud.createCafe({cafeName: 'test cafe', cafeAdd:'test address'})
+      .then((cafe)=>{
+        this.tempCafe = cafe;
+        done();
+      }).catch(done);
+    });
+
+    before((done)=>{
+      drinkCrud.createDrink({drinkName: 'test', drinkDesc:'test desc', locId: this.tempCafe._id})
+      .then((drink)=>{
+        this.tempDrink = drink;
+        done();
+      }).catch(done);
+    });
+
+    after((done)=>{
+      drinkCrud.removeAllDrinks()
+      .then(()=>done()).catch(done);
+    });
+
+    after((done)=>{
+      cafeCrud.removeAllCafes()
+      .then(()=>done()).catch(done);
+    });
+
+    it('should return a drink', (done)=>{
+      request.put(`${baseUrl}/api/drinks/${this.tempDrink._id}`)
+      .send({drinkName: 'edited'})
+      .then((res)=>{
+        expect(res.status).to.equal(200);
+        expect(res.body.drinkName).to.equal('edited');
+        done();
+      }).catch(done);
+    });
+
+    it('should return a 400 bad request', (done)=>{
+      request.put(`${baseUrl}/api/drinks/${this.tempDrink._id}`)
+      .send({})
+      .then(()=>done())
+      .catch((err)=> {
+        expect(err.response.error.status).to.equal(400);
+        done();
+      });
+    });
+
+    it('should return a 404 not found', (done)=>{
+      request.put(`${baseUrl}/api/drinks/123`)
+      .send({drinkName:'edited'})
+      .then(()=>done())
+      .catch((err)=> {
+        expect(err.response.error.status).to.equal(404);
+        done();
+      });
+    });
+  });
+
+  //DEL 204/404
+
 });
