@@ -18,23 +18,26 @@ brewRouter.get('/brew', function(req, res) {
   .catch(err => res.sendError(err));
 });
 
-brewRouter.put('/brew', jsonParser, function(req, res) {
-  if(!req.body.brew) {
+brewRouter.put('/brew/:id', jsonParser, function(req, res) {
+  console.log('hit route');
+  if(!req.body.brewOrigin) {
     const err = AppError.error400('bad request, please provide a brew');
     res.sendError(err);
   } else {
     brewCrud.fetchBrew(req.params.id)
     .then(function(brew) {
-      brew.brew = req.body.brew;
-      brew.brewing = req.body.brewing;
+      console.log('BREW; ', JSON.stringify(brew));
+      brew.roastDate = req.body.roastDate;
+      brew.brewOrigin = req.body.brewOrigin;
       brew.save();
       res.status(200).json(brew);
     }).catch(function(err) {
+      console.error('ERROR: ', err);
       res.sendError(err);
     });
   }
 });
-brewRouter.delete('/brew', function(req, res) {
+brewRouter.delete('/brew/:id', function(req, res) {
   brewCrud.deleteBrew(req.params.id)
   .then(brew => res.status(204).send('deleted: ' + brew))
   .catch(err => res.sendError(err));

@@ -36,7 +36,7 @@ describe('Testing module brew-route', function() {
     }
     done();
   });
-  describe('POST /api/brewer with data', function() {
+  describe('POST /api/brew with data', function() {
     before((done) => {
       brewerCrud.createBrewer({name: '!arms', content: 'it in the sleeves'})
       .then(brewer => {
@@ -52,7 +52,7 @@ describe('Testing module brew-route', function() {
       .catch(done);
     });
     it('Should return a new brew', (done) => {
-      request.post(`${baseUrl}/api/brewer`)
+      request.post(`${baseUrl}/api/brew`)
       .send({desc:'day1', brewerId:this.tempBrewer.id})
       .then((res) => {
         expect(res.status).to.equal(200);
@@ -106,12 +106,12 @@ describe('Testing module brew-route', function() {
 
 
 
-  describe('PUT /api/brewer/:id with valid ID', function() {
+  describe('PUT /api/brew/:id with valid ID', function() {
     before((done) => {
       brewerCrud.createBrewer({name: '!arms', content: 'troll talk'})
       .then(brewer => {
         this.tempBrewer = brewer;
-        return brewCrud.createBrew({dec: 'day3'});
+        return brewCrud.createBrew({desc: 'day3', brewerId: this.tempBrewer._id});
       }).then(brew => {
         this.tempBrew = brew;
         done();
@@ -133,25 +133,26 @@ describe('Testing module brew-route', function() {
       });
     });
     it('Shsould return a 404 not found', (done) => {
-      request.put(`${baseUrl}/api/brew/1234455`).send({desc: 'day5', brewId: this.tempBrewer.id}).end((req, res) => {
+      request.put(`${baseUrl}/api/brew/1234455`).send({desc: 'day5', brewId: this.tempBrewer.id, brewOrigin: 'mexico'}).end((req, res) => {
         expect(res.status).to.equal(404);
         done();
       });
     });
-    it('Should return 200 for not date provided', (done) => {
-      request.put(`${baseUrl}/api/brew/${this.tempBrew._id}`).send({desc: 'day5',  brewerId:this.tempBrewer.id}).end((req, res) => {
+    it('Should return 200', (done) => {
+      request.put(`${baseUrl}/api/brew/${this.tempBrew._id}`)
+      .send({desc: 'day5',  brewerId:this.tempBrewer._id, brewOrigin: 'mexico'}).end((req, res) => {
         expect(res.status).to.equal(200);
         done();
       });
     });
   });
 
-  describe('Testing DELETE ar api/brewer/:id', function() {
+  describe('Testing DELETE ar api/brew/:id', function() {
     before((done) => {
       brewerCrud.createBrewer({name: '!arms', content:'troll make coffee'})
       .then(brewer => {
         this.tempBrewer = brewer;
-        return brewCrud.createBrew({desc: 'day7', brewId: this.tempBrewer.id});
+        return brewCrud.createBrew({desc: 'day7', brewerId: this.tempBrewer.id});
       }).then(brew => {
         this.tempBrew = brew;
         done();
@@ -172,7 +173,7 @@ describe('Testing module brew-route', function() {
       });
     });
     it('Should return a 204 for completed delete', (done) => {
-      request.del(`${baseUrl}/api/brew/${this.tempBrewer.id}`).end((req, res) => {
+      request.del(`${baseUrl}/api/brew/${this.tempBrew._id}`).end((req, res) => {
         expect(res.status).to.equal(204);
         done();
       });
