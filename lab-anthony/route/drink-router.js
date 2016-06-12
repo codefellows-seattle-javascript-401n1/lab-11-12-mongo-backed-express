@@ -35,3 +35,11 @@ drinkRouter.put('/drinks/:id', jsonParser, function(req, res){
 });
 
 //DELETE BY ID
+drinkRouter.delete('/drinks/:id', function(req, res){
+  debug('drinkRouter DELETE');
+  drinkCrud.removeDrink(req.params.id)
+  .then(()=>{
+    res.status(204).send();
+  })
+  .catch(err => res.sendError(err));
+});

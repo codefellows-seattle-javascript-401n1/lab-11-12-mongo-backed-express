@@ -53,6 +53,14 @@ exports.editDrink = function(id, reqBody){
 };
 
 //remove a drink
+exports.removeDrink = function(id){
+  debug('removeDrink');
+  return new Promise((resolve, reject)=>{
+    Drink.remove({_id: id})
+    .then(resolve)
+    .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
 
 //remove all drink
 exports.removeAllDrinks = function(){

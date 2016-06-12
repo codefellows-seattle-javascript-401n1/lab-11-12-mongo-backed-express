@@ -189,5 +189,48 @@ describe('Testing the drink-router module', function(){
   });
 
   //DEL 204/404
+  describe('Testing DELETE to /api/drinks/:id with valid and invalid data', function(){
+    before((done)=>{
+      cafeCrud.createCafe({cafeName: 'test cafe', cafeAdd:'test address'})
+      .then((cafe)=>{
+        this.tempCafe = cafe;
+        done();
+      }).catch(done);
+    });
 
+    before((done)=>{
+      drinkCrud.createDrink({drinkName: 'test', drinkDesc:'test desc', locId: this.tempCafe._id})
+      .then((drink)=>{
+        this.tempDrink = drink;
+        done();
+      }).catch(done);
+    });
+
+    after((done)=>{
+      drinkCrud.removeAllDrinks()
+      .then(()=>done()).catch(done);
+    });
+
+    after((done)=>{
+      cafeCrud.removeAllCafes()
+      .then(()=>done()).catch(done);
+    });
+
+    it('should return a drink', (done)=>{
+      request.del(`${baseUrl}/api/drinks/${this.tempDrink._id}`)
+      .then((res)=>{
+        expect(res.status).to.equal(204);
+        done();
+      }).catch(done);
+    });
+
+    it('should return a 404 not found', function(done){
+      request.del(`${baseUrl}/api/drinks/123`)
+      .then(done)
+      .catch((err)=>{
+        expect(err.response.error.status).to.equal(404);
+        done();
+      });
+    });
+  });
 });
