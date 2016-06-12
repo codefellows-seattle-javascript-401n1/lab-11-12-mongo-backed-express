@@ -14,7 +14,11 @@ drinkRouter.post('/drinks', jsonParser, function(req, res){
 });
 
 //GET BY ID
-
+drinkRouter.get('/drinks/:id', function(req, res){
+  drinkCrud.fetchDrink(req.params.id)
+  .then(drink => res.send(drink))
+  .catch(err => res.sendError(err));
+});
 
 //POST BY ID
 

@@ -40,7 +40,7 @@ describe('Testing the drink-router module', function(){
   });
 
   //POST 200
-  describe('Testing POST to /api/drinks with valid data', function(){
+  describe('Testing POST to /api/drinks with valid and invalid data', function(){
     before((done)=>{
       cafeCrud.createCafe({cafeName: 'test cafe', cafeAdd:'test address'})
       .then((cafe)=>{
@@ -71,6 +71,7 @@ describe('Testing the drink-router module', function(){
       }).catch(done);
     });
 
+    //POST 404
     it('should return a 400 bad request', function(done){
       request.post(`${baseUrl}/api/drinks`)
       .send({})
@@ -81,6 +82,51 @@ describe('Testing the drink-router module', function(){
     });
   });
 
+  //GET 200/404
+  describe('Testing GET to /api/drinks/:id with valid and invalid data', function(){
+    before((done)=>{
+      cafeCrud.createCafe({cafeName: 'test cafe', cafeAdd:'test address'})
+      .then((cafe)=>{
+        this.tempCafe = cafe;
+        done();
+      }).catch(done);
+    });
 
+    before((done)=>{
+      drinkCrud.createDrink({drinkName: 'test', drinkDesc:'test desc', locId: this.tempCafe._id})
+      .then((drink)=>{
+        this.tempDrink = drink;
+        done();
+      }).catch(done);
+    });
+
+    after((done)=>{
+      drinkCrud.removeAllDrinks()
+      .then(()=>done()).catch(done);
+    });
+
+    after((done)=>{
+      cafeCrud.removeAllCafes()
+      .then(()=>done()).catch(done);
+    });
+
+    it('should return a drink', (done)=>{
+      request.get(`${baseUrl}/api/drinks/${this.tempDrink._id}`)
+      .then((res)=>{
+        expect(res.status).to.equal(200);
+        expect(res.body.drinkName).to.equal('test');
+        done();
+      }).catch(done);
+    });
+
+    it('should return a 404 not found', function(done){
+      request.get(`${baseUrl}/api/drinks/123`)
+      .then(done)
+      .catch((err)=>{
+        expect(err.response.error.status).to.equal(404);
+        done();
+      });
+    });
+  });
 
 });
