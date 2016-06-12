@@ -50,30 +50,3 @@ exports.deleteTaskByNoteId = function(noteId) {
     .catch( err => reject(err));
   });
 };
-
-// exports.updateTaskByNoteId = function(id, taskUpdatedBody){
-//   debug('task-updateTask');
-//
-//   return new Promise((resolve, reject) => {
-//     if(!taskUpdatedBody)
-//       reject(AppErr.error400('note require\'s content'));
-//     if(!id)
-//       reject(AppErr.error400('note require\'s id'));
-//
-//     Task.findOne({_id: id})
-//     .then((note) => {
-//       if(taskUpdatedBody.name){
-//         note.name = taskUpdatedBody.name;
-//       }
-//       if(taskUpdatedBody.content){
-//         note.content = taskUpdatedBody.content;
-//       }
-//       note.save()
-//       .then(resolve)
-//       .catch(reject);
-//     })
-//     .catch((err) => {
-//       reject(AppErr.error404(err.message));
-//     });
-//   });
-// };

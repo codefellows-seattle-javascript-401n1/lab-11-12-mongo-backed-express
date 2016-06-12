@@ -23,9 +23,3 @@ taskRouter.delete('/note/:id/task', function(req, res){
   .then(task => res.send(204, task))
   .catch(err => res.sendError(err));
 });
-
-// taskRouter.put('/note/:id/task', jsonParser, function(req, res){
-//   taskCrud.updateNote(req.params.id, req.body)
-//   .then(task => res.send(task))
-//   .catch(err => res.sendError(err));
-// });

@@ -154,45 +154,15 @@ describe('DELETE /note/:id/tasks with valid id', function(){
   before((done) => {
     noteCrud.createNote({name:'cats', content:'meow 123'})
       .then(note => {
-
         this.tempNote = note;
         taskCrud.createTask({noteId: note._id, desc: '123'})
-          .then(done()
-          // taskCrud.createTask({name:'meow', content:'456'})
-          // this.tempTask = task;
-          //   request
-          //   .del(`${baseUrl}/api/note/${this.tempNote._id}/tasks`)
-          ).catch(done);
-        // .catch(done)
+          .then(done())
+          .catch(done);
       }).catch(done);
-        // taskCrud.createTask({name:'meow', content:'456'})
-        // .then(task => {
-        //   this.tempTask = task;
-        //   request
-        //   .del(`${baseUrl}/api/note/${this.tempNote._id}/tasks`)
-        // }).catch(done);
   });
-
-    // this.tempNote = note,
-    // this.tempTask = task;
-
-    // .then(note, task => {
-    //   this.tempNote = note,
-    //   this.tempTask = task;
-    //   done();
-    // })
-    // .catch(done);
-
-    // taskCrud.createTask({name:'meow', content:'456'})
-    // .then(task => {
-    //   this.tempTask = task;
-    //   done();
-    // }).catch(done);
-  // });
 
 //DELETE 204
   it('should return "no content"', (done) => {
-
     request
     .del(`${baseUrl}/api/note/${this.tempNote._id}/task`)
     .then((res) => {
@@ -201,7 +171,6 @@ describe('DELETE /note/:id/tasks with valid id', function(){
       done();
     })
     .catch(done);
-    // console.log('HIT IT', this.tempNote._id, this.tempTask._id);
   });
 
 //DELETE 404
