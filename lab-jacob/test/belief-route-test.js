@@ -65,6 +65,24 @@ describe('testing the belief router', function(){
         done();
       }).catch(done);
     });
+
+    describe('testing a bad request', function(){
+      it('should return a 400', (done) => {
+        request.post(`${homeUrl}/api/belief`)
+        .send({})
+        .then(done)
+        .catch((err) => {
+          try {
+            const res = err.response;
+            expect(res.status).to.equal(400);
+            expect(res.text).to.equal('bad request');
+            done();
+          } catch (err) {
+            done(err);
+          }
+        });
+      });
+    });
   });
 
   describe('testing GET method with a valid request', function(){
@@ -92,6 +110,23 @@ describe('testing the belief router', function(){
         expect(res.body.name).to.equal('test name');
         done();
       }).catch(done);
+    });
+
+    describe('testing a bad GET route', function(){
+      it('should return a 404', (done) => {
+        request.get(`${homeUrl}/api/belief/1276351876235`)
+        .then(done)
+        .catch((err) => {
+          try {
+            const res = err.response;
+            expect(res.status).to.equal(404);
+            expect(res.text).to.equal('not found');
+            done();
+          } catch (err) {
+            done(err);
+          }
+        });
+      });
     });
   });
 
@@ -122,6 +157,42 @@ describe('testing the belief router', function(){
         done();
       }).catch(done);
     });
+
+    describe('testing a bad PUT request', () => {
+      it('should return a 400', (done) => {
+        request.put(`${homeUrl}/api/belief/${this.tempDeity._id}`)
+        .send({})
+        .then(done)
+        .catch((err) => {
+          try {
+            const res = err.response;
+            expect(res.status).to.equal(400);
+            expect(res.text).to.equal('bad request');
+            done();
+          } catch (err) {
+            done(err);
+          }
+        });
+      });
+    });
+
+    describe('testing a PUT request on invalid id', () => {
+      it('should return a 404', (done) => {
+        request.put(`${homeUrl}/api/belief/08172049870293847`)
+        .send({name: 'heres some amazing test', desc: 'some more test text'})
+        .then(done)
+        .catch((err) => {
+          try {
+            const res = err.response;
+            expect(res.status).to.equal(404);
+            expect(res.text).to.equal('not found');
+            done();
+          } catch (err) {
+            done(err);
+          }
+        });
+      });
+    });
   });
 
   describe('testing the DELETE method with a valid request', function() {
@@ -145,9 +216,25 @@ describe('testing the belief router', function(){
     it('should delete a belief', (done) => {
       request.del(`${homeUrl}/api/belief/${this.tempDeity._id}`)
       .then((res) => {
-        expect(res.status).to.equal(200);
+        expect(res.status).to.equal(204);
         done();
       }).catch(done);
+    });
+
+    describe('testing a bad DELETE request', ()=>{
+      it('should return a 404', (done) => {
+        request.del(`${homeUrl}/api/belief/23471277482156`)
+        .then(done)
+        .catch((err) => {
+          try {
+            const res = err.response;
+            expect(res.status).to.equal(404);
+            done();
+          } catch (err) {
+            done(err);
+          }
+        });
+      });
     });
   });
 });

@@ -33,7 +33,7 @@ exports.fetchDeity = function(id){ // our read function
 exports.updateDeity = function(id, updateContent){ // update function
   debug('deity-updateCrud');
   return new Promise((resolve, reject) => {
-    if(!updateContent.name || !updateContent.power) {
+    if(!updateContent.name && !updateContent.power) {
       console.log('first if');
       return reject(AppError.error400('bad request'));
     }

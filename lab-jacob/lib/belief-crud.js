@@ -34,10 +34,12 @@ exports.fetchBeliefByDeityId = function(deityId){ // fetches our beliefs from th
 exports.updateBeliefByDeityId = function(deityId, updateContent){ // function to update our beliefs
   debug('belief-updateCrud');
   return new Promise((resolve, reject) => {
-    if(!updateContent)
-      reject(AppError.error400('bad request'));
-    if(!deityId)
-      reject(AppError.error400('bad request'));
+    if(!updateContent.name && !updateContent.desc) {
+      return reject(AppError.error400('bad request'));
+    }
+    if(!deityId) {
+      return reject(AppError.error400('bad request'));
+    }
     deityCrud.fetchDeity({_id: deityId})
     .then( deity => Belief.findOne({deityId: deity._id}))
     .then((belief) => {

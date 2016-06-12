@@ -26,6 +26,8 @@ beliefRouter.put('/belief/:id', jsonParser, function(req, res){
 
 beliefRouter.delete('/belief/:id', function(req, res){
   beliefCrud.deleteBeliefByDeityId(req.params.id)
-  .then( belief => res.send(belief))
+  .then( (deity) =>{
+    res.status(204).send(deity);
+  })
   .catch( err => res.sendError(err));
 });

@@ -127,7 +127,7 @@ describe('testing the deity router', function(){
 
     it('should return an updated deity', (done) => {
       request.put(`${homeUrl}/api/deity/${this.tempDeity._id}`)
-      .send({name: 'MegaBrian', power: 'Aaaaaahhhhh!!!'})
+      .send({name: 'MegaBrian'})
       .then((res) => {
         expect(res.status).to.equal(200);
         expect(res.body.name).to.equal('MegaBrian');
