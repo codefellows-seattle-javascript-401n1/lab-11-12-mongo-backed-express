@@ -10,7 +10,7 @@ const baseUrl = `http://localhost:${port}`;
 const server = require('../server');
 const noteCrud = require('../lib/note-crud');
 const taskCrud = require('../lib/task-crud');
-const debug = require('debug');
+// const debug = require('debug');
 request.use(superPromise);
 
 describe('testing module note-router', function(){
@@ -49,20 +49,118 @@ describe('testing module note-router', function(){
       request.post(`${baseUrl}/api/note`)
       .send({name: 'test note', content:'test data'})
       .then((res) => {
-        debug('creating note');
+        // debug('creating note');
         expect(res.status).to.equal(200);
         expect(res.body.name).to.equal('test note');
         console.log(res.body);
         done();
       }).catch(done);
     });
-  });
+    describe('POST /api/note no body', function(){
+      after((done)=>{
+        noteCrud.removeAllNotes()
+        .then(()=>done())
+        .catch(done);
+      });
 
-  describe('GET /api/note:id with valid id', function(){
+      it('should return an error', function(done){
+        request.post(`${baseUrl}/api/note`)
+        .send({})
+        .then(() => done())
+        .catch(err => {
+          console.log('ERROR', err.message);
+          expect(err.response.res.statusCode).to.equal(400);
+          expect(err.response.res.text).to.equal('bad request');
+          done();
+        });
+
+      });
+    });
+
+    describe('GET /api/note/:id with valid id', function(){
+      before((done) => {
+        noteCrud.createNote({name: 'booya', content: 'test test 123'})
+        .then(note =>{
+          this.tempNote = note;
+          // console.log(this.tempNote);
+          done();
+        })
+        .catch(done);
+      });
+      after((done) => {
+        noteCrud.removeAllNotes()
+        .then(() => done())
+        .catch(done);
+      });
+
+      it('should return a note', (done) =>{
+        request.get(`${baseUrl}/api/note/${this.tempNote._id}`)
+        .then((res)=> {
+          expect(res.status).to.equal(200);
+          expect(res.body.name).to.equal(this.tempNote.name);
+          done();
+        })
+        .catch(done);
+      });
+    });
+    describe('GET /api/note/:id with NO valid id', function(){
+      it('should return an error', (done) =>{
+        request.get(`${baseUrl}/api/note/123`)
+        .then(() => done())
+        .catch(err => {
+          expect(err.response.res.statusCode).to.equal(404);
+          expect(err.response.res.text).to.equal('not found');
+          done();
+        })
+        .catch(done);
+      });
+    });
+    describe('GET /api/note/:id/tasks with valid id', function(){
+      before((done) =>{
+        noteCrud.createNote({name: 'booya', content: 'test test 123'})
+        .then(note =>{
+          this.tempNote = note;
+          return Promise.all([
+            taskCrud.createTask({noteId: note._id, description: 'test one'}),
+            taskCrud.createTask({noteId: note._id, description: 'test two'}),
+            taskCrud.createTask({noteId: note._id, description: 'test three'})
+          ]);
+        })
+        .then(tasks => {
+          this.tempTask = tasks;
+          done();
+        })
+          .catch(done);
+      });
+
+      after((done) => {
+        Promise.all([
+          noteCrud.removeAllNotes(),
+          taskCrud.removeAllTasks()
+        ])
+        .then(() => done())
+        .catch(done);
+      });
+
+      it('should return an array of three tasks', (done) => {
+        request.get(`${baseUrl}/api/note/${this.tempNote._id}/tasks`)
+        .then((res) => {
+          console.log('tasks:\n', res.body);
+          expect(res.status).to.equal(200);
+          expect(res.body.length).to.equal(3);
+          expect(res.body[0].description).to.equal('test one');
+          done();
+        })
+        .catch(done);
+      });
+    });
+  });
+  describe('testing DELETE/api/note/:id', function(){
     before((done) => {
       noteCrud.createNote({name: 'booya', content: 'test test 123'})
       .then(note =>{
         this.tempNote = note;
+        // console.log(this.tempNote);
         done();
       })
       .catch(done);
@@ -72,54 +170,25 @@ describe('testing module note-router', function(){
       .then(() => done())
       .catch(done);
     });
-
-    it('should return a note', (done) =>{
-      request.get(`${baseUrl}/api/note/${this.tempNote._id}`)
-      .then((res)=> {
-        expect(res.status).to.equal(200);
-        expect(res.body.name).to.equal(this.tempNote.name);
+    it('should delete the note', (done)=>{
+      request.del(`${baseUrl}/api/note/${this.tempNote._id}`)
+      .then((res) => {
+        expect(res.statusCode).to.equal(204);
+        expect(res.text).to.equal('');
         done();
       })
       .catch(done);
     });
   });
-  describe('GET /api/not/:id/tasks with valid id', function(){
-    before((done) =>{
-      noteCrud.createNote({name: 'booya', content: 'test test 123'})
-      .then(note =>{
-        this.tempNote = note;
-        return Promise.all([
-          noteCrud.createNote({noteId: note._id, desc: 'test one'}),
-          noteCrud.createNote({noteId: note._id, desc: 'test two'}),
-          noteCrud.createNote({noteId: note._id, desc: 'test three'})
-        ]);
-      })
-      .then(tasks => {
-        this.tempTask = tasks;
+  describe('testing DELETE/api/note/:id task with an invalid id', function(){
+    it('should error', (done)=>{
+      request.del(`${baseUrl}/api/note/123`)
+      .then(() => done())
+      .catch(err => {
+        expect(err.response.res.statusCode).to.equal(404);
+        expect(err.response.res.text).to.equal('not found');
         done();
-      })
-        .catch(done);
+      });
     });
-
-    after((done) => {
-      Promise.all([
-        noteCrud.removeAllNotes(),
-        taskCrud.removeAllTasks()
-      ])
-  .then(() => done())
-    .catch(done);
-    });
-
-    it('should return an array of three tasks', (done) => {
-      request.get(`${baseUrl}/api/note/${this.tempNote._id}/tasks`)
-      .then((res) => {
-        console.log('tasks:\n', res.body);
-        expect(res.status).to.equal(200);
-        expect(res.body.length).to.equal(3);
-        expect(res.body[0].slug).to.equal('hello');
-        done();
-      })
-      .catch(done);
-    });
-  }) ;
+  });
 });

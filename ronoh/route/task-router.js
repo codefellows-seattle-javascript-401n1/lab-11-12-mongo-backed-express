@@ -3,7 +3,7 @@
 const Router = require('express').Router;
 // const debug = require('debug')('ronito:task-router');
 const taskCrud = require('../lib/task-crud');
-const jsonParser = require('body-parser').json();
+const jsonParser = require('body-parser');
 
 const taskRouter = module.exports = new Router;
 

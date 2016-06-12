@@ -12,7 +12,7 @@ const noteRouter = require('./route/note-router');
 const taskRouter = require('./route/task-router');
 //global
 const port = process.env.PORT || 3000;
-const mongoURI = process.env.MONGO_URI || 'mongodb://localhost/ronito';
+const mongoURI = process.env.MONGO_URI || 'mongodb://localhost/rito';
 const app = express();
 //connect to db
 mongoose.connect(mongoURI);

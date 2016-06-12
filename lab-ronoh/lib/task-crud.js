@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('ronito: task-crud');
+// const debug = require('debug')('ronito: task-crud');
 const mongoose = require('mongoose');
 mongoose.Promise= require('bluebird');
 const Task = require('../model/task');
@@ -11,7 +11,7 @@ exports.createTask = function(reqBody){
   return new Promise((resolve, reject)=> {
     if(!reqBody.noteId)
       return reject(AppError.error400('task requires noteId'));
-    if(!reqBody.descriptiion)
+    if(!reqBody.description)
       return reject(AppError.error400('task requires a description'));
 
     const task = new Task(reqBody);
