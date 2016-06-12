@@ -14,10 +14,6 @@ cafeRouter.post('/cafes', jsonParser, function(req, res){
   .catch(err => res.sendError(err));
 });
 
-// cafeRouter.get('/cafes/all', function(req, res){
-//   //fetch all
-// });
-
 cafeRouter.get('/cafes/:id', function(req, res){
   debug('CALLED GET BY ID');
   cafeCrud.fetchCafe(req.params.id)
@@ -25,7 +21,6 @@ cafeRouter.get('/cafes/:id', function(req, res){
   .catch(err => res.sendError(err));
 });
 
-//PUT - jsonParser
 cafeRouter.put('/cafes/:id', jsonParser, function(req, res){
   debug('CALLED PUT BY ID');
   cafeCrud.editCafe(req.params.id, req.body)
@@ -37,7 +32,6 @@ cafeRouter.put('/cafes/:id', jsonParser, function(req, res){
   });
 });
 
-//DELETE - no jsonParser
 cafeRouter.delete('/cafes/:id', function(req, res){
   debug('CALLED DELETE BY ID');
   cafeCrud.removeCafe(req.params.id)

@@ -25,12 +25,26 @@ exports.createDrink = function(reqBody){
 };
 
 //get/fetch a drink
-exports.fetchDrink = function(id){
-  debug('fetchDrink');
+exports.fetchDrinkById = function(id){
+  debug('fetchDrinkById');
   return new Promise((resolve, reject) =>{
     Drink.findOne({_id: id})
     .then(drink => resolve(drink))
     .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
+
+//fetch drinks by cafe id
+exports.fetchDrinksByCafeId = function(id){
+  debug('fetchDrinksByCafeId');
+  return new Promise((resolve, reject)=>{
+    Drink.find({locId: id})
+    .then((drinks)=>{
+      return resolve(drinks);
+    })
+    .catch((err)=>{
+      return reject(AppErr.error404(err.message));
+    });
   });
 };
 
