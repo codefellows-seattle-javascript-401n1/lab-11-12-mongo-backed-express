@@ -1,6 +1,6 @@
 'use strict';
 
-const Note = require('../model/user');
+const User = require('../model/user');
 const AppErr = require('../lib/app-error');
 const debug = require('debug')('awesomeNote:user-crud');
 
@@ -12,8 +12,8 @@ exports.createUser = function(reqBody){
       return reject(AppErr.error400('User require\'s name'));
 
     reqBody.timestamp = new Date();
-    const note = new Note(reqBody);
-    note.save()
+    const user = new User(reqBody);
+    user.save()
     .then(resolve)
     .catch(reject);
   });
@@ -22,12 +22,37 @@ exports.createUser = function(reqBody){
 exports.fetchUser = function(id){
   return new Promise((resolve, reject) => {
     debug('fetchUser');
-    Note.findOne({_id: id})
-    .then(resolve)
+    User.findOne({_id: id})
+    .then(user => resolve(user))
     .catch(err => reject(AppErr.error404(err.message)));
   });
 };
 
-exports.removeAllNotes = function(){
-  return Note.remove({});
+exports.updateUser = function(id, data){
+  return new Promise((resolve, reject) =>{
+    debug('updateUser');
+    User.update({_id: id}, data)
+    .then(() => {
+      User.findOne({_id: id})
+      .then(resolve)
+      .catch(err => reject(AppErr.error404(err.message)));
+    })
+    .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
+
+exports.removeOneUser = function(id){
+  return new Promise ((resolve, reject) => {
+    debug('delete one user');
+    User.findOne({_id: id})
+    .then(() => {
+      User.remove({_id: id})
+      .then(resolve)
+      .catch(err => reject(AppErr.error500(err.message)));
+    })
+    .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
+exports.removeAllUsers = function(){
+  return User.remove({});
 };

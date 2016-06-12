@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('rito:app-error')
+const debug = require('debug')('awesomeNote:app-error');
 
 const AppError = module.exports = function(message, statusCode, responseMessage){
   debug('creating app error');

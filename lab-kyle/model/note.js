@@ -1,4 +1,4 @@
-'use stirct';
+'use strict';
 
 const mongoose = require('mongoose');
 
