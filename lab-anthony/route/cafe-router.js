@@ -1,0 +1,40 @@
+'use strict';
+
+const debug = require('debug');
+const Router = require('express').Router;
+const jsonParser = require('body-parser').json();
+const cafeCrud = require('../lib/cafe-crud');
+
+const cafeRouter = module.exports = new Router();
+
+cafeRouter.post('/cafes', jsonParser, function(req, res){
+  console.log('CALLED POST');
+  cafeCrud.createCafe(req.body)
+  .then(cafe => res.send(cafe))
+  .catch(err => res.sendError(err));
+});
+
+cafeRouter.get('/cafes/:id', function(req, res){
+  debug('CALLED GET BY ID');
+  cafeCrud.fetchCafe(req.params.id)
+  .then(cafe => res.send(cafe))
+  .catch(err => res.sendError(err));
+});
+
+cafeRouter.put('/cafes/:id', jsonParser, function(req, res){
+  debug('CALLED PUT BY ID');
+  cafeCrud.editCafe(req.params.id, req.body)
+  .then((cafe) => {
+    res.send(cafe);
+  })
+  .catch((err) => {
+    res.sendError(err);
+  });
+});
+
+cafeRouter.delete('/cafes/:id', function(req, res){
+  debug('CALLED DELETE BY ID');
+  cafeCrud.removeCafe(req.params.id)
+  .then(() => res.status(204).send())
+  .catch(err => res.sendError(err));
+});
