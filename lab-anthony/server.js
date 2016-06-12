@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 //app modules
 const errorResponse = require('./lib/error-response');
 const cafeRouter = require('./route/cafe-router');
+const drinkRouter = require('./route/drink-router');
 
 //globals
 const port = process.env.PORT || 3000;
@@ -23,6 +24,7 @@ app.use(morgan('dev'));
 app.use(errorResponse);
 //routes
 app.use('/api', cafeRouter);
+app.use('/api', drinkRouter);
 app.all('*', function(req, res){
   debug('404 *');
   res.status(404).send('not found');

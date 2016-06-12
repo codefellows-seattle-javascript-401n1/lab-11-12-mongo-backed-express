@@ -21,6 +21,7 @@ describe('Testing the cafe-router module', function(){
         console.log('server is running on port:', port);
         done();
       });
+      return;
     }
     done();
   });
