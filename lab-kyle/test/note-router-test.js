@@ -83,7 +83,7 @@ describe('testing module note-router', function(){
 
     it('should return a note', (done) => {
       request.post(`${baseUrl}/api/note`)
-      .send({userd: this.tempUser._id, cont: 'test note', nae: 'thisNote'})
+      .send({userId: this.tempUser._id, cont: 'test note', nae: 'thisNote'})
       .then((done))
       .catch((err) => {
         try {
@@ -97,5 +97,33 @@ describe('testing module note-router', function(){
       });
     });
   });
+
+  describe('GET /api/note with valid id', function(){
+    before((done) => {
+      userCrud.createUser({name: 'test name', email: 'test email'})
+      .then( user => {
+        this.tempUser = user;
+        done();
+      })
+      .catch(done);
+    });
+
+    after((done) => {
+      noteCrud.removeAllNotes()
+      .then( () => done())
+      .catch(done);
+    });
+
+    it('should return a note', (done) => {
+      request.get(`${baseUrl}/api/note/${this.tempUser._id}`)
+      .then( res => {
+        expect(res.status).to.equal(200);
+        expect(res.body.content).to.equal(`${this.tempUser._id}`);
+        done();
+      })
+      .catch(done);
+    });
+  });
+
 
 });

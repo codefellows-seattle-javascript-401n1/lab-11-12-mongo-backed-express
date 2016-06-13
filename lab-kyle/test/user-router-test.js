@@ -200,7 +200,7 @@ describe('testing module user-router', function(){
       .send({name: 'kyle', email:'kyle@gmail.com'})
       .then((res) => {
         expect(res.status).to.equal(200);
-        expect(res.id).to.equal(this.tempUser._id);
+        expect(res.body.id).to.equal(this.tempUser._id);
         done();
       }).catch(done);
     });
@@ -223,7 +223,8 @@ describe('testing module user-router', function(){
     });
 
     it('should return a 400 bad request', (done) => {
-      request.put(`${baseUrl}/api/user/id`)
+      request.put(`${baseUrl}/api/user/${this.tempUser.name}`)
+      .send({name: 'lk;dsknj', email: '9087'})
       .then((done))
       .catch((err) => {
         try {

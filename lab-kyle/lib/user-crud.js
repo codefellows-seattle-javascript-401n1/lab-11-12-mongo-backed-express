@@ -37,7 +37,7 @@ exports.updateUser = function(id, data){
       .then(resolve)
       .catch(err => reject(AppErr.error404(err.message)));
     })
-    .catch(err => reject(AppErr.error404(err.message)));
+    .catch(err => reject(AppErr.error400(err.message)));
   });
 };
 

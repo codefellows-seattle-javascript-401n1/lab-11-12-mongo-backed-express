@@ -26,7 +26,7 @@ exports.fetchNoteByUserId = function(userId){
   return new Promise((resolve, reject) => {
     userCrud.fetchUser({_id: userId})
     .then( note => Note.find({userId: note._id}))
-    .then( tasks => resolve(tasks))
+    .then( notes => resolve(notes))
     .catch( err => reject(err));
   });
 };
