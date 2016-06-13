@@ -8,6 +8,7 @@ const repairRouter = module.exports = new Router();
 
 
 repairRouter.post('/repair', bodyParser, function(req, res){
+  debug('entered post in repair-router.js');
   repairCrud.createRepair(req.body)
     //for fat arrow functions that do not have{}, the value on the right is implicitly returned
     .then (repair => res.send(repair))

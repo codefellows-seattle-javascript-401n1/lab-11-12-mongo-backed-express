@@ -16,7 +16,7 @@ gulp.task('eslint', function(){
 });
 
 gulp.task('mocha', function(){
-  return gulp.src([''])
+  return gulp.src(paths)
     //stream  through gulp-mocha
     .pipe(mocha());
 });

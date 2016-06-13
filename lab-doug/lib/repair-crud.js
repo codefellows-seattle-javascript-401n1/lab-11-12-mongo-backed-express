@@ -5,6 +5,7 @@ const AppErr = require('./app-error');
 const debug = require('debug')('business:repair-crud');
 
 exports.createRepair = function(reqBody){
+  debug('entered createRepair in repair-crud');
   return new Promise((resolve, reject) => {
     if(!reqBody.mechanicLastName)
       return reject(AppErr.error400('repair needs mechanics name'));

@@ -11,7 +11,7 @@ const receiptOps = require('../lib/receipt-ops');
 
 request.use(supPromise);
 
-describe('Testing receipt router', function(){
+describe('Testing RECEIPT router', function(){
   before((done) => {
     if(!server.isRunning){
       server.listen(port, () => {
@@ -60,10 +60,11 @@ describe('Testing receipt router', function(){
       }).catch(done);
     });
     it('should return a receipt', (done) => {
+      console.log('value of tempReceipt in receipt-router-test Get with valid id: ', this.tempReceipt._id);
       request.get(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
       .then((res) => {
         expect(res.status).to.equal(200);
-        expect(res.body.autoMake).to.equal('VW');
+        expect(res.body.receipt.autoMake).to.equal('VW');
         done();
       }).catch(done);
     });
