@@ -1,8 +1,5 @@
 'use strict';
-//node modules
-//npm modules
-//app modules
-//global
+
 
 //we are requiring the Router function from the express module//
 const Router = require('express').Router;

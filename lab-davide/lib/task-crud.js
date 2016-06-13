@@ -18,6 +18,15 @@ exports.createTask = function(reqBody) {
   });
 };
 
+exports.fetchTask = function(req.params.id) {
+    debug('fetchNote');
+    return new Promise((resolve, reject) => {
+
+    }
+
+}
+
+
 exports.removeAllTasks = function() {
   return Task.remove({});
 };

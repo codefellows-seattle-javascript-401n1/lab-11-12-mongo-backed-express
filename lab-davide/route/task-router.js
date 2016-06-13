@@ -11,15 +11,15 @@ const JsonParser = require('body-parser').json();
 
 //app modules//
 const taskRouter = module.exports = new Router();
-const taskCrud = require('../lib/task-crud');
-
+const taskCrud = require('./../lib/task-crud');
+console.log('const taskCrud' + taskCrud);
 
 
 
 //adding POST request//
 taskRouter.post('/task', JsonParser, function(req, res) {
   debug('post task');
-  taskCrud.createtask(req.body)
+  taskCrud.createTask(req.body)
   .then(task => res.send(task))
   .catch(err => res.sendError(err));
 });
@@ -27,7 +27,7 @@ taskRouter.post('/task', JsonParser, function(req, res) {
 // adding GET request//
 taskRouter.get('/:id', function(req, res) {
   debug('get task');
-  taskCrud.fetchtask(req.params.id)
+  taskCrud.fetchTask(req.params.id)
   .then(task => res.send(task))
   .catch(err => res.sendError(err));
 
@@ -36,7 +36,7 @@ taskRouter.get('/:id', function(req, res) {
 //adding PUT request//
 taskRouter.put('/:id', function(req, res) {
   debug('put task');
-  taskCrud.updatetask(req.params.id, req.body)
+  taskCrud.updateTask(req.params.id, req.body)
   .then(task => res.send(task))
   .catch(err => res.sendError(err));
 
@@ -45,7 +45,7 @@ taskRouter.put('/:id', function(req, res) {
 //adding DELETE request//
 taskRouter.delete('/:id', function(req, res) {
   debug('delete task');
-  taskCrud.deletetask(req.params.id)
+  taskCrud.deleteTask(req.params.id)
   .then(task => res.send(task))
   .catch(err => res.sendError(err));
 
