@@ -12,22 +12,60 @@ exports.createNote = function(reqBody){
       return reject(AppErr.error400('note require\'s name'));
 
     reqBody.timestamp = new Date();
-    const newNote = new Note(reqBody);
-    newNote.save(); //save on 'note' objects, not 'Note' constructor
-    resolve(newNote);
+    const note = new Note(reqBody);
+    note.save() //save on 'note' objects, not 'Note' constructor
+    .then (resolve)
+    .catch (reject);
   });
 };
 
 exports.fetchNote = function(id){
-  debug('fetching Note');
+  debug('fetchNote');
   return new Promise((resolve, reject) =>{
-    //Look up object with 'id'
     Note.findOne({_id: id})
     .then(resolve)
     .catch(err => reject(AppErr.error404(err.message)));
   });
 };
-
+exports.updateNote = function(id, data){
+  debug('updateNote');
+  return new Promise((resolve, reject)=> {
+    if(!id){
+      var err = AppErr.error400('bad request');
+      return reject(err);
+    }
+    if(!data){
+      err = AppErr.error400('bad request');
+      return reject(err);
+    }
+    if(!data.content){
+      err = AppErr.error400('bad request');
+      return reject(err);
+    }
+    Note.findOne({_id:id})
+    .then(()=>{
+      Note.update({_id:id},data)
+      .then(()=>{
+        Note.findOne({_id:id})
+        .then(resolve)
+        .catch(reject);
+      })
+      .catch(err => reject(AppErr.error400(err.message)));
+    })
+    .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
+exports.removeNote = function(id){
+  return new Promise((resolve, reject)=> {
+    Note.findOne({_id:id})
+    .then(()=>{
+      Note.remove({_id:id})
+      .then(resolve)
+      .catch(err => reject(AppErr.error500(err.message)));
+    })
+    .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
 exports.removeAllNotes = function(){
   return Note.remove({});
 };
