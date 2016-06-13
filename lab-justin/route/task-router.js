@@ -6,6 +6,8 @@ const jsonParser = require('body-parser').json();
 const taskCrud = require('../lib/task-crud');
 const taskRouter = module.exports = new Router();
 
+debug('justin:task-router');
+
 taskRouter.post('/note/:id/task', jsonParser, function(req, res){
   taskCrud.createTask(req.body)
   .then( task => res.send(task))

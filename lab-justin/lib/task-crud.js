@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const noteCrud = require('./note-crud');
 
+debug('justin:task-crud');
 
 exports.createTask = function(reqBody){
   return new Promise((resolve, reject) => {

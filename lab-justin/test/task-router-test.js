@@ -1,4 +1,4 @@
- 'use strict';
+'use strict';
 
 process.env.MONGO_URI = 'mongodb://localhost/test-task';
 
@@ -141,50 +141,50 @@ describe('testing module task-router', function(){
   });
 
 //DELETE
-describe('DELETE /note/:id/tasks with valid id', function(){
-  after((done) => {
-    Promise.all([
-      noteCrud.removeAllNotes(),
-      taskCrud.removeAllTasks()
-    ])
-    .then(() => done())
-    .catch(done);
-  });
+  describe('DELETE /note/:id/tasks with valid id', function(){
+    after((done) => {
+      Promise.all([
+        noteCrud.removeAllNotes(),
+        taskCrud.removeAllTasks()
+      ])
+      .then(() => done())
+      .catch(done);
+    });
 
-  before((done) => {
-    noteCrud.createNote({name:'cats', content:'meow 123'})
-      .then(note => {
-        this.tempNote = note;
-        taskCrud.createTask({noteId: note._id, desc: '123'})
-          .then(done())
-          .catch(done);
-      }).catch(done);
-  });
+    before((done) => {
+      noteCrud.createNote({name:'cats', content:'meow 123'})
+        .then(note => {
+          this.tempNote = note;
+          taskCrud.createTask({noteId: note._id, desc: '123'})
+            .then(done())
+            .catch(done);
+        }).catch(done);
+    });
 
-//DELETE 204
-  it('should return "no content"', (done) => {
-    request
-    .del(`${baseUrl}/api/note/${this.tempNote._id}/task`)
-    .then((res) => {
-      expect(res.status).to.eql(204);
-      expect(res.text).to.eql('');
-      done();
-    })
-    .catch(done);
-  });
+  //DELETE 204
+    it('should return "no content"', (done) => {
+      request
+      .del(`${baseUrl}/api/note/${this.tempNote._id}/task`)
+      .then((res) => {
+        expect(res.status).to.eql(204);
+        expect(res.text).to.eql('');
+        done();
+      })
+      .catch(done);
+    });
 
-//DELETE 404
-  it('should return "not found"', (done) => {
-    request
-    .del(baseUrl)
-    .then(done)
-    .catch( err => {
-      let res = err.response;
-      expect(res.status).to.eql(404);
-      expect(res.text).to.eql('not found');
-      done();
+  //DELETE 404
+    it('should return "not found"', (done) => {
+      request
+      .del(baseUrl)
+      .then(done)
+      .catch( err => {
+        let res = err.response;
+        expect(res.status).to.eql(404);
+        expect(res.text).to.eql('not found');
+        done();
+      });
     });
   });
-});
 
 });
