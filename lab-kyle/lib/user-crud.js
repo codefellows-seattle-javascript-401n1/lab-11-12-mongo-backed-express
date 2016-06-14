@@ -29,15 +29,31 @@ exports.fetchUser = function(id){
 };
 
 exports.updateUser = function(id, data){
-  return new Promise((resolve, reject) =>{
-    debug('updateUser');
-    User.update({_id: id}, data)
-    .then(() => {
-      User.findOne({_id: id})
-      .then(resolve)
-      .catch(err => reject(AppErr.error404(err.message)));
-    })
-    .catch(err => reject(AppErr.error400(err.message)));
+  return new Promise((resolve, reject) => {
+    if(!id){
+      var err = AppErr.error400('bad request');
+      return reject(err);
+    }
+    if(!data){
+      err = AppErr.error400('bad request');
+      return reject(err);
+    }
+    if(!data.content){
+      err = AppErr.error400('bad request');
+      return reject(err);
+    }
+
+    User.findOne({_id: id})
+   .then(() => {
+     User.update({_id: id}, data)
+     .then(() => {
+       User.findOne({_id: id})
+       .then(resolve)
+       .catch(reject);
+     })
+    .catch( err => reject(AppErr.error400(err.mesage)));
+   })
+  .catch(err => reject(AppErr.error404(err.message)));
   });
 };
 
