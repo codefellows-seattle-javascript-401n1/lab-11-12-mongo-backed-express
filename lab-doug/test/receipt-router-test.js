@@ -71,7 +71,6 @@ describe('Testing RECEIPT router', function(){
       request.get(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
       .then((res) => {
         expect(res.status).to.equal(200);
-        console.log('res.body: ', res.body);
         expect(res.body.autoMake).to.equal('VW');
         done();
       }).catch(done);
@@ -114,30 +113,34 @@ describe('Testing RECEIPT router', function(){
     it('should return a modified receipt object', (done) => {
       request.put(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
       .send ({customerLastName: 'Smith', autoMake: 'Audi', autoYear: 2010})
-      .then(receiptCrud.putReceipt(req.params.id, reqBody))
-          .then (receipt => res.send(receipt))
-          .catch(err => res.sendError(err));
+      .then((res) => {
+        console.log('res.status: ', res.status);
+        console.log('customer: ', res.body.customerLastName);
+        expect(res.status).to.equal(200);
+        expect(res.body.customerLastName).to.equal('Smith');
+        done();
+      })
+      .catch(err => res.sendError(err));
       });
   });
 
 
-//
-// describe('Testing DELETE with a valid id', function(req, res){
-//   before((done) => {
-//     receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015})
-//
-//     .then(receipt => {
-//       this.tempReceipt = receipt;
-//       done();
-//     }).catch(done);
-//   });
-//   it('should remove the document from the collection', (done) => {
-//     request.del(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
-//     .receiptCrud.removeReceipt(`${this.tempReceipt._id}`)
-//     .then((res) => {
-//       expect(res.status).to.equal(200);
-//       done();
-//     }).catch(done);
-//   });
-// });
+  describe('Testing DELETE with a valid id', function(req, res){
+    before((done) => {
+      receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015})
+
+      .then(receipt => {
+        this.tempReceipt = receipt;
+        done();
+      }).catch(done);
+    });
+    it('should remove the document from the collection', (done) => {
+      request.del(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
+      .then((res) => {
+        expect(res.status).to.equal(200);
+        expect(res.body.autoYear).to.equal(2015);
+        done();
+      }).catch(done);
+    });
+  });
 });

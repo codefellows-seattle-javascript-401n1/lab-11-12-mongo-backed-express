@@ -15,8 +15,8 @@ exports.createReceipt = function(reqBody){
     //save the instance of receipt to mongo db.
     receipt.save()
     /*  mongo will return a copy of the receipt it creates to 'then', which will be handled by receiptRouter.get 'then'*/
-    .then(receipt => resolve)
-    .catch(err => reject(err));
+    .then(resolve)
+    .catch(reject);
 
   });
 };
@@ -30,6 +30,7 @@ exports.getReceipt = function(id){
 };
 
 exports.putReceipt = function(id, reqBody){
+  console.log('putReceipt called');
   return new Promise((resolve, reject) => {
     Receipt.findOneAndUpdate({_id: id}, reqBody, {new:true})
     .then(resolve)
