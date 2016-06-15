@@ -10,6 +10,7 @@ const server = require('../server');
 const bodyParser = require('body-parser').json();
 const receiptCrud = require('../lib/receipt-crud');
 
+
 request.use(supPromise);
 
 describe('Testing RECEIPT router', function(){
@@ -59,16 +60,16 @@ describe('Testing RECEIPT router', function(){
       .then(receipt => {
         // console.log('GET receipt created: ', receipt);
         this.tempReceipt = receipt;
-        // console.log('GET tempReceipt created: ', this.tempReceipt);
+        console.log('GET tempReceipt created: ', this.tempReceipt);
         done();
       }).catch(done);
     });
     it('should return a receipt', (done) => {
-      // console.log('value of tempReceipt ID in receipt-router-test Get with valid id: ', this.tempReceipt._id);
+      console.log('value of tempReceipt ID in receipt-router-test Get with valid id: ', this.tempReceipt._id);
       request.get(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
       .then((res) => {
         expect(res.status).to.equal(200);
-        // console.log('res.body: ', res.body);
+        console.log('res.body: ', res.body);
         expect(res.body.autoMake).to.equal('VW');
         done();
       }).catch(done);
@@ -99,39 +100,42 @@ describe('Testing RECEIPT router', function(){
       });
     });
   });
-  describe('Testing PUT with valid id', function(){
-    before((done) => {
-      receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
-      .then(receipt => {
-        this.tempReceipt = receipt;
-        done();
-      }).catch(done);
-    });
-
-    it('should return a modified receipt object', (done) => {
-      request.put(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
-      .send ({customerLastName: 'Smith', autoMake: 'Audi', autoYear: 2010})
-      .receiptCrud.putReceipt(req.params.id, reqBody)
-          .then (receipt => res.send(receipt))
-          .catch(err => res.sendError(err));
-      });
-  });
-});
-
-
+//   describe('Testing PUT with valid id', function(){
+//     before((done) => {
+//       receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
+//       .then(receipt => {
+//         this.tempReceipt = receipt;
+//         done();
+//       }).catch(done);
+//     });
+//
+//     it('should return a modified receipt object', (done) => {
+//       request.put(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
+//       .send ({customerLastName: 'Smith', autoMake: 'Audi', autoYear: 2010})
+//       .receiptCrud.putReceipt(req.params.id, reqBody)
+//           .then (receipt => res.send(receipt))
+//           .catch(err => res.sendError(err));
+//       });
+//   });
+//
+//
+//
 // describe('Testing DELETE with a valid id', function(req, res){
 //   before((done) => {
 //     receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015})
+//
 //     .then(receipt => {
 //       this.tempReceipt = receipt;
 //       done();
 //     }).catch(done);
 //   });
 //   it('should remove the document from the collection', (done) => {
-//     request.delete(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
+//     request.del(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
+//     .receiptCrud.removeReceipt(`${this.tempReceipt._id}`)
 //     .then((res) => {
 //       expect(res.status).to.equal(200);
 //       done();
 //     }).catch(done);
 //   });
 // });
+});

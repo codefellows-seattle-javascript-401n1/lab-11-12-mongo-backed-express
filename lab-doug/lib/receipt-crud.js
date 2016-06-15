@@ -21,6 +21,7 @@ exports.createReceipt = function(reqBody){
 };
 
 exports.getReceipt = function(id){
+  debug('entered getReceipt in receipt-crud.js');
   return new Promise((resolve, reject) => {
     Receipt.findOne({_id: id})
     .then(resolve)
@@ -36,9 +37,17 @@ exports.putReceipt = function(id, reqBody){
   });
 };
 
+exports.putReceipt = function(id, reqBody){
+  return new Promise((resolve, reject) => {
+    Receipt.findOneAndUpdate({_id: id}, reqBody, {new:true})
+    .then(resolve)
+    .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
+
 exports.removeReceipt = function(id){
   return new Promise((resolve, reject) => {
-    Receipt.remove({_id: id})
+    Receipt.findOneAndRemove({_id: id})
     .then(resolve)
     .catch(err => reject(AppErr.error404(err.message)));
   });
