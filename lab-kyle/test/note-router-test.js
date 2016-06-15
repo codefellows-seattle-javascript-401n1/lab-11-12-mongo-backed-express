@@ -103,22 +103,28 @@ describe('testing module note-router', function(){
       userCrud.createUser({name: 'test name', email: 'test email'})
       .then( user => {
         this.tempUser = user;
+      })
+      .catch(done);
+      noteCrud.createNote({userId: this.tempUser.id, name: 'test note', content: 'this is a test note'})
+      .then( note => {
+        this.tempNote = note;
         done();
       })
       .catch(done);
     });
 
     after((done) => {
+      userCrud.removeAllUsers();
       noteCrud.removeAllNotes()
       .then( () => done())
       .catch(done);
     });
 
     it('should return a note', (done) => {
-      request.get(`${baseUrl}/api/note/${this.tempUser._id}`)
+      request.get(`${baseUrl}/api/note/${this.tempUser.id}`)
       .then( res => {
         expect(res.status).to.equal(200);
-        expect(res.body.content).to.equal(`${this.tempUser._id}`);
+        expect(res.body.userId).to.equal(`${this.tempUser.id}`);
         done();
       })
       .catch(done);

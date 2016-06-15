@@ -15,7 +15,15 @@ noteRouter.post('/note', jsonParser, function(req, res){
 });
 
 noteRouter.get('/note/:id', sendError, function(req, res){
+  debug('noteRouter Get');
   noteCrud.fetchNoteByUserId(req.params.id)
   .then(note => res.send(note))
+  .catch(err => res.sendError(err));
+});
+
+noteRouter.put('/note/:id', jsonParser, sendError, function(req, res){
+  debug('noteRouter PUT');
+  noteCrud.updateNote(req.params.id, req.body)
+  .then(user => res.send(user))
   .catch(err => res.sendError(err));
 });

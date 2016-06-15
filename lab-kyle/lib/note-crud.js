@@ -31,6 +31,36 @@ exports.fetchNoteByUserId = function(userId){
   });
 };
 
+exports.updateNote = function(id, data){
+  return new Promise((resolve, reject) => {
+    if(!id){
+      var err = AppErr.error400('bad request');
+      return reject(err);
+    }
+    if(!data){
+      err = AppErr.error400('bad request');
+      return reject(err);
+    }
+    if(!data.content){
+      err = AppErr.error400('bad request');
+      return reject(err);
+    }
+
+    Note.findOne({_id: id})
+    .then(() => {
+      Note.update({_id: id}, data)
+      .then(() => {
+        Note.findOne({_id: id})
+        .then(resolve)
+        .catch(reject);
+      })
+     .catch( err => reject(AppErr.error400(err.mesage)));
+    })
+   .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
+
+
 exports.removeAllNotes = function(){
   debug('note-crud removeAllNotes');
   return Note.remove({});

@@ -38,7 +38,7 @@ exports.updateUser = function(id, data){
       err = AppErr.error400('bad request');
       return reject(err);
     }
-    if(!data.content){
+    if(!data.email){
       err = AppErr.error400('bad request');
       return reject(err);
     }
