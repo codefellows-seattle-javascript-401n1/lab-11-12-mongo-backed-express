@@ -2,7 +2,7 @@
 
 const Receipt = require('../model/receipt');
 const AppErr = require('./app-error');
-const debug = require('debug')('business:receipt-ops');
+const debug = require('debug')('business:receipt-crud');
 
 exports.createReceipt = function(reqBody){
   return new Promise((resolve, reject) => {
@@ -10,8 +10,9 @@ exports.createReceipt = function(reqBody){
       return reject(AppErr.error400('receipt needs customer name'));
     if(!reqBody.autoMake)
       return reject(AppErr.error400('receipt needs auto make'));
-
+    //construct an instance of receipt
     const receipt = new Receipt(reqBody);
+    //save the instance of receipt to mongo db and create _id
     receipt.save()
     .then(resolve)
     .catch(reject);

@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const errorResponse = require('./lib/error-response');
 const receiptRouter = require('./route/receipt-router');
 const repairRouter = require('./route/repair-router');
-//globals
+
 const port = process.env.PORT || 3000;
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost/business';
 
@@ -22,7 +22,7 @@ app.use(morgan('dev'));//executed for each request
 app.use('/api', receiptRouter);
 app.use('/api', repairRouter);
 
-//fall through router handling
+//fall through route handling
 app.all('*', function(req, res){
   debug('this route is not registered');
   res.status(404).send('not found');

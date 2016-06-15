@@ -7,7 +7,8 @@ const supPromise = require('superagent-promise-plugin');
 const port = process.env.PORT || 3000;
 const baseUrl = `http://localhost:${port}`;
 const server = require('../server');
-const receiptOps = require('../lib/receipt-ops');
+const bodyParser = require('body-parser').json();
+const receiptCrud = require('../lib/receipt-crud');
 
 request.use(supPromise);
 
@@ -34,9 +35,10 @@ describe('Testing RECEIPT router', function(){
     }
     done();
   });
+
   describe('Testing POST with valid request', function(){
     after((done) => {
-      receiptOps.removeReceiptDocuments()
+      receiptCrud.removeReceiptDocuments()
       .then(() => done()).catch(done);
     });
 
@@ -53,25 +55,28 @@ describe('Testing RECEIPT router', function(){
 
   describe('Testing GET with valid request and id', function(){
     before((done) => {
-      receiptOps.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
+      receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
       .then(receipt => {
+        // console.log('GET receipt created: ', receipt);
         this.tempReceipt = receipt;
+        // console.log('GET tempReceipt created: ', this.tempReceipt);
         done();
       }).catch(done);
     });
     it('should return a receipt', (done) => {
-      console.log('value of tempReceipt in receipt-router-test Get with valid id: ', this.tempReceipt._id);
+      // console.log('value of tempReceipt ID in receipt-router-test Get with valid id: ', this.tempReceipt._id);
       request.get(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
       .then((res) => {
         expect(res.status).to.equal(200);
-        expect(res.body.receipt.autoMake).to.equal('VW');
+        // console.log('res.body: ', res.body);
+        expect(res.body.autoMake).to.equal('VW');
         done();
       }).catch(done);
     });
   });
   describe('Testing GET with INVALID request id', function(){
     before((done) => {
-      receiptOps.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
+      receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
       .then(receipt => {
         this.tempReceipt = receipt;
         done();
@@ -79,12 +84,12 @@ describe('Testing RECEIPT router', function(){
     });
 
     after((done) => {
-      receiptOps.removeReceiptDocuments()
+      receiptCrud.removeReceiptDocuments()
       .then(() => done()).catch(done);
     });
 
     it('should return a 404 not found', (done) => {
-      request.get(`${baseUrl}/api/receipt/${123456}`)
+      request.get(`${baseUrl}/api/receipt/${"123s456"}`)
       .then(done)
       .catch(err => {
         const res = err.response;
@@ -94,31 +99,29 @@ describe('Testing RECEIPT router', function(){
       });
     });
   });
+  describe('Testing PUT with valid id', function(){
+    before((done) => {
+      receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
+      .then(receipt => {
+        this.tempReceipt = receipt;
+        done();
+      }).catch(done);
+    });
 
+    it('should return a modified receipt object', (done) => {
+      request.put(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
+      .send ({customerLastName: 'Smith', autoMake: 'Audi', autoYear: 2010})
+      .receiptCrud.putReceipt(req.params.id, reqBody)
+          .then (receipt => res.send(receipt))
+          .catch(err => res.sendError(err));
+      });
+  });
 });
 
-  // describe('Testing PUT with valid id', function(){
-  //   before((done) => {
-  //     receiptOps.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
-  //     .then(receipt => {
-  //       this.tempReceipt = receipt;
-  //       done();
-  //     }).catch(done);
-  //   });
-  //
-  //   it('should return a modified receipt object', (done) => {
-  //   request.put(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
-  //   .send {customerLastName: 'Smith', autoMake: 'Audi', autoYear: 2010}
-  //   receiptOps.putReceipt(req.params.id, reqBody)
-  //     .then (receipt => res.send(receipt))
-  //     .catch(err => res.sendError(err));
-  //   });
-  // });
 
-// });
 // describe('Testing DELETE with a valid id', function(req, res){
 //   before((done) => {
-//     receiptOps.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015})
+//     receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015})
 //     .then(receipt => {
 //       this.tempReceipt = receipt;
 //       done();

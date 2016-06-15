@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000;
 const baseUrl = `http://localhost:${port}`;
 const server = require('../server');
 const repairCrud = require('../lib/repair-crud');
-const receiptOps = require('../lib/receipt-ops');
+const receiptCrud = require('../lib/receipt-crud');
 
 request.use(supPromise);
 
@@ -37,7 +37,7 @@ describe('Testing REPAIR router', function(){
   });
   describe('Testing repair POST with valid request', function(){
     before((done) => {
-      receiptOps.createReceipt({customerLastName: 'Walsh',autoMake: 'Ford',
+      receiptCrud.createReceipt({customerLastName: 'Walsh',autoMake: 'Ford',
       autoYear: 2013})
       .then(receipt => {
         this.tempReceipt = receipt;
@@ -70,7 +70,7 @@ describe('Testing REPAIR router', function(){
 
 //   describe('Testing GET with valid request and id', function(){
 //     before((done) => {
-//       receiptOps.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
+//       receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
 //       .then(receipt => {
 //         this.tempReceipt = receipt;
 //         done();
@@ -87,7 +87,7 @@ describe('Testing REPAIR router', function(){
 //   });
 //   describe('Testing GET with INVALID request id', function(){
 //     before((done) => {
-//       receiptOps.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
+//       receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
 //       .then(receipt => {
 //         this.tempReceipt = receipt;
 //         done();
@@ -95,7 +95,7 @@ describe('Testing REPAIR router', function(){
 //     });
 //
 //     after((done) => {
-//       receiptOps.removeReceiptDocuments()
+//       receiptCrud.removeReceiptDocuments()
 //       .then(() => done()).catch(done);
 //     });
 //
@@ -115,7 +115,7 @@ describe('Testing REPAIR router', function(){
 //
 //   // describe('Testing PUT with valid id', function(){
 //   //   before((done) => {
-//   //     receiptOps.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
+//   //     receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
 //   //     .then(receipt => {
 //   //       this.tempReceipt = receipt;
 //   //       done();
@@ -125,7 +125,7 @@ describe('Testing REPAIR router', function(){
 //   //   it('should return a modified receipt object', (done) => {
 //   //   request.put(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
 //   //   .send {customerLastName: 'Smith', autoMake: 'Audi', autoYear: 2010}
-//   //   receiptOps.putReceipt(req.params.id, reqBody)
+//   //   receiptCrud.putReceipt(req.params.id, reqBody)
 //   //     .then (receipt => res.send(receipt))
 //   //     .catch(err => res.sendError(err));
 //   //   });
@@ -134,7 +134,7 @@ describe('Testing REPAIR router', function(){
 // // });
 // // describe('Testing DELETE with a valid id', function(req, res){
 // //   before((done) => {
-// //     receiptOps.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015})
+// //     receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015})
 // //     .then(receipt => {
 // //       this.tempReceipt = receipt;
 // //       done();
