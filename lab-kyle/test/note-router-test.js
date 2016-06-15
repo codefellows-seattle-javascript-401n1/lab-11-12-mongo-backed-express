@@ -103,9 +103,8 @@ describe('testing module note-router', function(){
       userCrud.createUser({name: 'test name', email: 'test email'})
       .then( user => {
         this.tempUser = user;
+        return noteCrud.createNote({userId: this.tempUser._id, name: 'test note', content: 'this is a test note'});
       })
-      .catch(done);
-      noteCrud.createNote({userId: this.tempUser.id, name: 'test note', content: 'this is a test note'})
       .then( note => {
         this.tempNote = note;
         done();
@@ -124,7 +123,7 @@ describe('testing module note-router', function(){
       request.get(`${baseUrl}/api/note/${this.tempUser.id}`)
       .then( res => {
         expect(res.status).to.equal(200);
-        expect(res.body.userId).to.equal(`${this.tempUser.id}`);
+        expect(res.body.noteId).to.equal(`${this.tempUser.id}`);
         done();
       })
       .catch(done);
