@@ -12,26 +12,18 @@ exports.createReceipt = function(reqBody){
       return reject(AppErr.error400('receipt needs auto make'));
     //construct an instance of receipt
     const receipt = new Receipt(reqBody);
-    //save the instance of receipt to mongo db and create _id
+    //save the instance of receipt to mongo db.
     receipt.save()
-    .then(resolve)
-    .catch(reject);
+    /*  mongo will return a copy of the receipt it creates to 'then', which will be handled by receiptRouter.get 'then'*/
+    .then(receipt => resolve)
+    .catch(err => reject(err));
 
   });
 };
 
 exports.getReceipt = function(id){
-  debug('entered getReceipt in receipt-crud.js');
   return new Promise((resolve, reject) => {
     Receipt.findOne({_id: id})
-    .then(resolve)
-    .catch(err => reject(AppErr.error404(err.message)));
-  });
-};
-
-exports.putReceipt = function(id, reqBody){
-  return new Promise((resolve, reject) => {
-    Receipt.update({_id: id}, reqBody)
     .then(resolve)
     .catch(err => reject(AppErr.error404(err.message)));
   });

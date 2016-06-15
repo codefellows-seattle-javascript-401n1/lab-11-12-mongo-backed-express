@@ -40,7 +40,8 @@ describe('Testing RECEIPT router', function(){
   describe('Testing POST with valid request', function(){
     after((done) => {
       receiptCrud.removeReceiptDocuments()
-      .then(() => done()).catch(done);
+      .then(() => done())
+      .catch(done);
     });
 
     it('should return a receipt', function(done){
@@ -51,6 +52,7 @@ describe('Testing RECEIPT router', function(){
         expect(res.body.autoMake).to.equal('Audi');
         done();
       }).catch(done);
+      /*in mocha, if you pass 'done' in catch, it logs the error and ends the test.*/
     });
   });
 
@@ -100,25 +102,25 @@ describe('Testing RECEIPT router', function(){
       });
     });
   });
-//   describe('Testing PUT with valid id', function(){
-//     before((done) => {
-//       receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
-//       .then(receipt => {
-//         this.tempReceipt = receipt;
-//         done();
-//       }).catch(done);
-//     });
-//
-//     it('should return a modified receipt object', (done) => {
-//       request.put(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
-//       .send ({customerLastName: 'Smith', autoMake: 'Audi', autoYear: 2010})
-//       .receiptCrud.putReceipt(req.params.id, reqBody)
-//           .then (receipt => res.send(receipt))
-//           .catch(err => res.sendError(err));
-//       });
-//   });
-//
-//
+  describe('Testing PUT with valid id', function(){
+    before((done) => {
+      receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
+      .then(receipt => {
+        this.tempReceipt = receipt;
+        done();
+      }).catch(done);
+    });
+
+    it('should return a modified receipt object', (done) => {
+      request.put(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
+      .send ({customerLastName: 'Smith', autoMake: 'Audi', autoYear: 2010})
+      .then(receiptCrud.putReceipt(req.params.id, reqBody))
+          .then (receipt => res.send(receipt))
+          .catch(err => res.sendError(err));
+      });
+  });
+
+
 //
 // describe('Testing DELETE with a valid id', function(req, res){
 //   before((done) => {

@@ -5,12 +5,10 @@ const AppErr = require('./app-error');
 const debug = require('debug')('business:repair-crud');
 
 exports.createRepair = function(reqBody){
-  debug('entered createRepair in repair-crud');
+  debug('entered createRepair in repair-crud.js');
   return new Promise((resolve, reject) => {
     if(!reqBody.mechanicLastName)
       return reject(AppErr.error400('repair needs mechanics name'));
-    // if(!reqBody.completionDate)
-    //   return reject(AppErr.error400('repair needs a completion date'));
     if(!reqBody.repairName)
       return reject(AppErr.error400('repair needs a name'));
     if(!reqBody.laborCost)
@@ -22,9 +20,8 @@ exports.createRepair = function(reqBody){
 
     const repair = new Repair(reqBody);
     repair.save()
-    .then(task => resolve)
+    .then(repair => resolve(repair))
     .catch(err => reject(err));
-
   });
 };
 
@@ -38,7 +35,7 @@ exports.getRepair = function(id){
 
 exports.putRepair = function(id, reqBody){
   return new Promise((resolve, reject) => {
-    Repair.update({_id: id}, reqBody)
+    Repair.findOneAndUpdate({_id: id}, reqBody, {new:true})
     .then(resolve)
     .catch(err => reject(AppErr.error404(err.message)));
   });
@@ -46,7 +43,7 @@ exports.putRepair = function(id, reqBody){
 
 exports.removeRepair = function(id){
   return new Promise((resolve, reject) => {
-    Repair.remove({_id: id})
+    Repair.findOneAndRemove({_id: id})
     .then(resolve)
     .catch(err => reject(AppErr.error404(err.message)));
   });
