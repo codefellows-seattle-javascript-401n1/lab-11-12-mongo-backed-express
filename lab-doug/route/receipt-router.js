@@ -4,6 +4,7 @@ const Router = require('express').Router;
 const bodyParser = require('body-parser').json();
 const debug = require('debug')('business:receipt-router');
 const receiptCrud = require('../lib/receipt-crud');
+const repairCrud = require('../lib/repair-crud');
 const receiptRouter = module.exports = new Router();
 
 
@@ -20,6 +21,12 @@ receiptRouter.get('/receipt/:id', function(req, res){
   receiptCrud.getReceipt(req.params.id)
     .then (receipt => res.send(receipt))
     .catch(err => res.sendError(err));
+});
+
+receiptRouter.get('/receipt/:id/repair', function(req, res){
+  repairCrud.getRepairByReceiptId(req.params.id)
+  .then(receipt => res.send(receipt))
+  .catch(err => res.sendError(err));
 });
 
 receiptRouter.put('/receipt/:id', bodyParser, function(req, res){

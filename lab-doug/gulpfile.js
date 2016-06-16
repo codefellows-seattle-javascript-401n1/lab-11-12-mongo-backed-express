@@ -15,10 +15,9 @@ gulp.task('eslint', function(){
   .pipe(eslint.failAfterError());
 });
 
-gulp.task('mocha', function(){
-  return gulp.src(paths)
-    //stream  through gulp-mocha
-    .pipe(mocha());
+gulp.task('test', () => {
+  return gulp.src(['./test/receipt-router-test.js', './test/repair-router-test.js'], {read: false})
+  .pipe(mocha({reporter: 'list'}));
 });
 
 gulp.task('nodemon', function(){
@@ -28,4 +27,4 @@ gulp.task('nodemon', function(){
   });
 });
 
-gulp.task('default', ['eslint', 'mocha']);
+gulp.task('default', ['eslint', 'test']);

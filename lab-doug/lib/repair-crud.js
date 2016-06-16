@@ -27,13 +27,22 @@ exports.createRepair = function(reqBody){
 
 exports.getRepair = function(id){
   return new Promise((resolve, reject) => {
-    Repair.find({_id: id})
+    Repair.findOne({_id: id})
+    .then(resolve)
+    .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
+
+exports.getRepairByReceiptId = function(receiptId){
+  return new Promise((resolve, reject) => {
+    Repair.find({receiptId: receiptId})
     .then(resolve)
     .catch(err => reject(AppErr.error404(err.message)));
   });
 };
 
 exports.putRepair = function(id, reqBody){
+  console.log('putRepair called');
   return new Promise((resolve, reject) => {
     Repair.findOneAndUpdate({_id: id}, reqBody, {new:true})
     .then(resolve)

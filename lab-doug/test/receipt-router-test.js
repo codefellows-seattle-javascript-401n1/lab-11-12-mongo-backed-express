@@ -7,8 +7,8 @@ const supPromise = require('superagent-promise-plugin');
 const port = process.env.PORT || 3000;
 const baseUrl = `http://localhost:${port}`;
 const server = require('../server');
-const bodyParser = require('body-parser').json();
 const receiptCrud = require('../lib/receipt-crud');
+const repairCrud = require('../lib/repair-crud');
 
 
 request.use(supPromise);
@@ -62,12 +62,10 @@ describe('Testing RECEIPT router', function(){
       .then(receipt => {
         // console.log('GET receipt created: ', receipt);
         this.tempReceipt = receipt;
-        console.log('GET tempReceipt created: ', this.tempReceipt);
         done();
       }).catch(done);
     });
     it('should return a receipt', (done) => {
-      console.log('value of tempReceipt ID in receipt-router-test Get with valid id: ', this.tempReceipt._id);
       request.get(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
       .then((res) => {
         expect(res.status).to.equal(200);
@@ -76,6 +74,7 @@ describe('Testing RECEIPT router', function(){
       }).catch(done);
     });
   });
+
   describe('Testing GET with INVALID request id', function(){
     before((done) => {
       receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
@@ -101,6 +100,42 @@ describe('Testing RECEIPT router', function(){
       });
     });
   });
+
+  describe('Testing GET receipt/:receiptId/repair with valid receipt ID', function(){
+    before((done) => {
+      receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
+      .then(receipt => {
+        this.tempReceipt = receipt;
+        return Promise.all ([
+          repairCrud.createRepair({mechanicLastName: 'Remmy', repairName: 'strut replacement', laborCost: 75.00, partsCost: 375.00, receiptId: `${this.tempReceipt._id}`}),
+          repairCrud.createRepair({mechanicLastName: 'Smitty', repairName: 'transmission replacement', laborCost: 175.00, partsCost: 275.00, receiptId: `${this.tempReceipt._id}`}),
+          repairCrud.createRepair({mechanicLastName: 'Jones', repairName: 'engine replacement', laborCost: 275.00, partsCost: 175.00, receiptId: `${this.tempReceipt._id}`})
+        ]);
+      })
+    .then(repairs => {
+      this.tempRepairs = repairs;
+      done();
+    })
+    .catch(done);
+    });
+    after((done) => {
+      Promise.all([
+        receiptCrud.removeReceiptDocuments(),
+        repairCrud.removeAllRepairs()
+      ])
+      .then(() => done())
+      .catch(done);
+    });
+    it('should return an array of three repairs that have provided receiptId', (done) => {
+      request.get(`${baseUrl}/api/receipt/${this.tempReceipt._id}/repair`)
+      .then((res) => {
+        expect(res.status).to.equal(200);
+        expect(res.body.length).to.equal(3);
+        done();
+      });
+    });
+  });
+
   describe('Testing PUT with valid id', function(){
     before((done) => {
       receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
@@ -114,14 +149,12 @@ describe('Testing RECEIPT router', function(){
       request.put(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
       .send ({customerLastName: 'Smith', autoMake: 'Audi', autoYear: 2010})
       .then((res) => {
-        console.log('res.status: ', res.status);
-        console.log('customer: ', res.body.customerLastName);
         expect(res.status).to.equal(200);
         expect(res.body.customerLastName).to.equal('Smith');
         done();
       })
       .catch(err => res.sendError(err));
-      });
+    });
   });
 
 
