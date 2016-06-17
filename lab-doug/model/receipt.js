@@ -1,6 +1,5 @@
 'use strict';
 const mongoose = require('mongoose');
-const debug = require('debug')('business:receipt');
 
 /*
 this is the mongoose specific constructor for an instance of a mongo document that is formatted the way we specify in the constructor and will be placed in the collection (receipt) we specify in our mongoose.model function at the bottom of the page

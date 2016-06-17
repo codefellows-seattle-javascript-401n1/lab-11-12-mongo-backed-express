@@ -5,6 +5,7 @@ const AppErr = require('./app-error');
 const debug = require('debug')('business:receipt-crud');
 
 exports.createReceipt = function(reqBody){
+  debug('entered createReceipt in receiptCrud.js');
   return new Promise((resolve, reject) => {
     if(!reqBody.customerLastName)
       return reject(AppErr.error400('receipt needs customer name'));
@@ -22,6 +23,7 @@ exports.createReceipt = function(reqBody){
 };
 
 exports.getReceipt = function(id){
+  debug('entered getReceipt in receiptCrud.js');
   return new Promise((resolve, reject) => {
     Receipt.findOne({_id: id})
     .then(resolve)
@@ -30,6 +32,7 @@ exports.getReceipt = function(id){
 };
 
 exports.putReceipt = function(id, reqBody){
+  debug('entered putReceipt in receiptCrud.js');
   console.log('putReceipt called');
   return new Promise((resolve, reject) => {
     Receipt.findOneAndUpdate({_id: id}, reqBody, {new:true})
@@ -39,6 +42,7 @@ exports.putReceipt = function(id, reqBody){
 };
 
 exports.removeReceipt = function(id){
+  debug('entered removeReceipt in receiptCrud.js');
   return new Promise((resolve, reject) => {
     Receipt.findOneAndRemove({_id: id})
     .then(resolve)
@@ -47,5 +51,6 @@ exports.removeReceipt = function(id){
 };
 
 exports.removeReceiptDocuments = function(){
+  debug('entered removeReceiptDocuments in receiptCrud.js');
   return Receipt.remove({});
 };

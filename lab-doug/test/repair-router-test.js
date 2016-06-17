@@ -112,7 +112,7 @@ describe('Testing REPAIR router', function(){
     });
 
     it('should return a 404 not found', (done) => {
-      request.get(`${baseUrl}/api/repair/${"123s456"}`)
+      request.get(`${baseUrl}/api/repair/123s456`)
       .then(done)
       .catch(err => {
         const res = err.response;
@@ -148,7 +148,7 @@ describe('Testing REPAIR router', function(){
         expect(res.body.receiptId).to.equal(`${this.tempReceipt._id}`);
         done();
       })
-      .catch(err => res.sendError(err));
+      .catch(done);
     });
   });
 

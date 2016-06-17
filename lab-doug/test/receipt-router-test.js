@@ -90,7 +90,7 @@ describe('Testing RECEIPT router', function(){
     });
 
     it('should return a 404 not found', (done) => {
-      request.get(`${baseUrl}/api/receipt/${"123s456"}`)
+      request.get(`${baseUrl}/api/receipt/123s456`)
       .then(done)
       .catch(err => {
         const res = err.response;
@@ -153,7 +153,7 @@ describe('Testing RECEIPT router', function(){
         expect(res.body.customerLastName).to.equal('Smith');
         done();
       })
-      .catch(err => res.sendError(err));
+      .catch(done);
     });
   });
 
