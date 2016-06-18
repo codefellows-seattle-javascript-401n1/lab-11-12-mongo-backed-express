@@ -30,6 +30,7 @@ describe('Testing RECEIPT router', function(){
     if(server.isRunning){
       server.close(() => {
         console.log('server has been shutdown');
+        server.isRunning = false;
         done();
       });
       return;
@@ -107,9 +108,9 @@ describe('Testing RECEIPT router', function(){
       .then(receipt => {
         this.tempReceipt = receipt;
         return Promise.all ([
-          repairCrud.createRepair({mechanicLastName: 'Remmy', repairName: 'strut replacement', laborCost: 75.00, partsCost: 375.00, receiptId: `${this.tempReceipt._id}`}),
-          repairCrud.createRepair({mechanicLastName: 'Smitty', repairName: 'transmission replacement', laborCost: 175.00, partsCost: 275.00, receiptId: `${this.tempReceipt._id}`}),
-          repairCrud.createRepair({mechanicLastName: 'Jones', repairName: 'engine replacement', laborCost: 275.00, partsCost: 175.00, receiptId: `${this.tempReceipt._id}`})
+          repairCrud.createRepair({mechanicLastName: 'Remmy', repairName: 'strut replacement', laborCost: 75.00, partsCost: 375.00, receiptId: this.tempReceipt._id}),
+          repairCrud.createRepair({mechanicLastName: 'Smitty', repairName: 'transmission replacement', laborCost: 175.00, partsCost: 275.00, receiptId: this.tempReceipt._id}),
+          repairCrud.createRepair({mechanicLastName: 'Jones', repairName: 'engine replacement', laborCost: 275.00, partsCost: 175.00, receiptId: this.tempReceipt._id})
         ]);
       })
     .then(repairs => {
@@ -171,7 +172,6 @@ describe('Testing RECEIPT router', function(){
       request.del(`${baseUrl}/api/receipt/${this.tempReceipt._id}`)
       .then((res) => {
         expect(res.status).to.equal(200);
-        expect(res.body.autoYear).to.equal(2015);
         done();
       }).catch(done);
     });

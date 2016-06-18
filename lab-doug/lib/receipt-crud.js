@@ -33,7 +33,6 @@ exports.getReceipt = function(id){
 
 exports.putReceipt = function(id, reqBody){
   debug('entered putReceipt in receiptCrud.js');
-  console.log('putReceipt called');
   return new Promise((resolve, reject) => {
     Receipt.findOneAndUpdate({_id: id}, reqBody, {new:true})
     .then(resolve)

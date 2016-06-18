@@ -53,7 +53,7 @@ describe('Testing REPAIR router', function(){
 
     it('should return a Repair', (done) => {
       request.post(`${baseUrl}/api/repair`)
-      .send({mechanicLastName: 'Remmy', repairName: 'strut replacement', laborCost: 75.00, partsCost: 375.00, receiptId: `${this.tempReceipt._id}`})
+      .send({mechanicLastName: 'Remmy', repairName: 'strut replacement', laborCost: 75.00, partsCost: 375.00, receiptId: this.tempReceipt._id})
       .then((res) => {
         expect(res.status).to.equal(200);
         expect(res.body.partsCost).to.equal(375.00);
@@ -71,7 +71,7 @@ describe('Testing REPAIR router', function(){
         this.tempReceipt = receipt;
       })
       .then(() => {
-        repairCrud.createRepair({mechanicLastName: 'Remmy', repairName: 'strut replacement', laborCost: 75.00, partsCost: 375.00, receiptId: `${this.tempReceipt._id}`})
+        repairCrud.createRepair({mechanicLastName: 'Remmy', repairName: 'strut replacement', laborCost: 75.00, partsCost: 375.00, receiptId: this.tempReceipt._id})
         .then(repair => {
           this.tempRepair = repair;
           done();
@@ -98,7 +98,7 @@ describe('Testing REPAIR router', function(){
         this.tempReceipt = receipt;
       })
       .then(() => {
-        repairCrud.createRepair({mechanicLastName: 'Remmy', repairName: 'strut replacement', laborCost: 75.00, partsCost: 375.00, receiptId: `${this.tempReceipt._id}`})
+        repairCrud.createRepair({mechanicLastName: 'Remmy', repairName: 'strut replacement', laborCost: 75.00, partsCost: 375.00, receiptId: this.tempReceipt._id})
         .then(repair => {
           this.tempRepair = repair;
           done();
@@ -129,7 +129,7 @@ describe('Testing REPAIR router', function(){
         this.tempReceipt = receipt;
       })
       .then(() => {
-        repairCrud.createRepair({mechanicLastName: 'Remmy', repairName: 'strut replacement', laborCost: 75.00, partsCost: 375.00, receiptId: `${this.tempReceipt._id}`})
+        repairCrud.createRepair({mechanicLastName: 'Remmy', repairName: 'strut replacement', laborCost: 75.00, partsCost: 375.00, receiptId: this.tempReceipt._id})
         .then(repair => {
           this.tempRepair = repair;
           done();
@@ -152,7 +152,6 @@ describe('Testing REPAIR router', function(){
     });
   });
 
-
   describe('Testing DELETE with a valid id', function(req, res){
     before((done) => {
       receiptCrud.createReceipt({customerLastName: 'Wilson', autoMake: 'VW', autoYear: 2015 })
@@ -170,12 +169,11 @@ describe('Testing REPAIR router', function(){
     it('should remove the document from the collection', (done) => {
       request.del(`${baseUrl}/api/repair/${this.tempRepair._id}`)
       .then((res) => {
-        expect(res.status).to.equal(200);
-        expect(res.body.repairName).to.equal('testing delete repair');
-        expect(res.body.laborCost).to.equal(75.25);
-        expect(res.body.partsCost).to.equal(375.25);
+        expect(res.status).to.equal(204);
         done();
-      }).catch(done);
+      }).catch(err => console.log('err: ', err));
+       //    .catch(err => res.sendError(err));
+      done();
     });
   });
 });

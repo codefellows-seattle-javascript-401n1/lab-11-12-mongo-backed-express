@@ -42,7 +42,6 @@ exports.getRepairByReceiptId = function(receiptId){
 };
 
 exports.putRepair = function(id, reqBody){
-  console.log('putRepair called');
   return new Promise((resolve, reject) => {
     Repair.findOneAndUpdate({_id: id}, reqBody, {new:true})
     .then(resolve)
