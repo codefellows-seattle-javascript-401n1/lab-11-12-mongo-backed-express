@@ -2,12 +2,12 @@
 
 const Note = require('../model/note');
 const AppError = require('./app-error');
-// const debug = require('debug')('ronito:note-crud');
+const debug = require('debug')('ronito:note-crud');
 
 exports.createNote = function(reqBody){
   return new Promise((resolve, reject) =>{
     if(!reqBody.content)
-      return reject(AppError.error400('notes requires content'));
+      return reject(AppError.error400('note requires content'));
     if(!reqBody.name)
       return reject(AppError.error400('note requires name'));
 
@@ -20,6 +20,7 @@ exports.createNote = function(reqBody){
 };
 
 exports.fetchNote = function(id){
+  debug('fetchNote');
   return new Promise((resolve, reject) => {
     Note.findOne({_id: id})
     .then(resolve)
@@ -27,6 +28,7 @@ exports.fetchNote = function(id){
   });
 };
 exports.updateNote = function(id, data){
+  debug('updateNote');
   return new Promise((resolve, reject) => {
     if(!id){
       var err = AppError.error400('bad request');
@@ -49,7 +51,7 @@ exports.updateNote = function(id, data){
        .then(resolve)
        .catch(reject);
      })
-     .catch( err => reject(AppError.error400(err.mesage)));
+     .catch( err => reject(AppError.error400(err.message)));
    })
    .catch(err => reject(AppError.error404(err.message)));
   });

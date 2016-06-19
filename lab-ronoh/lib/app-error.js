@@ -15,7 +15,10 @@ AppError.isAppError = function(err){
   debug('isAppError');
   return err instanceof AppError;
 };
-
+AppError.error204 = function(message){
+  debug('error204');
+  return new AppError(message, 204, 'no content');
+};
 AppError.error400 = function(message){
   debug('error400');
   return new AppError(message, 400, 'bad request');

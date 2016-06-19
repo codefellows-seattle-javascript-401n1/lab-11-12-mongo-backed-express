@@ -29,7 +29,14 @@ exports.fetchTaskByNoteId = function(noteId){
     .catch(err => reject(err));
   });
 };
-
+exports.fetchTaskByTaskId = function(id){
+  return new Promise((resolve, reject) =>{
+    noteCrud.fetchNote({_id: id})
+    .then(task => Task.find({_id: task.id}))
+    .then(tasks => resolve(tasks))
+    .catch(err => reject(err));
+  });
+};
 exports.removeAllTasks = function(){
   return Task.remove({});
 };
