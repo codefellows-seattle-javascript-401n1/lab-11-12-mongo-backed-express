@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 
 const noteSchema = mongoose.Schema({
   name: {type: String, required: true},
-  timestamp: {type: Date, required: true},
+  timestamp: Date,
+  // timestamp: {type: Date, required: false},
   content: {type: String, required: true}
 });
 

@@ -4,7 +4,6 @@ const debug = require('debug')('note:error-response');
 const AppError = require('./app-error');
 
 module.exports = function (req, res, next) {
-  console.log('working?');
   res.sendError = function(err) {
     debug('sendError');
     console.error(err.message);
@@ -12,6 +11,7 @@ module.exports = function (req, res, next) {
       res.status(err.statusCode).send(err.responseMessage);
       return;
     }
+
     res.status(500).send('internal server error');
   };
   next();

@@ -25,7 +25,7 @@ taskRouter.post('/task', JsonParser, function(req, res) {
 });
 
 // adding GET request//
-taskRouter.get('/:id', function(req, res) {
+taskRouter.get('/task/:id', function(req, res) {
   debug('get task');
   taskCrud.fetchTask(req.params.id)
   .then(task => res.send(task))
@@ -34,7 +34,7 @@ taskRouter.get('/:id', function(req, res) {
 });
 
 //adding PUT request//
-taskRouter.put('/:id', function(req, res) {
+taskRouter.put('/task/:id', function(req, res) {
   debug('put task');
   taskCrud.updateTask(req.params.id, req.body)
   .then(task => res.send(task))
@@ -43,10 +43,12 @@ taskRouter.put('/:id', function(req, res) {
 });
 
 //adding DELETE request//
-taskRouter.delete('/:id', function(req, res) {
+taskRouter.delete('/task/:id', function(req, res) {
   debug('delete task');
   taskCrud.deleteTask(req.params.id)
-  .then(task => res.send(task))
+  .then((task) => {
+    res.status(204).send(task);
+  })
   .catch(err => res.sendError(err));
 
 });

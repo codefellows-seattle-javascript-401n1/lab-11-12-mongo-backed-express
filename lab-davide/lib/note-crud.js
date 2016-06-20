@@ -9,10 +9,10 @@ exports.createNote = function(reqBody) {
   debug('createNote');
   return new Promise((resolve, reject) => {
     if(! reqBody.content){
-      return reject(AppErr.error400('note require\'s content'));
+      return reject(AppErr.error400('note requires content'));
     }
     if(! reqBody.name){
-      return reject(AppErr.error400('note require\'s name'));
+      return reject(AppErr.error400('note requires name'));
     }
     reqBody.timestamp = new Date();
     const note = new Note(reqBody);
@@ -27,29 +27,44 @@ exports.fetchNote = function(id) {
   debug('fetchNote');
   return new Promise((resolve, reject) => {
     if(!id){
+      debug('No id provided.');
       return reject(AppErr.error404('not found'));
     }
-
     Note.findOne({_id: id})
-    .then(resolve)
-    .catch(reject(AppErr.error404('not found')));
+    .then(data => {
+      debug('Found note with id: ' + id);
+      resolve(data);
+    })
+    .catch(() => {
+      debug('Invalid id provided.');
+      reject(AppErr.error404('not found'));
+    });
   });
 
 };
 
-exports.updateNote = function(reqBody, id) {
-  debug('updateNote');
-  return new Promise((resolve, reject) => {
-    if(! reqBody.content){
+exports.updateNote = function(id, reqBody){
+  debug('update note');
+  return new Promise((resolve, reject)=>{
+    if (!reqBody.name) {
       return reject(AppErr.error400('bad request'));
     }
-    if(! reqBody.id){
+    if (!reqBody.content) {
       return reject(AppErr.error400('bad request'));
     }
 
-    Note.findOne({_id: id})
-    .then(resolve)
-    .catch(reject(AppErr.error404('not found')));
+    Note.findByIdAndUpdate(id, reqBody, {new: true})
+    .then((note) => {
+
+      if(!note)
+        return reject((AppErr.error404('cannot find note id')));
+
+      return resolve(note);
+    })
+    .catch((err) => {
+      return reject((AppErr.error404(err.message)));
+    });
+
   });
 };
 
@@ -59,7 +74,7 @@ exports.deleteNote = function(id) {
   return new Promise((resolve, reject) => {
     Note.findOne({_id: id})
     .then(resolve)
-    .catch(reject);
+    .catch(reject(AppErr.error(404)('not found')));
   });
 };
 

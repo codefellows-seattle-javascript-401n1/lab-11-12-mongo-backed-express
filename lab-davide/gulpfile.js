@@ -11,12 +11,17 @@ const paths = ['*./js', 'lib/*.js', 'model/*.js;', 'test/*.js', 'route/*.js'];
 gulp.task('eslint', function(){
   gulp.src(paths)
   .pipe(eslint())
-  .pipe(eslint.format());
+  .pipe(eslint.format())
+  .pipe(eslint.failAfterError());
 });
 
 gulp.task('test', function(){
-  return gulp.src('test.js', {read: false})
+  return gulp.src('test/*.js', {read: false})
   .pipe(mocha({reporter: 'nyan'}));
+});
+
+gulp.task('watch', function(){
+  gulp.watch('**/*.js', ['test', 'eslint']);
 });
 
 gulp.task('nodemon', function(){
@@ -27,4 +32,4 @@ gulp.task('nodemon', function(){
   });
 });
 
-gulp.task('default', ['eslint', 'test', 'nodemon']);
+gulp.task('default', ['eslint', 'test', 'easlint', 'nodemon']);
