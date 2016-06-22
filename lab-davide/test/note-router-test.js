@@ -44,8 +44,7 @@ describe('testing module note-router', function() {
         done();
       });
     });
-//   });
-// });
+
     after((done) => {
       noteCrud.removeAllNotes()
       .then(() => {
@@ -58,8 +57,8 @@ describe('testing module note-router', function() {
       });
     });
     it('should return a note', (done) => {
-      debug('GET note route: '+`${baseUrl}/api/note/${this.tempNote._id}`);
-      request.get(`${baseUrl}/api/note/${this.tempNote._id}`)
+      debug('GET note route: '+`${baseUrl}/${this.tempNote._id}`);
+      request.get(`${baseUrl}/${this.tempNote._id}`)
       .then((res) => {
         expect(res.status).to.equal(200);
         expect(res.body.name).to.equal('test note');
@@ -76,7 +75,7 @@ describe('testing module note-router', function() {
 //GET 404//
 describe('testing GET /api/note/:id with bad id', function(){
   it('should return not found', (done) => {
-    request.get(`localhost:${port}/api/note/ffkijdf`)
+    request.get(`localhost:${port}/api/ffkijdf`)
     .then(done)
     .catch((err) => {
       try {
@@ -109,69 +108,59 @@ describe('testing PUT /api/note/:id with a valid body', function() {
   });
 
   it('should return an updated note', (done) => {
-    request.put(`${baseUrl}/api/note/${this.tempNote._id}`)
+    request.put(`${baseUrl}/${this.tempNote._id}`)
     .send({name: 'updated', content: 'test content'})
       .then((res) => {
         debug('hitting put update');
         expect(res.status).to.equal(200);
-        expect(res.res.body.name).to.equal('updated');
+        expect(res.body.name).to.equal('updated');
         done();
       }).catch(done);
   });
-});
 
+  after((done) => {
+    noteCrud.removeAllNotes()
+    .then(() =>  done())
+    .catch(done);
+  });
 
   it('should return a bad request', (done) => {
-    request.put(`${baseUrl}/api/note/${this.tempNote._id}`)
-    .send({})
-      .end((err) => {
-        console.log('ERR RIGHT HURRR ', err);
-        // console.log('res', err.message);
-        // expect(res.err).to.equal(400);
-        expect(err).to.equal('Bad Request');
-        done();
-  //   .send({})
-  //     .then(done)
-  //       .catch((err) => {
-  //         try {
-  //           var res = err.response;
-  //           expect(res.status).to.equal(400);
-  //           done();
-  //         } catch (err) {
-  //           done(err);
-  //         }
-  //       });
-//       });
-//   });
-// });
-
+    request.put(`${baseUrl}/2345`)
+    .end((err, res) => {
+      console.log('error' + err);
+      console.log('res' + JSON.stringify(res));
+      expect(res.status).to.equal(400);
+      done();
+    });
+  });
+});
 
 //DELETE  204 and 404//
-// describe('testing DELETE /api/note/:id that was not found', function(){
-//   before((done) => {
-//     noteCrud.createNote({name: 'test name', content: 'test content' })
-//     .then(note => {
-//       debug('Failed to create note for DELETE tests.');
-//       this.tempNote = note;
-//       done();
-//     }).catch(done);
-//
-//
-//     after((done) => {
-//       noteCrud.removeAllNotes()
-//       .then(() => done())
-//       .catch(done);
-//     });
-//   });
-//
-//
-//
-//   it('should delete a note', (done) => {
-//     request.delete(`${baseUrl}/${this.tempNote._id}`)
-//       .then((res) => {
-//         debug('Hitting delete');
-//         expect(res.status).to.equal(204);
-//         done();
-//       })
-//     .catch(done);
-//   });
+describe('testing DELETE /api/note/:id with no body', function (){
+  before((done) => {
+    debug('hitting delete');
+    noteCrud.createNote({name: 'test name', content: 'test content' })
+    .then(note => {
+      debug('Failed to create note for DELETE tests.');
+      this.tempNote = note;
+      done();
+    }).catch(done);
+  });
+
+  after((done) => {
+    noteCrud.removeAllNotes()
+    .then(() => done())
+    .catch(done);
+  });
+
+
+  it('should delete a note', (done) => {
+    request.del(`${baseUrl}/${this.tempNote._id}`)
+      .then((res) => {
+        debug('Hitting delete');
+        expect(res.status).to.equal(204);
+        done();
+      })
+    .catch(done);
+  });
+});

@@ -26,22 +26,12 @@ exports.createNote = function(reqBody) {
 exports.fetchNote = function(id) {
   debug('fetchNote');
   return new Promise((resolve, reject) => {
-    if(!id){
-      debug('No id provided.');
-      return reject(AppErr.error404('not found'));
-    }
     Note.findOne({_id: id})
-    .then(data => {
-      debug('Found note with id: ' + id);
-      resolve(data);
-    })
-    .catch(() => {
-      debug('Invalid id provided.');
-      reject(AppErr.error404('not found'));
-    });
+    .then(resolve)
+    .catch(err => reject(AppErr.error404(err.message)));
   });
-
 };
+
 
 exports.updateNote = function(id, reqBody){
   debug('update note');
@@ -55,10 +45,8 @@ exports.updateNote = function(id, reqBody){
 
     Note.findByIdAndUpdate(id, reqBody, {new: true})
     .then((note) => {
-
       if(!note)
         return reject((AppErr.error404('cannot find note id')));
-
       return resolve(note);
     })
     .catch((err) => {
@@ -68,16 +56,15 @@ exports.updateNote = function(id, reqBody){
   });
 };
 
-
 exports.deleteNote = function(id) {
   debug('deleteNote');
   return new Promise((resolve, reject) => {
-    Note.findOne({_id: id})
+    Note.remove({_id: id})
     .then(resolve)
-    .catch(reject(AppErr.error(404)('not found')));
+    .catch(err => reject(AppErr.error404(err.message)));
   });
 };
 
-exports.removeAllNotes = function(){
+exports.removeAllNotes = function() {
   return Note.remove({});
 };

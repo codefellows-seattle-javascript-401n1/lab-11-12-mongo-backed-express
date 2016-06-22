@@ -3,7 +3,7 @@
 
 //we are requiring the Router function from the express module//
 const Router = require('express').Router;
-// const debug = require('debug')('note:note-router');
+const debug = require('debug')('note:note-router');
 const JsonParser = require('body-parser').json();
 
 
@@ -40,8 +40,8 @@ noteRouter.put('/note/:id', JsonParser, function(req, res) {
 
 //adding DELETE request//
 noteRouter.delete('/note/:id', function(req, res) {
+  debug('hitting delete by id');
   noteCrud.deleteNote(req.params.id)
-  .then(note => res.send(note))
+  .then(() => res.status(204).send())
   .catch(err => res.sendError(err));
-
 });
