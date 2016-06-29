@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 
 const taskSchema = mongoose.Schema({
   desc: {type: String, required: true},
-  dueDate: {type: Date},
-  noteId: {type: mongoose.Schema.ObjectId}
+  dueDate: {type: String},
+  content: {type: String, required: true}
 });
 
 

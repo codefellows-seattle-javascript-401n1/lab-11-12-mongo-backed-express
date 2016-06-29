@@ -5,13 +5,15 @@ const AppErr = require('../lib/app-error');
 const debug = require('debug')('task:task-crud');
 
 exports.createTask = function(reqBody) {
-  debug('createTask');
+  debug('createTask is working');
   return new Promise((resolve, reject) => {
-    if(! reqBody.noteId)
-      return reject(AppErr.error400('task requires noteId'));
-    if(! reqBody.desc)
+    if(!reqBody.desc){
       return reject(AppErr.error400('task requires a desc'));
-
+    }
+    if(!reqBody.content){
+      return reject(AppErr.error400('task requires a content'));
+    }
+    reqBody.dueDate = new Date();
     const task = new Task(reqBody);
     task.save()
     .then(resolve)
@@ -19,44 +21,24 @@ exports.createTask = function(reqBody) {
   });
 };
 
-//Fetch//
 exports.fetchTask = function(id) {
-  debug('fetchTask');
-  return new Promise((resolve, reject) => {
-
-    Task.findOne({_id: id})
-    .then(resolve)
-    .catch(reject(AppErr.error404('not found')));
-  });
-};
-
-//Need help with update task/
-exports.updateNote = function(id, updateContent) {
-  debug('updateNote');
-  return new Promise((resolve, reject) => {
-    if(!id){
-      return reject(AppErr.error400('bad request'));
-    }
-    if(!updateContent.name) {
-      return reject(AppErr.error400('bad request'));
-    }
-
-    Task.findOne({_id: id})
-    .then(resolve)
-    .catch(reject(AppErr.error404('not found')));
-  });
-};
-
-
-exports.deleteNote = function(id) {
-  debug('deleteNote');
+  debug('fetchTask is working');
   return new Promise((resolve, reject) => {
     Task.findOne({_id: id})
     .then(resolve)
-    .catch(reject(AppErr.error(404)('not found')));
+    .catch(err => reject(AppErr.error404(err.message)));
   });
 };
 
-exports.removeAllNotes = function(){
+exports.deleteTask = function(id) {
+  debug('deleteTask is working');
+  return new Promise((resolve, reject) => {
+    Task.remove({_id: id})
+    .then(resolve)
+    .catch(err => reject(AppErr.error404(err.message)));
+  });
+};
+
+exports.removeAllTask = function(){
   return Task.remove({});
 };

@@ -4,14 +4,13 @@ const Note = require('../model/note');
 const AppErr = require('../lib/app-error');
 const debug = require('debug')('note:note-crud');
 
-
 exports.createNote = function(reqBody) {
   debug('createNote');
   return new Promise((resolve, reject) => {
-    if(! reqBody.content){
+    if(!reqBody.content){
       return reject(AppErr.error400('note requires content'));
     }
-    if(! reqBody.name){
+    if(!reqBody.name){
       return reject(AppErr.error400('note requires name'));
     }
     reqBody.timestamp = new Date();
@@ -52,7 +51,6 @@ exports.updateNote = function(id, reqBody){
     .catch((err) => {
       return reject((AppErr.error404(err.message)));
     });
-
   });
 };
 

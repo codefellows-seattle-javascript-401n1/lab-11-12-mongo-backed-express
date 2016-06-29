@@ -20,7 +20,7 @@ noteRouter.post('/note', JsonParser, function(req, res) {
 });
 
 // adding GET request//
-noteRouter.get('/note/:id', function(req, res) {
+noteRouter.get('/note/:id', JsonParser, function(req, res) {
   noteCrud.fetchNote(req.params.id)
   .then(note => res.send(note))
   .catch(err => res.sendError(err));

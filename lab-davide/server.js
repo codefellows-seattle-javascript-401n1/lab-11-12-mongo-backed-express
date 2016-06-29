@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 
 //app modules//
 const noteRouter = require('./route/note-router');
-//const taskRouter = require('./route/task-router');
+const taskRouter = require('./route/task-router');
 const errorResponse = require('./lib/error-response');
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost/note';
 //const port = process.env.PORT || 3000;
@@ -23,8 +23,9 @@ app.use(errorResponse);
 
 
 
-//app.use('/api', taskRouter);
+
 app.use('/api', noteRouter);
+app.use('/api', taskRouter);
 app.all('*', function(req, res) {
   debug('*404');
   res.status(404).send('not found');

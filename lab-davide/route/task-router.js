@@ -11,44 +11,34 @@ const JsonParser = require('body-parser').json();
 
 //app modules//
 const taskRouter = module.exports = new Router();
-const taskCrud = require('./../lib/task-crud');
-console.log('const taskCrud' + taskCrud);
+const taskCrud = require('../lib/task-crud');
+// console.log('const taskCrud' + taskCrud);
 
 
 
 //adding POST request//
 taskRouter.post('/task', JsonParser, function(req, res) {
-  debug('post task');
+  debug('hitting task post');
   taskCrud.createTask(req.body)
   .then(task => res.send(task))
   .catch(err => res.sendError(err));
 });
 
 // adding GET request//
-taskRouter.get('/task/:id', function(req, res) {
-  debug('get task');
+taskRouter.get('/task/:id', JsonParser, function(req, res) {
+  debug('get task in route');
   taskCrud.fetchTask(req.params.id)
   .then(task => res.send(task))
   .catch(err => res.sendError(err));
 
 });
 
-//adding PUT request//
-taskRouter.put('/task/:id', function(req, res) {
-  debug('put task');
-  taskCrud.updateTask(req.params.id, req.body)
-  .then(task => res.send(task))
-  .catch(err => res.sendError(err));
-
-});
-
 //adding DELETE request//
-taskRouter.delete('/task/:id', function(req, res) {
-  debug('delete task');
+taskRouter.delete('/task/:id', JsonParser, function(req, res) {
+  debug('hitting /task delete');
   taskCrud.deleteTask(req.params.id)
   .then((task) => {
     res.status(204).send(task);
   })
   .catch(err => res.sendError(err));
-
 });
