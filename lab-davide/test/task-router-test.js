@@ -62,7 +62,6 @@ describe('testing module task-router', function() {
       });
     });
 
-
     after((done) => {
       taskCrud.removeAllTask()
       .then(() => {
