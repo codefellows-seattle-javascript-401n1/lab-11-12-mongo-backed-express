@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 const baseUrl = `http://localhost:${port}`;
 const server = require('../server');
 const noteCrud = require('../lib/note-crud');
-const taskCrud = require('../lib/task-crud');
+
 // const debug = require('debug');
 request.use(superPromise);
 
@@ -82,7 +82,6 @@ describe('testing module note-router', function(){
         noteCrud.createNote({name: 'booya', content: 'test test 123'})
         .then(note =>{
           this.tempNote = note;
-          // console.log(this.tempNote);
           done();
         })
         .catch(done);
@@ -110,45 +109,6 @@ describe('testing module note-router', function(){
         .catch(err => {
           expect(err.response.res.statusCode).to.equal(404);
           expect(err.response.res.text).to.equal('not found');
-          done();
-        })
-        .catch(done);
-      });
-    });
-    describe('GET /api/note/:id/tasks with valid id', function(){
-      before((done) =>{
-        noteCrud.createNote({name: 'booya', content: 'test test 123'})
-        .then(note =>{
-          this.tempNote = note;
-          return Promise.all([
-            taskCrud.createTask({noteId: note._id, description: 'test one'}),
-            taskCrud.createTask({noteId: note._id, description: 'test two'}),
-            taskCrud.createTask({noteId: note._id, description: 'test three'})
-          ]);
-        })
-        .then(tasks => {
-          this.tempTask = tasks;
-          done();
-        })
-          .catch(done);
-      });
-
-      after((done) => {
-        Promise.all([
-          noteCrud.removeAllNotes(),
-          taskCrud.removeAllTasks()
-        ])
-        .then(() => done())
-        .catch(done);
-      });
-
-      it('should return an array of three tasks', (done) => {
-        request.get(`${baseUrl}/api/note/${this.tempNote._id}/tasks`)
-        .then((res) => {
-          console.log('tasks:\n', res.body);
-          expect(res.status).to.equal(200);
-          expect(res.body.length).to.equal(3);
-          expect(res.body[0].description).to.equal('test one');
           done();
         })
         .catch(done);

@@ -37,6 +37,13 @@ exports.fetchTaskByTaskId = function(id){
     .catch(err => reject(err));
   });
 };
+exports.updateTaskByTaskId = function(noteId, data){
+  return new Promise((resolve, reject)=> {
+    noteCrud.fetchNote({_id:noteId}, data)
+    .then(note => Task.find({noteId: note._id}))
+    .catch(err => reject(err));
+  });
+};
 exports.removeAllTasks = function(){
   return Task.remove({});
 };
