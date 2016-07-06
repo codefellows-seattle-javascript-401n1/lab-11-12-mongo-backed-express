@@ -108,18 +108,12 @@ describe('testing module note-router', function() {
 
   describe('testing PUT /api/note/:id with a valid body', function() {
     before((done) => {
-      noteCrud.createNote({name: 'test name', content: 'test content' })
+      noteCrud.createNote({name: 'test name', content: 'test data' })
         .then(note => {
           debug('Failed to create note for PUT tests.');
           this.tempNote = note;
           done();
         }).catch(done);
-    });
-
-    after((done) => {
-      noteCrud.removeAllNotes()
-      .then(() =>  done())
-      .catch(done);
     });
 
     it('should return an updated note', (done) => {
@@ -131,12 +125,6 @@ describe('testing module note-router', function() {
           expect(res.body.name).to.equal('updated');
           done();
         }).catch(done);
-    });
-
-    after((done) => {
-      noteCrud.removeAllNotes()
-      .then(() =>  done())
-      .catch(done);
     });
 
     it('should return a bad request', (done) => {
@@ -153,7 +141,7 @@ describe('testing module note-router', function() {
   describe('POST /api/note with valid data', function (){
     debug('post is working?');
     before((done) =>
-      noteCrud.createNote({name: 'test name', content: 'test content' })
+      noteCrud.createNote({name: 'test name', content: 'test data' })
       .then(note => {
         debug('created note for POST tests');
         this.tempNote = note;
@@ -162,22 +150,10 @@ describe('testing module note-router', function() {
       .catch(done)
       );
 
-    after((done) => {
-      noteCrud.removeAllNotes()
-      .then(() => {
-        debug('Deleted task for POST tests.');
-        done();
-      })
-      .catch(() => {
-        debug('Did not delete task for POST tests.');
-        done();
-      });
-    });
-
-    it('should return a note', (done) => {
-      debug('hitting return a note');
+    it('should return post/api note', (done) => {
+      debug('hitting return post/api note');
       request.post(`${baseUrl}`)
-      .send({name: 'test name', content: 'test content' })
+      .send({name: 'test name', content: 'test data' })
       .then( res => {
         debug('hitting POST testtttttt');
         expect(res.status).to.equal(200);
@@ -206,19 +182,13 @@ describe('testing module note-router', function() {
 
   describe('testing DELETE /api/note/:id with no body', function (){
     before((done) => {
-      debug('hitting delete');
-      noteCrud.createNote({name: 'test name', content: 'test content' })
+      debug('hitting delete api/note/:id no body');
+      noteCrud.createNote({name: 'test name', content: 'test data' })
       .then(note => {
         debug('Failed to create note for DELETE tests.');
         this.tempNote = note;
         done();
       }).catch(done);
-    });
-
-    after((done) => {
-      noteCrud.removeAllNotes()
-      .then(() => done())
-      .catch(done);
     });
 
     it('should delete a note', (done) => {

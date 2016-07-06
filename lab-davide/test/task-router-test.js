@@ -62,18 +62,6 @@ describe('testing module task-router', function() {
       });
     });
 
-    after((done) => {
-      taskCrud.removeAllTask()
-      .then(() => {
-        debug('Deleted task for GET tests.');
-        done();
-      })
-      .catch(() => {
-        debug('Did not delete task for GET tests.');
-        done();
-      });
-    });
-
     it('should return a task', (done) => {
       debug('GET task route: '+`${baseUrl}/${this.tempTask._id}`);
       request.get(`${baseUrl}/${this.tempTask._id}`)
@@ -115,18 +103,6 @@ describe('testing module task-router', function() {
       })
       .catch(done)
       );
-
-    after((done) => {
-      taskCrud.removeAllTask()
-      .then(() => {
-        debug('Deleted task for POST tests.');
-        done();
-      })
-      .catch(() => {
-        debug('Did not delete task for POST tests.');
-        done();
-      });
-    });
 
     it('should return a task', (done) => {
       debug('hitting return a task');
