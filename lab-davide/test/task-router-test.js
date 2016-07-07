@@ -25,6 +25,7 @@ describe('testing module task-router', function() {
   before((done) => {
     if (!server.isRunning) {
       server.listen(port, () => {
+        // server.isRunning = true;
         debug('server running on port', port);
         done();
       });
@@ -37,6 +38,8 @@ describe('testing module task-router', function() {
     if(server.isRunning) {
       debug('server is close');
       server.close(() => {
+        server.isRunning = false;
+        console.log('server down');
         done();
       });
       return;

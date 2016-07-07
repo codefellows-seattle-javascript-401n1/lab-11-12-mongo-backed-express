@@ -37,7 +37,7 @@ describe('testing module note-router', function() {
 
   after((done) => {
     if(server.isRunning) {
-      debug('server close');
+      debug('server is close');
       server.close(() => {
         done();
       });
