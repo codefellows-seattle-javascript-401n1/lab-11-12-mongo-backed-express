@@ -32,4 +32,4 @@ gulp.task('nodemon', function(){
   });
 });
 
-gulp.task('default', ['eslint', 'test', 'eslint', 'nodemon']);
+gulp.task('default', ['eslint', 'test', 'nodemon']);
