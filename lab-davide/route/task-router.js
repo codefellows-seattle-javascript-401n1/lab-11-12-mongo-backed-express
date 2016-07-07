@@ -1,8 +1,5 @@
 'use strict';
-//node modules
-//npm modules
-//app modules
-//global
+
 
 //we are requiring the Router function from the express module//
 const Router = require('express').Router;
@@ -12,7 +9,6 @@ const JsonParser = require('body-parser').json();
 //app modules//
 const taskRouter = module.exports = new Router();
 const taskCrud = require('../lib/task-crud');
-
 
 
 //adding POST request//

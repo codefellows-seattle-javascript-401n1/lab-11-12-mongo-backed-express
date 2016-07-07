@@ -1,3 +1,4 @@
+//sample test:ignore//
 'use strict';
 
 process.env.MONGO_URI = 'mongodb://localhost/test';
