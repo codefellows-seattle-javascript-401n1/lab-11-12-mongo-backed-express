@@ -25,7 +25,6 @@ describe('testing module task-router', function() {
   before((done) => {
     if (!server.isRunning) {
       server.listen(port, () => {
-        // server.isRunning = true;
         debug('server running on port', port);
         done();
       });
@@ -38,8 +37,6 @@ describe('testing module task-router', function() {
     if(server.isRunning) {
       debug('server is close');
       server.close(() => {
-        // server.isRunning = false;
-        console.log('server down');
         done();
       });
       return;
@@ -93,7 +90,7 @@ describe('testing module task-router', function() {
   });
 
   describe('POST /api/task with valid data', function (){
-    debug('post is working?');
+    debug('post api/task is working?');
     before((done) =>
       taskCrud.createTask({content: 'test task', desc: 'test data', dueDate: '2016-06-21'})
       .then(task => {
@@ -109,7 +106,7 @@ describe('testing module task-router', function() {
       request.post(`${baseUrl}`)
       .send({content: 'test task', desc: 'test data', dueDate: '2016-06-21'})
       .then( res => {
-        debug('hitting POST testtttttt');
+        debug('hitting post/api/task 200 testtt');
         expect(res.status).to.equal(200);
         expect(res.body.content).to.equal('test task');
         expect(res.body.desc).to.equal('test data');
@@ -119,7 +116,7 @@ describe('testing module task-router', function() {
     });
 
     it('should return a bad request', (done) => {
-      debug('hitting POST bad request');
+      debug('hitting post/api/task 400 bad request');
       request.post(`${baseUrl}`)
       .then(done)
       .catch((err) => {
@@ -153,7 +150,7 @@ describe('testing module task-router', function() {
     it('should delete a task', (done) => {
       request.del(`${baseUrl}/${this.tempTask._id}`)
         .then((res) => {
-          debug('Hitting delete task');
+          debug('Hitting delete api/task 204');
           expect(res.status).to.equal(204);
           done();
         })
