@@ -37,7 +37,6 @@ noteRouter.put('/note/:id', JsonParser, function(req, res) {
 
 });
 
-
 //adding DELETE request//
 noteRouter.delete('/note/:id', function(req, res) {
   debug('hitting delete by id');

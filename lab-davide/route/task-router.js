@@ -12,7 +12,6 @@ const JsonParser = require('body-parser').json();
 //app modules//
 const taskRouter = module.exports = new Router();
 const taskCrud = require('../lib/task-crud');
-// console.log('const taskCrud' + taskCrud);
 
 
 

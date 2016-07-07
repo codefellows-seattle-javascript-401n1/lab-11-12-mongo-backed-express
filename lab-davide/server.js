@@ -21,9 +21,6 @@ mongoose.connect(mongoURI);
 app.use(morgan('dev'));
 app.use(errorResponse);
 
-
-
-
 app.use('/api', noteRouter);
 app.use('/api', taskRouter);
 app.all('*', function(req, res) {

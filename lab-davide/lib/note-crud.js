@@ -21,7 +21,6 @@ exports.createNote = function(reqBody) {
   });
 };
 
-
 exports.fetchNote = function(id) {
   debug('fetchNote');
   return new Promise((resolve, reject) => {
@@ -30,7 +29,6 @@ exports.fetchNote = function(id) {
     .catch(err => reject(AppErr.error404(err.message)));
   });
 };
-
 
 exports.updateNote = function(id, reqBody){
   debug('update note');
