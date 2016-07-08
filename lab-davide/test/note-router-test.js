@@ -28,6 +28,7 @@ describe('testing module note-router', function() {
     if (!server.isRunning) {
       server.listen(port, () => {
         debug('server running on port', port);
+        server.isRunning = true;
         done();
       });
       return;
@@ -39,6 +40,7 @@ describe('testing module note-router', function() {
     if(server.isRunning) {
       debug('server is close');
       server.close(() => {
+        server.isRunning = false;
         done();
       });
       return;

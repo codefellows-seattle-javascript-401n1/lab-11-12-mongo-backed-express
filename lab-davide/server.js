@@ -28,8 +28,13 @@ app.all('*', function(req, res) {
   res.status(404).send('not found');
 });
 
-const server = app;
+
+
+const server = app.listen(3000, () => {
+  console.log('listening 3000');
+
+});
 
 //we make this true so we can check this in testing//
-server.isRunning = false;
+server.isRunning = true;
 module.exports = server;

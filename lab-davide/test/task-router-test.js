@@ -25,7 +25,7 @@ describe('testing module task-router', function() {
   before((done) => {
     if (!server.isRunning) {
       server.listen(port, () => {
-        // server.isRunning = true;
+        server.isRunning = true;
         debug('server running on port', port);
         done();
       });
