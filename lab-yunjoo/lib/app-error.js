@@ -16,11 +16,6 @@ AppError.isAppError = function(err){
   return err instanceof AppError;
 };
 
-// AppError.error204 = function(err){
-//   debug('error204');
-//   return err instanceof AppError;
-// };
-
 AppError.error400 = function(message){
   debug('error400');
   return new AppError(message, 400, 'bad request  - App Error');

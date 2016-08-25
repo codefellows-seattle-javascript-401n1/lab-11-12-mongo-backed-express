@@ -14,7 +14,8 @@ exports.createTask = function(reqBody){
       return reject(AppError.error400('tasks require noteID'));
     if(! reqBody.desc)
       return reject(AppError.error400('tasks require a desc'));
-    Task.save()
+    const task = new Task(reqBody);
+    task.save()
     .then(task => resolve(task))
     .catch(err => reject(err));
   });
@@ -38,12 +39,13 @@ exports.fetchTaskByTaskId = function(id){
 };
 
 
-// exports.updateTask = function(noteId, data){
-//   return new Promise((resolve, reject)=> {
-//     noteCrud.updateNote({_id:noteId},data)
-//     .then(note =>Task.find({noteId: note._id}))
-//   });
-// };
+exports.updateTask = function(noteId, data){
+  return new Promise((resolve, reject)=> {
+    noteCrud.updateNote({_id:noteId},data)
+    .then(note =>Task.find({noteId: note._id}))
+    .catch(err => reject(err));
+  });
+};
 
 exports.removeAllTasks = function(){
   return Task.remove({});

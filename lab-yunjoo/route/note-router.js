@@ -3,7 +3,7 @@
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const noteCrud = require('../lib/note-crud');
-const taskCrud = require('../lib/task-crud');
+// const taskCrud = require('../lib/task-crud');
 const noteRouter = module.exports = new Router();
 const sendError = require('../lib/error-response');
 
@@ -14,13 +14,13 @@ noteRouter.post('/note', jsonParser, sendError, function(req, res){
 });
 
 noteRouter.get('/note/:id', jsonParser, sendError, function(req, res){
-  noteCrud.fetchNote(req.params.id)
+  noteCrud.fetchNoteByNoteId(req.params.id)
   .then(note => res.send(note))
   .catch(err => res.sendError(err));
 });
 
 noteRouter.get('/note/:id/tasks', sendError,function(req, res){
-  taskCrud.fetchTaskByNoteId(req.params.id)
+  noteCrud.fetchNoteByNoteId(req.params.id)
   .then(tasks => res.send(tasks))
   .catch(err => res.sendError(err));
 });

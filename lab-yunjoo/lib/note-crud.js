@@ -14,12 +14,12 @@ exports.createNote = function(reqBody){
     reqBody.timestamp = new Date();
     const note = new Note(reqBody);
     note.save() //save on 'note' objects, not 'Note' constructor
-    .then (resolve)
-    .catch (reject);
+    .then(resolve)
+    .catch(reject);
   });
 };
 
-exports.fetchNote = function(id){
+exports.fetchNoteByNoteId = function(id){
   debug('fetchNote');
   return new Promise((resolve, reject) =>{
     Note.findOne({_id: id})
@@ -27,6 +27,7 @@ exports.fetchNote = function(id){
     .catch(err => reject(AppErr.error404(err.message)));
   });
 };
+
 exports.updateNote = function(id, data){
   debug('updateNote');
   return new Promise((resolve, reject)=> {
@@ -60,7 +61,9 @@ exports.removeNote = function(id){
     Note.findOne({_id:id})
     .then(()=>{
       Note.remove({_id:id})
-      .then(resolve)
+      .then(() => {
+        resolve();
+      })
       .catch(err => reject(AppErr.error500(err.message)));
     })
     .catch(err => reject(AppErr.error404(err.message)));
