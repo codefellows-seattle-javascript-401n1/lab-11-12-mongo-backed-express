@@ -20,7 +20,7 @@ taskRouter.get('/task/:id', jsonParser, sendError, function(req,res){
   .catch(err=> res.sendError(err));
 });
 
-taskRouter.get('/task/:id/tasks', sendError, function(req, res){
+taskRouter.get('/task/:id', sendError, function(req, res){
   taskCrud.fetchTaskBytaskId(req.params.id)
   .then(tasks => res.send(tasks))
   .catch(err=>res.sendError(err));
