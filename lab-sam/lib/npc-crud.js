@@ -34,7 +34,7 @@ exports.updateNpc = function(id, reqBody){
     }
     console.log('updateNpc good; reqBody.encounterId');
     encounterCrud.fetchEncounter(reqBody.encounterId)
-    .then( encounter => {
+    .then( () => {
       NPC.findOne({_id: id})
       .then( npc => {
         console.log('found npc: ', npc);
