@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('dm:app-error');
+const debug = require('debug')('familiar:app-error');
 
 const AppError = module.exports = function(message, statusCode, responseMessage){
   debug('creating app error');

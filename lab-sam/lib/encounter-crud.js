@@ -64,7 +64,7 @@ exports.removeEncounter = function(id){
     console.log('removeEncounter hit');
     Encounter.remove({_id: id})
     .then(resolve)
-    .catch(err => reject(AppError.error404(err.message)));
+    .catch(err => reject(AppError.error(404, err.message)));
   });
 };
 

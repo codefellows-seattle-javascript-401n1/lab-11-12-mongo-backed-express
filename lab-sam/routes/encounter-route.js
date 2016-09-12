@@ -13,14 +13,14 @@ encounterRoute.post('/encounter', jsonParser, function(req, res){
   debug('encounter POST route');
   encounterCrud.createEncounter(req.body)
   .then( encounter => res.send(encounter))
-  .catch( err => res.sendError(err))
+  .catch( err => res.sendError(err));
 });
 
 encounterRoute.get('/encounter/:id', function
 (req, res){
   encounterCrud.fetchEncounter(req.params.id)
   .then(encounter => res.send(encounter))
-  .catch(err => res.sendError(err));
+  .catch(err => AppError(err));
 });
 
 encounterRoute.get('/encounter/:id/npcs', function(req, res){
