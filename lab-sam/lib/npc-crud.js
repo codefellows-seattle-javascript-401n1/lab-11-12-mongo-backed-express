@@ -37,27 +37,27 @@ exports.updateNpc = function(id, reqBody){
     .then( encounter => {
       NPC.findOne({_id: id})
       .then( npc => {
-        console.log('found npc: ', npc)
-          if (reqBody.race) {
-            npc.race = reqBody.race;
-          };
-          if (reqBody.name) {
-            npc.name = reqBody.name;
-          };
-          if (reqBody.classes) {
-            npc.classes = reqBody.classes;
-          };
-          if (reqBody.extra) {
-            npc.extra = reqBody.extra;
-          }
-          npc.save()
-          .then(npc => resolve(npc))
-          .catch(err => reject(AppError.error404(err.message)));
-        })
+        console.log('found npc: ', npc);
+        if (reqBody.race) {
+          npc.race = reqBody.race;
+        }
+        if (reqBody.name) {
+          npc.name = reqBody.name;
+        }
+        if (reqBody.classes) {
+          npc.classes = reqBody.classes;
+        }
+        if (reqBody.extra) {
+          npc.extra = reqBody.extra;
+        }
+        npc.save()
+        .then(npc => resolve(npc))
         .catch(err => reject(AppError.error404(err.message)));
       })
       .catch(err => reject(AppError.error404(err.message)));
-  })
+    })
+    .catch(err => reject(AppError.error404(err.message)));
+  });
 
 };
 //

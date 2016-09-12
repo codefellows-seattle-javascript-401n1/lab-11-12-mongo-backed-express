@@ -3,7 +3,7 @@ const Router = require('express').Router;
 const debug = require('debug')('dm:encounterRoute');
 const jsonParser = require('body-parser').json();
 
-const AppError = require('../lib/app-error');
+// const AppError = require('../lib/app-error');
 const encounterCrud = require('../lib/encounter-crud');
 const npcCrud = require('../lib/npc-crud');
 
@@ -13,7 +13,7 @@ encounterRoute.post('/encounter', jsonParser, function(req, res){
   debug('encounter POST route');
   encounterCrud.createEncounter(req.body)
   .then( encounter => res.send(encounter))
-  .catch( err => res.sendError(err))
+  .catch( err => res.sendError(err));
 });
 
 encounterRoute.get('/encounter/:id', function
