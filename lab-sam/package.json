@@ -1,0 +1,37 @@
+{
+  "name": "lab-11-12-mongo",
+  "version": "1.0.0",
+  "description": "mongo server for 401",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "# Created by https://www.gitignore.io/api/linux,node,osx,vim"
+  },
+  "author": "### Linux ###",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "chai": "^3.5.0",
+    "debug": "^2.2.0",
+    "express": "^4.13.4",
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^2.2.0",
+    "mongodb": "^2.1.21",
+    "mongoose": "^4.4.19",
+    "morgan": "^1.7.0"
+  },
+  "devDependencies": {
+    "gulp-eslint": "^2.0.0",
+    "gulp-nodemon": "^2.0.7",
+    "nodemon": "^1.9.2",
+    "superagent": "^2.0.0",
+    "superagent-promise-plugin": "^3.2.0",
+    "superagent-use": "0.0.1"
+  }
+}
